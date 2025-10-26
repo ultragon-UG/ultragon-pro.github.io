@@ -7,7 +7,8 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"> <style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"> 
+    <style>
         /* Hilangkan highlight biru di HP */
         * {
             -webkit-tap-highlight-color: transparent;
@@ -66,8 +67,7 @@
             margin-right: auto;
             width: 100px;
             height: 40px;
-            /* margin-bottom: 20px; <-- Dikurangi sedikit */
-            margin-bottom: 5px; /* Jarak ke label versi */
+            margin-bottom: 5px; 
         }
 
         /* ============================================== */
@@ -75,12 +75,12 @@
         /* ============================================== */
         .version-label {
             font-family: 'Poppins', sans-serif;
-            font-weight: 700; /* Bold */
-            font-size: 1.1em; /* Sedikit lebih besar dari teks biasa */
-            color: #dcdcdc; /* Warna putih agak redup */
-            margin-bottom: 15px; /* Jarak ke tombol tab */
+            font-weight: 700; 
+            font-size: 1.1em; 
+            color: #dcdcdc; 
+            margin-bottom: 15px; 
             text-align: center;
-            letter-spacing: 2px; /* Sedikit jarak antar huruf */
+            letter-spacing: 2px; 
         }
         /* ============================================== */
 
@@ -145,7 +145,7 @@
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
             font-size: 14px;
-            color: #333; /* Ganti warna teks input agar terlihat */
+            color: #333; 
         }
 
         /* Tombol Submit */
@@ -173,7 +173,7 @@
         }
 
         .submit-button.success {
-            background-color: #2ecc71 !important; /* Warna hijau sukses */
+            background-color: #2ecc71 !important; 
         }
 
         /* Animasi Guncang */
@@ -302,7 +302,61 @@
         const db = firebase.database();
 
 
+        // ===========================================
+        // ### START: COOKIE FUNCTIONS (PENTING)
+        // ===========================================
+
+        // Fungsi untuk mengatur cookie (disimpan selama 365 hari untuk permanen)
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            // Set path=/ agar cookie berlaku untuk seluruh aplikasi, Secure/SameSite untuk standar keamanan
+            // Jika ini berjalan di server HTTP (bukan HTTPS), hapus `Secure;`
+            document.cookie = name + "=" + (value || "")  + expires + "; path=/; SameSite=Strict"; 
+        }
+
+        // Fungsi untuk mendapatkan cookie
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Fungsi untuk menghapus cookie (digunakan saat logout/redirect)
+        function eraseCookie(name) {   
+            document.cookie = name+'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+
+        // ===========================================
+        // ### END: COOKIE FUNCTIONS
+        // ===========================================
+
         document.addEventListener('DOMContentLoaded', () => {
+
+            // --- Cek Sesi Cookie Saat Memuat Halaman ---
+            const userUid = getCookie('userUid');
+            const sessionId = getCookie('sessionId');
+            
+            // JIKA Sesi DITEMUKAN, LANGSUNG MASUK KE DASHBOARD
+            if (userUid && sessionId) {
+                // Hapus entry history saat ini agar tombol back di dashboard langsung keluar.
+                if (window.history && window.history.replaceState) {
+                    window.history.replaceState(null, null, window.location.href);
+                }
+                window.location.href = 'index1.html';
+                return; // Hentikan eksekusi script selanjutnya
+            }
+            // --- Akhir Cek Sesi Cookie ---
+
 
             // --- Ambil Link WA Dinamis ---
             function loadDynamicLinks() {
@@ -352,7 +406,7 @@
                 tabLogin.classList.remove('active');
             });
 
-            // --- LOGIKA LOGIN FIREBASE (dengan Session ID) ---
+            // --- LOGIKA LOGIN FIREBASE (Menggunakan Cookies) ---
             loginForm.addEventListener('submit', (event) => {
                 event.preventDefault();
                 loginErrorEl.style.display = 'none';
@@ -396,16 +450,18 @@
                     const newSessionId = Date.now().toString() + Math.random().toString(36).substring(2);
 
                     // Simpan Session ID Baru ke Database
-                    return db.ref('users/' + userUid).update({ currentSessionId: newSessionId }).then(() => newSessionId); // Kembalikan newSessionId
+                    return db.ref('users/' + userUid).update({ currentSessionId: newSessionId }).then(() => newSessionId); 
                 })
                 .then((newSessionId) => {
                     // LOGIN BERHASIL!
                     loginButton.textContent = 'Login Berhasil!';
                     loginButton.classList.add('success');
 
-                    // Simpan userUid DAN sessionId BARU ke localStorage // <<< DIUBAH
-                    localStorage.setItem('userUid', userUid); // <<< DIUBAH
-                    localStorage.setItem('sessionId', newSessionId); // <<< DIUBAH
+                    // --- SIMPAN Sesi ke COOKIES (Mengganti localStorage) ---
+                    // Simpan selama 365 hari (agar permanen)
+                    setCookie('userUid', userUid, 365); 
+                    setCookie('sessionId', newSessionId, 365); 
+                    // --- Akhir SIMPAN Sesi ---
 
                     setTimeout(() => {
                         window.location.href = 'index1.html';

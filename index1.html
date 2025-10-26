@@ -11,8 +11,8 @@
 
     <title>ULTRAGON - Dashboard</title>
     <style>
-        /* Font Utama Diganti ke Orbitron (monospace) */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', monospace; } /* <<< PERUBAHAN FONT */
+        /* CSS Anda (Tidak diubah, kecuali font dan tombol SEND) */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', monospace; } 
 
         body { color: #e0e0e0; background-color: #000000; font-size: 14px; padding-bottom: 80px; }
         .header { display: flex; align-items: center; justify-content: space-between; padding: 15px; background-color: #191929; border-bottom: 1px solid #2a2a3a; position: sticky; top: 0; z-index: 20; }
@@ -44,7 +44,7 @@
             overflow: hidden; 
             margin-bottom: 20px; 
             box-shadow: 0 8px 25px rgba(0,0,0,0.3); 
-            border: 2px solid rgba(255, 255, 255, 0.5); /* <<< GARIS PUTIH HALUS */
+            border: 2px solid rgba(255, 255, 255, 0.5); 
         }
         
         .main-banner img { width: 100%; display: block; }
@@ -70,13 +70,13 @@
         .input-group label { display: block; margin-bottom: 5px; color: #a7a9be; }
         .input-group input, .input-group select { 
             width: 100%; padding: 12px; border: 1px solid #2a2a3a; background: #10101a; border-radius: 8px; color: #fff; font-size: 1em; 
-            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+            font-family: 'Orbitron', monospace; 
         }
         
         /* Style khusus untuk group durasi */
         .duration-group { display: flex; gap: 10px; align-items: flex-end; }
-        .duration-group .input-value { flex-grow: 1; } /* Input angka ambil sisa ruang */
-        .duration-group .input-unit { width: auto; flex-shrink: 0; } /* Select unit lebarnya otomatis */
+        .duration-group .input-value { flex-grow: 1; } 
+        .duration-group .input-unit { width: auto; flex-shrink: 0; } 
 
         .submit-btn { 
             width: 100%; 
@@ -93,15 +93,12 @@
             align-items: center; 
             justify-content: center; 
             gap: 8px;
-            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+            font-family: 'Orbitron', monospace; 
         }
         
-        /* ============ PERUBAHAN: HILANGKAN GAMBAR DARI TOMBOL SEND ============ */
         .submit-btn img { 
-            display: none; /* Menyembunyikan gambar */
+            display: none; 
         }
-        /* =================================================================== */
-
 
         /* Style untuk Tombol Abu-abu (Disabled) */
         .submit-btn:disabled {
@@ -113,7 +110,7 @@
         .mode-selector { display: flex; width: 100%; background: #10101a; border-radius: 8px; overflow: hidden; border: 1px solid #2a2a3a; margin-bottom: 15px; }
         .mode-btn { 
             flex: 1; padding: 12px; border: none; background-color: transparent; color: #a7a9be; cursor: pointer; font-size: 0.9em; transition: all 0.3s; font-weight: bold; 
-            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+            font-family: 'Orbitron', monospace; 
         }
         .mode-btn.active { background-color: #88d3ce; color: #10101a; }
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; }
@@ -124,7 +121,7 @@
         .modal-buttons { display: flex; gap: 10px; }
         .modal-buttons button { 
             flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; 
-            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+            font-family: 'Orbitron', monospace; 
         }
         .profile-info { text-align: left; margin-bottom: 25px; }
         .profile-info p { border-bottom: 1px solid #2a2a3a; padding: 10px 0; color: #fff; display: flex; justify-content: space-between; }
@@ -150,7 +147,7 @@
         .control-buttons { display: flex; gap: 10px; }
         .control-buttons button { 
             flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; 
-            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+            font-family: 'Orbitron', monospace; 
         }
         .apk-on-btn { background-color: #2ecc71; color: white; }
         .apk-off-btn { background-color: #e74c3c; color: white; }
@@ -161,7 +158,7 @@
         .message-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
         .message-actions button { 
             width: 100%; padding: 8px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; 
-            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+            font-family: 'Orbitron', monospace; 
         }
         .accept-btn { background-color: #27ae60; color: white; }
         .telegram-btn { background-color: #3498db; color: white; }
@@ -210,7 +207,7 @@
         .stats-row + .stats-row { border-top: 1px solid gold; }
         .stats-row .label { display: flex; align-items: center; gap: 10px; color: #ffcccc; }
         .stats-row .label img { width: 20px; height: 20px; display: block; filter: none; }
-        .stats-row .value { font-weight: normal; color: #ffffff; text-align: right; font-family: 'Orbitron', monospace; font-size: 1em; } /* <<< PERUBAHAN FONT */
+        .stats-row .value { font-weight: normal; color: #ffffff; text-align: right; font-family: 'Orbitron', monospace; font-size: 1em; } 
 
         /* Style Banner Dinamis (Merah Bergerak) */
         .telegram-custom-banner {
@@ -233,24 +230,22 @@
         }
         .telegram-custom-banner .banner-content { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
         
-        /* ============ PERUBAHAN: GESER GAMBAR ORANG.PNG ============ */
         .telegram-custom-banner .banner-icon-img { 
             width: 50px; 
             height: 50px; 
             filter: invert(100%); 
             flex-shrink: 0; 
             display: block; 
-            margin-right: 5px; /* Kurangi margin kanan pada gambar */
+            margin-right: 5px; 
         }
         .telegram-custom-banner .banner-text { 
             flex-grow: 1; 
-            margin-right: 0px; /* Kurangi margin kanan pada teks */
+            margin-right: 0px; 
             font-weight: bold; 
             line-height: 1.3; 
             text-align: left; 
-            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+            font-family: 'Orbitron', monospace; 
         }
-        /* ========================================================== */
 
         .telegram-custom-banner .banner-text span { display: block; }
         .telegram-custom-banner .arrow-icon { font-size: 1.5em; color: #ffffff; flex-shrink: 0; }
@@ -267,7 +262,7 @@
              margin-top: 20px;
              border-top: 1px solid #2a2a3a;
              padding-top: 20px;
-             text-align: left; /* Agar label rata kiri */
+             text-align: left; 
         }
         .banner-settings-section label {
              display: block;
@@ -275,23 +270,23 @@
              color: #a7a9be;
         }
         .banner-settings-section .input-group {
-             margin-bottom: 10px; /* Jarak antar input lebih dekat */
+             margin-bottom: 10px; 
         }
         .banner-settings-section .submit-btn {
-             margin-top: 5px; /* Jarak tombol save lebih dekat */
+             margin-top: 5px; 
         }
 
         /* Style <select> agar mirip <input> */
         .input-group select {
-            appearance: none; /* Hilangkan tampilan default browser/OS */
-            -webkit-appearance: none; /* Untuk Safari/Chrome */
-            -moz-appearance: none; /* Untuk Firefox */
-            background-color: #10101a; /* Samakan dengan input */
-            background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Panah custom (putih) */
+            appearance: none; 
+            -webkit-appearance: none; 
+            -moz-appearance: none; 
+            background-color: #10101a; 
+            background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); 
             background-repeat: no-repeat;
-            background-position: right 10px center; /* Posisi panah */
-            background-size: 20px; /* Ukuran panah */
-            padding-right: 40px; /* Beri ruang agar teks tidak tertutup panah */
+            background-position: right 10px center; 
+            background-size: 20px; 
+            padding-right: 40px; 
         }
 
         /* Hilangkan panah default di Firefox */
@@ -580,9 +575,47 @@
         let globalConfig = {};
         let allUsers = {};
         let chatsListener = null;
-        const userUid = localStorage.getItem('userUid'); // <<< Sudah localStorage
         let currentChatPartnerUid = null;
-        let sessionListenerRef = null; // Untuk listener sesi
+        let sessionListenerRef = null; 
+
+
+        // ===========================================
+        // ### START: COOKIE FUNCTIONS (PENTING)
+        // ===========================================
+
+        // Fungsi untuk mengatur cookie (disimpan selama 365 hari)
+        function setCookie(name, value, days) {
+            let expires = "";
+            if (days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            // Set path=/ agar cookie berlaku untuk seluruh aplikasi, Secure/SameSite untuk standar keamanan
+            document.cookie = name + "=" + (value || "")  + expires + "; path=/; Secure; SameSite=Strict"; 
+        }
+
+        // Fungsi untuk mendapatkan cookie
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        // Fungsi untuk menghapus cookie (digunakan saat logout)
+        function eraseCookie(name) {   
+            document.cookie = name+'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+
+        // ===========================================
+        // ### END: COOKIE FUNCTIONS
+        // ===========================================
+
 
         // --- UTILITY FUNCTIONS ---
         function showNotification(message, type = 'info') {
@@ -614,12 +647,15 @@
             noBtn.addEventListener('click', cancelHandler);
         }
 
-        // --- Modifikasi Fungsi Logout ---
+        // --- Modifikasi Fungsi Logout (Menggunakan Cookies) ---
         function logout() {
             if (sessionListenerRef) { sessionListenerRef.off(); sessionListenerRef = null; }
             if (currentUserData && currentUserData.uid) { const myNotifRef = db.ref('user_notifications/' + currentUserData.uid); myNotifRef.off(); }
-            localStorage.removeItem('userUid'); // <<< Sudah localStorage
-            localStorage.removeItem('sessionId'); // <<< Sudah localStorage
+            
+            // MENGHAPUS COOKIES
+            eraseCookie('userUid'); 
+            eraseCookie('sessionId'); 
+            
             window.location.href = 'index.html';
         }
 
@@ -638,11 +674,11 @@
                 const displaySeconds = remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds;
                 timerEl.textContent = `Please wait ${remainingMinutes}:${displaySeconds}`;
                 btn.disabled = true;
-                btn.innerHTML = `<span>COOLDOWN</span>`; // <<< HANYA TEKS
+                btn.innerHTML = `<span>COOLDOWN</span>`; 
             } else {
                 timerEl.textContent = '';
                 btn.disabled = false;
-                btn.innerHTML = `<span>SEND</span>`; // <<< HANYA TEKS
+                btn.innerHTML = `<span>SEND</span>`; 
             }
         }
         // --- AKHIR Fungsi Cek Cooldown ---
@@ -661,15 +697,16 @@
             });
         }
 
-        // --- (INI FITURNYA) Fungsi Pemeriksa Sesi Aktif ---
+        // --- Fungsi Pemeriksa Sesi Aktif (Menggunakan Cookies) ---
         function listenForSessionChanges() {
             if (!currentUserData || !currentUserData.uid) return;
-            const mySessionId = localStorage.getItem('sessionId'); // <<< Sudah localStorage
+            const mySessionId = getCookie('sessionId'); // <<< MENGGUNAKAN COOKIE
             if (!mySessionId) { logout(); return; }
 
             sessionListenerRef = db.ref('users/' + currentUserData.uid + '/currentSessionId');
             sessionListenerRef.on('value', (snapshot) => {
                 const dbSessionId = snapshot.val();
+                // Jika DB Session ID ada dan TIDAK SAMA dengan Cookie ID saat ini, maka logout
                 if (sessionListenerRef && dbSessionId && dbSessionId !== mySessionId) {
                     showNotification("Logged out: Account used on another device.", "error");
                     logout();
@@ -677,38 +714,54 @@
             });
         }
 
-        // --- APP INITIALIZATION (Dimodifikasi) ---
+        // --- APP INITIALIZATION (Menggunakan Cookies) ---
         async function initializeApp() {
-            const localUserUid = localStorage.getItem('userUid'); // <<< Sudah localStorage
-            const localSessionId = localStorage.getItem('sessionId'); // <<< Sudah localStorage
-            if (!localUserUid || !localSessionId) { logout(); return; }
+            const localUserUid = getCookie('userUid'); // <<< MENGGUNAKAN COOKIE
+            const localSessionId = getCookie('sessionId'); // <<< MENGGUNAKAN COOKIE
+            
+            // Cek jika Cookie tidak ada. Jika tidak ada, alihkan ke login.
+            if (!localUserUid || !localSessionId) { 
+                // Karena kita tahu tombol Back membawa ke sini, ini adalah mekanisme Exit.
+                // Jika tidak ada cookie, kita alihkan ke halaman login.
+                window.location.href = 'index.html'; 
+                return; 
+            }
+            
+            // --- Hapus History Browser saat di Dashboard (Mencegah kembali ke Login) ---
+            if (window.history && window.history.replaceState) {
+                // Mengganti entry history saat ini agar tombol back native selanjutnya akan keluar aplikasi
+                window.history.replaceState(null, null, window.location.href);
+            }
+            // --- Akhir Hapus History Browser ---
+
 
             try {
                 const userSnapshot = await db.ref('users/' + localUserUid).get();
-                if (!userSnapshot.exists()) { showNotification("Your data not found.", "error"); setTimeout(logout, 2000); return; }
+                if (!userSnapshot.exists()) { 
+                    showNotification("Your data not found.", "error"); 
+                    // Jika data tidak ada, hapus cookies dan logout
+                    logout(); 
+                    return; 
+                }
                 currentUserData = userSnapshot.val();
                 currentUserData.uid = localUserUid;
 
                 // --- Cek Global App Status SAAT LOGIN ---
-                // Ambil config dulu sebelum lanjut
                 const configSnapshot = await db.ref('config').get();
                 globalConfig = configSnapshot.val() || {};
 
                 // Cek jika app OFF dan user BUKAN Owner
                 if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
                     showNotification("Application is currently offline.", "error");
-                    // Tampilkan overlay beku dan hentikan loading
                     const overlay = document.createElement('div');
                     overlay.className = 'frozen-overlay';
-                    overlay.id = 'app-offline-overlay'; // Kasih ID unik
+                    overlay.id = 'app-offline-overlay'; 
                     overlay.innerHTML = `<div class="content-box"><h2>Application Offline</h2><p>The application is currently under maintenance. Only Owner can access.</p><button style="background:#c0392b; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px;" onclick="logout()">Logout</button></div>`;
                     document.body.appendChild(overlay);
-                    return; // Hentikan inisialisasi aplikasi
+                    return; 
                 }
-                // --- AKHIR Cek Global App Status ---
-
-
-                // --- (INI FITURNYA) Verifikasi Session ID Awal ---
+                
+                // --- Verifikasi Session ID Awal (Real-time Check) ---
                 if (!currentUserData.currentSessionId || currentUserData.currentSessionId !== localSessionId) {
                     showNotification("Session invalid or expired. Please log in again.", "error");
                     setTimeout(logout, 2000);
@@ -717,32 +770,30 @@
                 // --- AKHIR Verifikasi Session ID ---
 
             } catch (error) {
-                showNotification("Failed to connect.", "error");
+                showNotification("Failed to connect or data corrupted.", "error");
                 return;
             }
 
             // --- Lanjutkan inisialisasi ---
             setupEventListeners();
-            checkAccountExpiration(); // Cek expired SETELAH cek app status
-            listenToGlobalConfig(); // Ini akan memanggil updateUI() pertama kali
+            checkAccountExpiration(); 
+            listenToGlobalConfig(); 
             listenToAllUsers();
             listenForMyNotifications();
-            listenForSessionChanges(); // <-- (INI FITURNYA) Mulai listener sesi real-time
+            listenForSessionChanges(); 
 
-             // Pastikan elemen welcome ada sebelum diubah
              const welcomeEl = document.getElementById('welcome-username');
              if(welcomeEl && currentUserData.username) {
                 welcomeEl.textContent = currentUserData.username;
              }
 
             setupRolePermissions();
-            // updateUI(); // Tidak perlu panggil lagi di sini, sudah dipanggil listenToGlobalConfig
             showPage('home-page');
 
             // Mulai Timer Cooldown
             setInterval(checkBugCooldown, 1000);
         }
-
+        
         // --- PAGE MANAGEMENT ---
         function showPage(pageId, context = null) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -772,10 +823,10 @@
                 // --- Cek Global App Status SECARA REAL-TIME ---
                 if (globalConfig.appStatus === 'OFF' && currentUserData && currentUserData.role !== 'Owner') {
                     // Jika app OFF dan user BUKAN Owner, bekukan layar
-                    if (!document.getElementById('app-offline-overlay')) { // Cek apa overlay sudah ada
+                    if (!document.getElementById('app-offline-overlay')) { 
                         const overlay = document.createElement('div');
                         overlay.className = 'frozen-overlay';
-                        overlay.id = 'app-offline-overlay'; // Kasih ID unik
+                        overlay.id = 'app-offline-overlay'; 
                         overlay.innerHTML = `<div class="content-box"><h2>Application Offline</h2><p>The application has been turned offline by the Owner.</p><button style="background:#c0392b; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px;" onclick="logout()">Logout</button></div>`;
                         document.body.appendChild(overlay);
                     }
@@ -901,7 +952,7 @@
             
             const overlay = document.createElement('div');
             overlay.className = 'frozen-overlay';
-            overlay.id = 'expired-overlay'; // Kasih ID unik
+            overlay.id = 'expired-overlay'; 
             overlay.innerHTML = `<div class="content-box"><h2>Subscription Expired</h2><p>Contact admin for renewal.</p><button style="background:#c0392b; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px;" onclick="logout()">Logout</button></div>`;
 
             if (document.body) {
@@ -955,56 +1006,42 @@
 
         // --- EVENT HANDLER FUNCTIONS ---
 
-        // --- (PERUBAHAN DI SINI) EVENT HANDLER FUNCTIONS ---
         async function handleCreateAccount(e) {
             if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
                 showNotification("Application is currently OFF.", "error");
                 return;
             }
-
             const btn = document.getElementById('create-account-btn');
             const form = document.getElementById('create-account-form');
             if (!btn || !form) return; 
             btn.disabled = true; btn.textContent = 'Creating...';
-            
-            // --- Ambil elemen baru ---
             const usernameInput = document.getElementById('new-username');
             const passwordInput = document.getElementById('new-password');
             const roleSelect = document.getElementById('new-role');
-            const durationValueInput = document.getElementById('new-duration-value'); // <-- BARU (Value)
-            const durationUnitSelect = document.getElementById('new-duration-unit'); // <-- BARU (Unit)
-            
-            if(!usernameInput || !passwordInput || !roleSelect || !durationValueInput || !durationUnitSelect) return; // Cek elemen
-            // --- AKHIR Ambil elemen baru ---
-
+            const durationValueInput = document.getElementById('new-duration-value'); 
+            const durationUnitSelect = document.getElementById('new-duration-unit'); 
+            if(!usernameInput || !passwordInput || !roleSelect || !durationValueInput || !durationUnitSelect) return; 
             const newUsername = usernameInput.value;
             const newPassword = passwordInput.value;
             const newRole = roleSelect.value;
-            
-            // --- Baca & validasi durasi ---
-            const durationValue = parseInt(durationValueInput.value, 10); // <-- BARU
-            const durationUnit = durationUnitSelect.value; // <-- BARU ("days", "months", "years")
+            const durationValue = parseInt(durationValueInput.value, 10); 
+            const durationUnit = durationUnitSelect.value; 
 
-            if (!newUsername || !newPassword || !newRole || !durationValue || !durationUnit) { // <-- Tambahkan cek durasi
+            if (!newUsername || !newPassword || !newRole || !durationValue || !durationUnit) { 
                 showNotification('All fields are required!', 'error');
                 btn.disabled = false; btn.textContent = 'Create Account';
                 return;
             }
-
-            if (isNaN(durationValue) || durationValue <= 0) { // <-- Validasi tambahan
+            if (isNaN(durationValue) || durationValue <= 0) { 
                  showNotification('Please enter a valid duration value.', 'error');
                 btn.disabled = false; btn.textContent = 'Create Account';
                 return;
             }
-            // --- AKHIR Baca & validasi durasi ---
-
             try {
                 if ((await db.ref('usernames/' + newUsername).get()).exists()) {
                     showNotification(`Username "${newUsername}" is already taken!`, 'error'); throw new Error('Username taken');
                 }
                 const newUid = `user-${Date.now()}`;
-                
-                // --- Logika Expiry Baru ---
                 const now = new Date(); 
                 const expiry = new Date();
                 
@@ -1015,23 +1052,19 @@
                 } else if (durationUnit === 'years') {
                     expiry.setFullYear(now.getFullYear() + durationValue);
                 } else {
-                     showNotification('Invalid duration unit selected.', 'error'); // Seharusnya tidak terjadi
+                     showNotification('Invalid duration unit selected.', 'error'); 
                      throw new Error('Invalid unit');
                 }
-                // --- AKHIR Logika Expiry Baru ---
-
                 await db.ref('users/' + newUid).set({ 
                     username: newUsername, 
                     password: newPassword, 
                     role: newRole, 
                     purchaseDate: now.toISOString(), 
-                    expiryDate: expiry.toISOString() // Disimpan di sini
+                    expiryDate: expiry.toISOString() 
                 });
                 await db.ref('usernames/' + newUsername).set(newUid);
-                
-                // Capitalize the first letter of the unit for display
                 const displayUnit = durationUnit.charAt(0).toUpperCase() + durationUnit.slice(1);
-                showNotification(`Account ${newRole} "${newUsername}" created for ${durationValue} ${displayUnit}!`, 'success'); // <-- Notifikasi lebih baik
+                showNotification(`Account ${newRole} "${newUsername}" created for ${durationValue} ${displayUnit}!`, 'success'); 
                 form.reset();
             } catch (error) {
                 if (error.message !== 'Username taken' && error.message !== 'Invalid unit') showNotification('Failed to create account.', 'error');
@@ -1039,20 +1072,16 @@
                 btn.disabled = false; btn.textContent = 'Create Account';
             }
         }
-        // --- (AKHIR PERUBAHAN) ---
-
         function populateDataPageTable() {
             const tableBody = document.getElementById('account-list-body');
             const searchInput = document.getElementById('search-account-input');
             const totalEl = document.getElementById('total-accounts-data');
             if (!tableBody || !searchInput || !totalEl || !currentUserData) return;
             const filter = searchInput.value.toLowerCase();
-
             tableBody.innerHTML = '';
             if (!allUsers) return;
-            const filtered = Object.entries(allUsers).filter(([uid, data]) => data && data.username && data.username.toLowerCase().includes(filter)); // Tambah cek data
+            const filtered = Object.entries(allUsers).filter(([uid, data]) => data && data.username && data.username.toLowerCase().includes(filter)); 
             totalEl.textContent = filtered.length;
-
             filtered.forEach(([uid, data]) => {
                 let canDelete = !(data.role === 'Owner' || uid === currentUserData.uid || (currentUserData.role === 'Reseller' && data.role === 'Reseller'));
                 const row = document.createElement('tr');
@@ -1062,13 +1091,11 @@
                 tableBody.appendChild(row);
             });
         }
-
         function handleDataPageActions(e) {
             if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
                 showNotification("Application is currently OFF.", "error");
                 return;
             }
-            
             const target = e.target;
             if (!target.dataset.uid || !currentUserData) return;
             const uid = target.dataset.uid;
@@ -1083,38 +1110,32 @@
                 if (!allUsers || !allUsers[uid]) return;
                 const expiry = new Date(allUsers[uid].expiryDate || Date.now());
                 const newExpiry = (new Date() > expiry ? new Date() : expiry);
-                newExpiry.setDate(newExpiry.getDate() + 30); // Extend selalu 30 hari
+                newExpiry.setDate(newExpiry.getDate() + 30); 
                 db.ref(`users/${uid}/expiryDate`).set(newExpiry.toISOString()).then(() => showNotification(`Subscription for "${uname}" extended by 30 days.`, 'success'));
             }
         }
-
-        
-        // --- Fungsi HandleBugSend (dengan Cooldown dan penghilangan gambar) ---
         async function handleBugSend(e) {
             if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
                 showNotification("Application is currently OFF.", "error");
                 return;
             }
-
             const btn = document.getElementById('send-bug-btn');
             if (!currentUserData || !btn) return;
-
             if (btn.disabled) { showNotification("You have sent, please wait for 15 minutes!!", "error"); return; }
             const now = Date.now();
             if (currentUserData.bugCooldownUntil && currentUserData.bugCooldownUntil > now) { showNotification("You have sent, please wait for 15 minutes!!", "error"); checkBugCooldown(); return; }
             btn.disabled = true;
-            btn.innerHTML = `<span>SENDING...</span>`; // <<< HANYA TEKS
+            btn.innerHTML = `<span>SENDING...</span>`; 
             const selectedModeEl = document.querySelector('#sender-page .mode-btn.active');
-            const selectedMode = selectedModeEl ? selectedModeEl.dataset.mode : 'delay'; // Default ke delay jika tidak ketemu
+            const selectedMode = selectedModeEl ? selectedModeEl.dataset.mode : 'delay'; 
             const prefixInput = selectedMode === 'delay' ? document.getElementById('delay-prefix-input') : document.getElementById('bug-prefix-input');
             const prefix = prefixInput ? prefixInput.value : (selectedMode === 'delay' ? '.delay' : '.bug');
             const targetNumberInput = document.getElementById('target-number');
             const targetNumber = targetNumberInput ? targetNumberInput.value : '';
-
             if (!targetNumber) { 
                 showNotification('Target number is required!', 'error'); 
                 btn.disabled = false; 
-                btn.innerHTML = `<span>SEND</span>`; // <<< HANYA TEKS
+                btn.innerHTML = `<span>SEND</span>`; 
                 return; 
             }
             const payload = `${prefix} ${targetNumber}`;
@@ -1122,35 +1143,28 @@
                 await db.ref('messageQueue').push({ senderUsername: currentUserData.username, senderUid: currentUserData.uid, payload: payload, timestamp: new Date().toISOString() });
                 showNotification('Bug request sent to Admin Inbox!', 'success');
                 const waForm = document.getElementById('wa-form'); if (waForm) waForm.reset();
-                const cooldownEndTime = Date.now() + 15 * 60 * 1000; // 15 menit
+                const cooldownEndTime = Date.now() + 15 * 60 * 1000; 
                 await db.ref('users/' + currentUserData.uid + '/bugCooldownUntil').set(cooldownEndTime);
                 currentUserData.bugCooldownUntil = cooldownEndTime;
                 checkBugCooldown();
             } catch (error) { 
                 showNotification('Failed to send request.', 'error'); 
                 btn.disabled = false; 
-                btn.innerHTML = `<span>SEND</span>`; // <<< HANYA TEKS
+                btn.innerHTML = `<span>SEND</span>`; 
             }
         }
-        // --- AKHIR Fungsi HandleBugSend ---
-
-
         function handleSavePrefix() {
             if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
                 showNotification("Application is currently OFF.", "error");
                 return;
             }
-
             const delayInput = document.getElementById('delay-prefix-input');
             const bugInput = document.getElementById('bug-prefix-input');
             if(delayInput && bugInput){
                  db.ref('config').update({ customDelayPrefix: delayInput.value, customBugPrefix: bugInput.value }).then(() => showNotification('Prefix settings saved!', 'success'));
             }
         }
-
-        // --- (PERUBAHAN DI SINI) updateSettingsPageUI ---
         function updateSettingsPageUI() {
-            // Pastikan elemen ada sebelum diakses
             const settingsUsername = document.getElementById('settings-username');
             const settingsRole = document.getElementById('settings-role');
             const purchaseDateEl = document.getElementById('purchase-date');
@@ -1158,29 +1172,21 @@
             const appStatusDisplay = document.getElementById('app-status-display');
             const renewLink = document.getElementById('renew-link');
             const ownerControlsContainer = document.getElementById('owner-controls-container');
-
-            if (!currentUserData) return; // Jangan update jika data user belum ada
-
+            if (!currentUserData) return; 
             if (settingsUsername) settingsUsername.textContent = currentUserData.username;
             if (settingsRole) settingsRole.textContent = currentUserData.role;
             const isOwner = currentUserData.role === 'Owner';
             if (purchaseDateEl) purchaseDateEl.textContent = currentUserData.purchaseDate ? new Date(currentUserData.purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric'}) : 'N/A';
             if (expiryDateEl) expiryDateEl.textContent = isOwner ? '∞ (Unlimited)' : (currentUserData.expiryDate ? new Date(currentUserData.expiryDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric'}) : 'N/A');
-            
             if (appStatusDisplay) { 
                 appStatusDisplay.textContent = globalConfig.appStatus || 'ON'; 
                 appStatusDisplay.className = (globalConfig.appStatus || 'ON') === 'ON' ? 'status-active' : 'status-expired'; 
             }
-
-            // --- PERUBAHAN: Gunakan nomor WA Extension ---
             if (renewLink) {
-                 const extensionWaNumber = globalConfig.extensionWaNumber || ''; // Ambil nomor extension dari config
+                 const extensionWaNumber = globalConfig.extensionWaNumber || ''; 
                  renewLink.href = `https://wa.me/${extensionWaNumber}?text=Hello, I am ${currentUserData.username} and I want to request an extension.`;
             }
-            // --- AKHIR PERUBAHAN ---
-
             if (ownerControlsContainer) {
-                // --- Tambahkan Kontrol WA Extension ke HTML Owner ---
                 ownerControlsContainer.innerHTML = isOwner ? `
                     <div class="owner-controls">
                         <h3>Global Application Control</h3>
@@ -1210,37 +1216,28 @@
                             <button class="submit-btn" style="background-color:#3498db" id="save-telegram-link-btn">Save Link</button>
                         </div>
                     </div>`
-                : ''; // Kosong jika bukan owner
+                : ''; 
             }
         }
-        // --- (AKHIR PERUBAHAN) ---
-
-        // --- (PERUBAHAN DI SINI) handleSettingsPageActions ---
         function handleSettingsPageActions(e) {
             const target = e.target;
-            // Pastikan elemennya ada sebelum mengambil value
             const activeSenderInput = document.getElementById('active-sender-input');
             const adminWaInput = document.getElementById('admin-wa-input');
-            const extensionWaInput = document.getElementById('extension-wa-input'); // <-- BARU
+            const extensionWaInput = document.getElementById('extension-wa-input'); 
             const telegramText1Input = document.getElementById('telegram-text1-input');
             const telegramText2Input = document.getElementById('telegram-text2-input');
             const telegramLinkInput = document.getElementById('telegram-link-input');
-
             const actions = {
                 'apk-on-btn': () => { db.ref('config/appStatus').set('ON'); showNotification('Application Status: ON', 'success'); },
                 'apk-off-btn': () => { db.ref('config/appStatus').set('OFF'); showNotification('Application Status: OFF', 'error'); },
                 'save-sender-btn': () => { if(activeSenderInput) db.ref('config/activeSenderCount').set(activeSenderInput.value); showNotification('Active Senders saved!', 'success'); },
                 'save-wa-btn': () => { if(adminWaInput) db.ref('config/adminWaNumberLogin').set(adminWaInput.value); showNotification('Admin WA Number saved!', 'success'); },
-                
-                // --- PERUBAHAN: Aksi untuk tombol save WA Extension ---
                 'save-extension-wa-btn': () => { 
                     if(extensionWaInput) {
                         db.ref('config/extensionWaNumber').set(extensionWaInput.value); 
                         showNotification('Extension Request WA Number saved!', 'success'); 
                     }
                 },
-                // --- AKHIR PERUBAHAN ---
-
                 'save-telegram-text-btn': () => {
                     if(telegramText1Input && telegramText2Input){
                         const text1 = telegramText1Input.value;
@@ -1259,13 +1256,11 @@
             const action = actions[target.id] || (target.classList.length > 0 && actions[target.classList[0]]);
             if (action) action();
         }
-        // --- (AKHIR PERUBAHAN) ---
-
         function populateMessagesInbox() {
              const container = document.getElementById('message-inbox-container');
-             if (!container) return; // Tambah cek jika elemen tidak ada
+             if (!container) return; 
              db.ref('messageQueue').on('value', snapshot => {
-                if (!container) return; // Cek lagi di dalam callback
+                if (!container) return; 
                 container.innerHTML = '';
                 if (!snapshot.exists()) { container.innerHTML = '<p>Inbox is empty.</p>'; return; }
                 snapshot.forEach(child => {
@@ -1279,25 +1274,19 @@
                 });
                 const adminWaInput = document.getElementById('admin-wa-number');
                 const adminTgInput = document.getElementById('admin-tg-id');
-
                 if(adminWaInput) adminWaInput.value = currentUserData.adminReplyPrefs?.waNumber || '';
                 if(adminTgInput) adminTgInput.value = currentUserData.adminReplyPrefs?.tgId || '';
              });
         }
-
-        // --- Fungsi Push Notifikasi ke User ---
         function pushNotificationToUser(targetUid, message, type) {
             if (!targetUid || !message || !type) return;
             db.ref('user_notifications/' + targetUid).push({ text: message, type: type, timestamp: new Date().toISOString() });
         }
-
-        // --- Fungsi Handle Aksi di Inbox Admin (Dirombak) ---
         async function handleMessagesPageActions(e) {
             if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
                 showNotification("Application is currently OFF.", "error");
                 return;
             }
-
             const target = e.target;
             if(!target.dataset.key) return;
             const key = target.dataset.key;
@@ -1307,39 +1296,34 @@
             const targetNumber = payloadParts.length > 1 ? payloadParts[1] : '[unknown number]';
             let notificationMessage = '';
             let notificationType = '';
-
             if(target.classList.contains('accept-btn') || target.classList.contains('telegram-btn')){
                 if (target.classList.contains('accept-btn')) {
                     const waNumInput = document.getElementById('admin-wa-number');
                     const waNum = waNumInput ? (waNumInput.value || globalConfig.adminWaNumberLogin) : globalConfig.adminWaNumberLogin;
                     if(!waNum) { showNotification('Please set your WA number first!', 'error'); return; }
-                    
                     if(waNumInput && waNumInput.value) {
                         try {
                             await db.ref(`users/${currentUserData.uid}/adminReplyPrefs/waNumber`).set(waNumInput.value);
                             if (!currentUserData.adminReplyPrefs) currentUserData.adminReplyPrefs = {};
-                            currentUserData.adminReplyPrefs.waNumber = waNumInput.value; // Update objek lokal
+                            currentUserData.adminReplyPrefs.waNumber = waNumInput.value; 
                         } catch (err) {
                             showNotification('Failed to save WA number.', 'error');
                         }
                     }
-
                     window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(payload)}`, '_blank');
-                } else { // ini adalah telegram-btn
+                } else { 
                      const tgIdInput = document.getElementById('admin-tg-id');
                      const tgId = tgIdInput ? tgIdInput.value : '';
                      if (!tgId) { showNotification('Please set your Telegram Username/ID first!', 'error'); return; }
-                     
                      if (tgIdInput && tgIdInput.value) {
                          try {
                             await db.ref(`users/${currentUserData.uid}/adminReplyPrefs/tgId`).set(tgIdInput.value);
                             if (!currentUserData.adminReplyPrefs) currentUserData.adminReplyPrefs = {};
-                            currentUserData.adminReplyPrefs.tgId = tgIdInput.value; // Update objek lokal
+                            currentUserData.adminReplyPrefs.tgId = tgIdInput.value; 
                          } catch (err) {
                             showNotification('Failed to save TG ID.', 'error');
                          }
                      }
-
                      const tgLink = tgId.startsWith('@') ? `https://t.me/${tgId.substring(1)}` : `tg://user?id=${tgId}`;
                      window.open(`${tgLink}?text=${encodeURIComponent(payload)}`, '_blank') || window.location.assign(`${tgLink}?text=${encodeURIComponent(payload)}`);
                 }
@@ -1349,11 +1333,9 @@
                 notificationMessage = `Failed to send to ${targetNumber}`;
                 notificationType = 'error';
             }
-
             if(senderUid && notificationMessage) { pushNotificationToUser(senderUid, notificationMessage, notificationType); }
             if (notificationMessage) { db.ref('messageQueue/' + key).remove(); }
         }
-
         function handleUserSearch(e) {
              const term = e.target.value.toLowerCase();
              const searchResults = document.getElementById('user-search-results');
@@ -1374,11 +1356,9 @@
                  }
              });
          }
-
         function populateChatList() {
             const conversationList = document.getElementById('conversation-list');
             if (!conversationList || !currentUserData) return;
-
             const chatsRef = db.ref('chats').orderByChild(`participants/${currentUserData.uid}`).equalTo(true);
             chatsRef.off('value');
             chatsRef.on('value', snapshot => {
@@ -1405,20 +1385,17 @@
                 });
             });
         }
-
         function handleConversationClick(e) {
             if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
                 showNotification("Application is currently OFF.", "error");
                 return;
             }
-
             const item = e.target.closest('.conversation-list-item');
             if (item && item.dataset.uid) {
                 currentChatPartnerUid = item.dataset.uid;
                 showPage('chat-window-page', { partnerUid: item.dataset.uid, partnerUsername: item.dataset.uname });
             }
         }
-
         function renderChatWindowPage(context) {
              if (!context || !currentUserData) return;
              const { partnerUid, partnerUsername } = context;
@@ -1427,16 +1404,13 @@
              const messageForm = document.getElementById('message-form');
              if (chatPartnerUsernameEl) chatPartnerUsernameEl.textContent = partnerUsername;
              if (messageForm) messageForm.dataset.partnerUid = partnerUid;
-
              const messageContainer = document.getElementById('message-container');
              if (!messageContainer) return;
              messageContainer.innerHTML = '';
              const conversationId = getConversationId(currentUserData.uid, partnerUid);
              const messagesRef = db.ref(`chats/${conversationId}/messages`);
-
              if(chatsListener) chatsListener.off();
              chatsListener = messagesRef.limitToLast(50);
-
              chatsListener.on('child_added', snapshot => {
                  if (!messageContainer) return;
                  const msg = snapshot.val();
@@ -1454,7 +1428,6 @@
                  messageContainer.appendChild(bubble);
                  messageContainer.scrollTop = messageContainer.scrollHeight;
              });
-
              chatsListener.on('child_removed', snapshot => {
                  if (!messageContainer) return;
                  const removedKey = snapshot.key;
@@ -1462,15 +1435,12 @@
                  if (bubbleToRemove) bubbleToRemove.remove();
              });
         }
-
         function handleSendMessage(e) {
             e.preventDefault();
-
             if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
                 showNotification("Application is currently OFF.", "error");
                 return;
             }
-
             const input = document.getElementById('message-input');
             const partnerUid = e.target.dataset.partnerUid;
             if (!input || !partnerUid || !currentUserData) return;
@@ -1481,18 +1451,14 @@
             const newMessage = { sender: currentUserData.uid, text: text, timestamp: new Date().toISOString() };
             const newMessageRef = messagesRef.push();
             newMessageRef.set(newMessage);
-
             db.ref(`chats/${conversationId}/lastMessage`).set({ ...newMessage, key: newMessageRef.key });
             db.ref(`chats/${conversationId}/participants`).set({ [currentUserData.uid]: true, [partnerUid]: true });
             input.value = '';
          }
-
-        // --- Handler for deleting messages ---
         function handleDeleteMessageClick(e) {
             if (e.target.classList.contains('delete-msg-btn')) {
                 const messageKey = e.target.dataset.key;
                 if (!messageKey || !currentChatPartnerUid || !currentUserData) return;
-
                 const conversationId = getConversationId(currentUserData.uid, currentChatPartnerUid);
                 showConfirm("Delete this message?", () => {
                     const messageRef = db.ref(`chats/${conversationId}/messages/${messageKey}`);
@@ -1516,8 +1482,6 @@
                 });
             }
         }
-
-        // Helper function to generate unique IDs
         function getConversationId(uid1, uid2) { return [uid1, uid2].sort().join('_'); }
 
         // --- START APP ---
