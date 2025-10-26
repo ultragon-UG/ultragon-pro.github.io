@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <title>ULTRAGON - Dashboard</title>
+    <style>
+        /* Font Utama Diganti ke Orbitron (monospace) */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', monospace; } /* <<< PERUBAHAN FONT */
+
+        body { color: #e0e0e0; background-color: #000000; font-size: 14px; padding-bottom: 80px; }
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 15px; background-color: #191929; border-bottom: 1px solid #2a2a3a; position: sticky; top: 0; z-index: 20; }
+        .header-left, .header-right { display: flex; align-items: center; flex: 1; }
+        .header-left { justify-content: flex-start; }
+        .header-right { justify-content: flex-end; gap: 10px; }
+        .header-center { flex: 2; text-align: center; }
+        .header-title-img { height: 35px; width: auto; vertical-align: middle; }
+        .header-logo { height: 30px; width: auto; }
+        .header-btn { background: none; border: none; cursor: pointer; padding: 5px; border-radius: 50%; }
+        .header-btn img, .nav-item img, .icon-button img { width: 24px; height: 24px; filter: invert(30%) sepia(90%) saturate(2000%) hue-rotate(340deg) brightness(100%) contrast(100%); transition: filter 0.3s; }
+        .nav-item.active img { filter: invert(30%) sepia(90%) saturate(2000%) hue-rotate(340deg) brightness(120%) contrast(100%); }
+        main { padding: 20px 15px; }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .content-box { background: rgba(25, 25, 41, 0.8); padding: 25px; border-radius: 15px; text-align: center; width: 100%; border: 1px solid #2a2a3a; margin-bottom: 20px; }
+        .content-box h2 { margin-bottom: 20px; color: #88d3ce; }
+        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #000000; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #2a2a3a; z-index: 10; }
+        .nav-item { cursor: pointer; text-align: center; color: #ffffff; flex: 1; }
+        .nav-item span { font-size: 0.75em; display: block; color: #ffffff; filter: brightness(0.6); transition: filter 0.3s, color 0.3s, font-weight 0.3s; }
+        .nav-item.active span { color: #ffffff; filter: brightness(1); font-weight: bold; }
+        button, a, input, select, .nav-item, .header-btn, .icon-button { outline: none !important; box-shadow: none !important; -webkit-tap-highlight-color: transparent; }
+        
+        /* Garis luar putih halus untuk main-banner */
+        .main-banner { 
+            position: relative; 
+            border-radius: 16px; 
+            overflow: hidden; 
+            margin-bottom: 20px; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3); 
+            border: 2px solid rgba(255, 255, 255, 0.5); /* <<< GARIS PUTIH HALUS */
+        }
+        
+        .main-banner img { width: 100%; display: block; }
+        .banner-overlay { position: absolute; bottom: 0; left: 0; width: 100%; padding: 20px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
+        .banner-overlay h2 { font-size: 1.5em; color: #fff; }
+        .banner-overlay p { font-size: 0.9em; color: #aaa; }
+        .icon-nav-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .icon-button { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: #ccc; }
+        
+        /* Garis luar merah untuk tombol icon */
+        .icon-button .icon-bg { width: 50px; height: 50px; background-color: #191929; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid red; transition: background-color 0.3s; }
+        
+        .icon-button:hover .icon-bg { background-color: #2a2a3a; }
+
+        /* Perbaikan Teks Create Account */
+        .icon-button span {
+            font-size: 0.8em;
+            text-align: center;
+            width: 100%;
+        }
+
+        .input-group { text-align: left; margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; color: #a7a9be; }
+        .input-group input, .input-group select { 
+            width: 100%; padding: 12px; border: 1px solid #2a2a3a; background: #10101a; border-radius: 8px; color: #fff; font-size: 1em; 
+            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+        }
+        
+        /* Style khusus untuk group durasi */
+        .duration-group { display: flex; gap: 10px; align-items: flex-end; }
+        .duration-group .input-value { flex-grow: 1; } /* Input angka ambil sisa ruang */
+        .duration-group .input-unit { width: auto; flex-shrink: 0; } /* Select unit lebarnya otomatis */
+
+        .submit-btn { 
+            width: 100%; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 8px; 
+            background: #88d3ce; 
+            color: #10101a; 
+            font-size: 1.1em; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-top: 10px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px;
+            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+        }
+        
+        /* ============ PERUBAHAN: HILANGKAN GAMBAR DARI TOMBOL SEND ============ */
+        .submit-btn img { 
+            display: none; /* Menyembunyikan gambar */
+        }
+        /* =================================================================== */
+
+
+        /* Style untuk Tombol Abu-abu (Disabled) */
+        .submit-btn:disabled {
+            background-color: #555;
+            color: #999;
+            cursor: not-allowed;
+        }
+
+        .mode-selector { display: flex; width: 100%; background: #10101a; border-radius: 8px; overflow: hidden; border: 1px solid #2a2a3a; margin-bottom: 15px; }
+        .mode-btn { 
+            flex: 1; padding: 12px; border: none; background-color: transparent; color: #a7a9be; cursor: pointer; font-size: 0.9em; transition: all 0.3s; font-weight: bold; 
+            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+        }
+        .mode-btn.active { background-color: #88d3ce; color: #10101a; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-box { background: #191929; padding: 25px; border-radius: 15px; text-align: center; width: 90%; max-width: 350px; border: 1px solid #2a2a3a; transform: scale(0.9); transition: transform 0.3s; }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-box p { margin-bottom: 20px; color: #a7a9be; }
+        .modal-buttons { display: flex; gap: 10px; }
+        .modal-buttons button { 
+            flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; 
+            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+        }
+        .profile-info { text-align: left; margin-bottom: 25px; }
+        .profile-info p { border-bottom: 1px solid #2a2a3a; padding: 10px 0; color: #fff; display: flex; justify-content: space-between; }
+        .profile-info p span { color: #aaa; }
+        .status-active { color: #2ecc71 !important; } .status-expired { color: #e74c3c !important; }
+        .account-data-table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
+        .account-data-table th, .account-data-table td { padding: 8px; border: 1px solid #2a2a3a; text-align: left; font-size: 0.9em; word-wrap: break-word; }
+        .account-data-table th { background-color: #10101a; }
+        .online-status { display: inline-block; width: 10px; height: 10px; background-color: #e74c3c; border-radius: 50%; margin-right: 5px; }
+        .online-status.online { background-color: #2ecc71; }
+        .action-btn { border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; width: 100%; color: white; }
+        .delete-btn { background-color: #c0392b; }
+        .delete-btn:disabled { background-color: #555; cursor: not-allowed; }
+        .renew-account-btn { background-color: #3498db; }
+        .frozen-overlay { width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; flex-direction: column; position: fixed; top: 0; left: 0; background: rgba(0,0,0,0.8); z-index: 9999; }
+        #notification-container { position: fixed; top: 20px; right: 20px; z-index: 10001; }
+        .notification { padding: 15px; border-radius: 8px; color: #fff; font-weight: bold; background: #333; margin-bottom: 10px; animation: slideIn 0.5s forwards; }
+        .notification.success { background: #2ecc71; } .notification.error { background: #e74c3c; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideOut { to { opacity: 0; transform: translateX(100%); } }
+        .subscription-status { background: #10101a; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: left; font-size: 0.9em; border: 1px solid #2a2a3a;}
+        .owner-controls { margin-top: 20px; border-top: 1px solid #2a2a3a; padding-top: 20px; }
+        .control-buttons { display: flex; gap: 10px; }
+        .control-buttons button { 
+            flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; 
+            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+        }
+        .apk-on-btn { background-color: #2ecc71; color: white; }
+        .apk-off-btn { background-color: #e74c3c; color: white; }
+        .message-inbox { max-height: 400px; overflow-y: auto; text-align: left; }
+        .message-item { background: #10101a; border: 1px solid #2a2a3a; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+        .message-item p { margin-bottom: 10px; word-wrap: break-word; }
+        .message-item b { color: #88d3ce; }
+        .message-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .message-actions button { 
+            width: 100%; padding: 8px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; 
+            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+        }
+        .accept-btn { background-color: #27ae60; color: white; }
+        .telegram-btn { background-color: #3498db; color: white; }
+        .reject-btn { background-color: #c0392b; color: white; }
+        .conversation-list-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #2a2a3a; cursor: pointer; }
+        .conversation-list-item:hover { background-color: #10101a; }
+        .conversation-info { text-align: left; flex-grow: 1; margin-right: 10px; }
+        .conversation-info .username { font-weight: bold; color: #fff; }
+        .conversation-info .last-message { font-size: 0.9em; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        #chat-window-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        #message-container { height: calc(100vh - 300px); overflow-y: auto; display: flex; flex-direction: column; padding: 10px; border: 1px solid #2a2a3a; border-radius: 8px; background-color: #10101a; margin-bottom: 10px;}
+        .message-bubble { max-width: 70%; padding: 10px 15px; border-radius: 18px; margin-bottom: 10px; word-wrap: break-word; position: relative; }
+        .message-bubble .timestamp { font-size: 0.7em; color: #bbb; display: block; margin-top: 5px; text-align: right; }
+        .sent { background-color: #3498db; color: white; align-self: flex-end; }
+        .received { background-color: #2c3e50; color: white; align-self: flex-start; }
+        .delete-msg-btn { position: absolute; top: 2px; left: -25px; background: none; border: none; color: #999; cursor: pointer; font-size: 1.2em; padding: 0; line-height: 1; opacity: 0; transition: opacity 0.2s; } /* Initially hidden */
+        .message-bubble.sent:hover .delete-msg-btn { opacity: 1; }
+        .delete-msg-btn:hover { color: #ff4d4d; }
+        #message-form { display: flex; margin-top: 10px; gap: 10px; }
+        #message-input { flex-grow: 1; }
+        #user-search-results { max-height: 200px; overflow-y: auto; margin-top: 15px; border: 1px solid #2a2a3a; border-radius: 8px;}
+        .search-result-item { padding: 12px; text-align: left; border-bottom: 1px solid #2a2a3a; cursor: pointer; }
+        .search-result-item:hover { background-color: #2a2a3a; }
+        .search-result-item:last-child { border-bottom: none; }
+
+        /* Style Stats-Panel (Merah Bergerak) */
+        .stats-panel {
+            width: 100%;
+            background: linear-gradient(-45deg, #600000, #a00000, #3d0000, #500000);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            border-radius: 12px;
+            padding: 0;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 100, 100, 0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            font-size: 14px;
+            color: #ffffff;
+            overflow: hidden;
+        }
+        .stats-header { display: flex; align-items: center; gap: 8px; padding: 15px; background-color: #b8860b; font-weight: bold; border-bottom: 1px solid gold; }
+        .stats-header span { color: #ffffff; }
+        .stats-header img { width: 20px; height: 20px; display: block; filter: none; }
+        .stats-content { padding: 0 15px 5px 15px; }
+        .stats-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
+        .stats-row + .stats-row { border-top: 1px solid gold; }
+        .stats-row .label { display: flex; align-items: center; gap: 10px; color: #ffcccc; }
+        .stats-row .label img { width: 20px; height: 20px; display: block; filter: none; }
+        .stats-row .value { font-weight: normal; color: #ffffff; text-align: right; font-family: 'Orbitron', monospace; font-size: 1em; } /* <<< PERUBAHAN FONT */
+
+        /* Style Banner Dinamis (Merah Bergerak) */
+        .telegram-custom-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: linear-gradient(-45deg, #600000, #a00000, #3d0000, #500000);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 100, 100, 0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .telegram-custom-banner .banner-content { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
+        
+        /* ============ PERUBAHAN: GESER GAMBAR ORANG.PNG ============ */
+        .telegram-custom-banner .banner-icon-img { 
+            width: 50px; 
+            height: 50px; 
+            filter: invert(100%); 
+            flex-shrink: 0; 
+            display: block; 
+            margin-right: 5px; /* Kurangi margin kanan pada gambar */
+        }
+        .telegram-custom-banner .banner-text { 
+            flex-grow: 1; 
+            margin-right: 0px; /* Kurangi margin kanan pada teks */
+            font-weight: bold; 
+            line-height: 1.3; 
+            text-align: left; 
+            font-family: 'Orbitron', monospace; /* <<< PERUBAHAN FONT */
+        }
+        /* ========================================================== */
+
+        .telegram-custom-banner .banner-text span { display: block; }
+        .telegram-custom-banner .arrow-icon { font-size: 1.5em; color: #ffffff; flex-shrink: 0; }
+
+        /* Animasi Gradient (Merah Bergerak) */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Style Tambahan untuk Bagian Banner Settings */
+        .banner-settings-section {
+             margin-top: 20px;
+             border-top: 1px solid #2a2a3a;
+             padding-top: 20px;
+             text-align: left; /* Agar label rata kiri */
+        }
+        .banner-settings-section label {
+             display: block;
+             margin-bottom: 5px;
+             color: #a7a9be;
+        }
+        .banner-settings-section .input-group {
+             margin-bottom: 10px; /* Jarak antar input lebih dekat */
+        }
+        .banner-settings-section .submit-btn {
+             margin-top: 5px; /* Jarak tombol save lebih dekat */
+        }
+
+        /* Style <select> agar mirip <input> */
+        .input-group select {
+            appearance: none; /* Hilangkan tampilan default browser/OS */
+            -webkit-appearance: none; /* Untuk Safari/Chrome */
+            -moz-appearance: none; /* Untuk Firefox */
+            background-color: #10101a; /* Samakan dengan input */
+            background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>'); /* Panah custom (putih) */
+            background-repeat: no-repeat;
+            background-position: right 10px center; /* Posisi panah */
+            background-size: 20px; /* Ukuran panah */
+            padding-right: 40px; /* Beri ruang agar teks tidak tertutup panah */
+        }
+
+        /* Hilangkan panah default di Firefox */
+        select::-moz-focus-inner {
+            border: 0;
+        }
+        /* Hilangkan panah default di IE */
+        select::-ms-expand {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="app-wrapper">
+        <div id="notification-container"></div>
+        <div class="header">
+            <div class="header-left">
+                <button class="header-btn" id="menu-btn">
+                    <img src="tandatiga.png" alt="Menu">
+                </button>
+            </div>
+            <div class="header-center">
+                <img src="ultragon.png" alt="ULTRAGON" class="header-title-img">
+            </div>
+            <div class="header-right">
+                <img src="logoug.png" alt="Logo ULTRAGON" class="header-logo">
+                <button class="header-btn" id="profile-header-btn">
+                    <img src="profil.png" alt="Profile">
+                </button>
+            </div>
+        </div>
+        <main>
+            <div id="home-page" class="page">
+                <div class="main-banner">
+                    <img src="saitama.png" alt="Main Banner">
+                    <div class="banner-overlay">
+                        <h2>ULTRAGON PRO</h2>
+                        <p>Welcome, <span id="welcome-username">User</span>!</p>
+                    </div>
+                </div>
+                <div class="icon-nav-grid">
+                    <a href="#" class="icon-button" data-page="admin-page">
+                        <div class="icon-bg"><img src="tambah.png" alt="Create Account"></div>
+                        <span>Create Account</span>
+                    </a>
+                    <a href="#" class="icon-button" data-page="chat-list-page">
+                        <div class="icon-bg"><img src="pesan.png" alt="Messages"></div>
+                        <span>Messages</span>
+                    </a>
+                    <a href="#" class="icon-button" data-page="sender-page">
+                        <div class="icon-bg"><img src="kumbang1.png" alt="Bug"></div>
+                        <span>Bug</span>
+                    </a>
+                    <a href="#" class="icon-button" data-page="data-page">
+                        <div class="icon-bg"><img src="data.png" alt="Data"></div>
+                        <span>Data</span>
+                    </a>
+                    <a href="#" class="icon-button" data-page="settings-page">
+                        <div class="icon-bg"><img src="pengaturan.png" alt="Settings"></div>
+                        <span>Settings</span>
+                    </a>
+                </div>
+
+                <a href="https://t.me/ultragonpro" id="telegram-banner-link" target="_blank" class="telegram-custom-banner">
+                    <div class="banner-content">
+                        <img src="orang.png" alt="People Icon" class="banner-icon-img">
+                        <span class="banner-text">
+                            <span id="banner-text-line1">🔥 Telegram Channel: Join To Get</span>
+                            <span id="banner-text-line2">More Info!</span>
+                        </span>
+                    </div>
+                    <span class="arrow-icon">⟩</span>
+                </a>
+
+                <div class="stats-panel">
+                    <div class="stats-header">
+                        <img src="stats.png" alt="Stats Icon"> <span>Server Stats</span>
+                    </div>
+                    <div class="stats-content">
+                        <div class="stats-row">
+                            <span class="label">
+                                <img src="onlineusers.png" alt="Users Icon"> <span>Online Users</span>
+                            </span>
+                            <span class="value" id="online-users-stat">0</span>
+                        </div>
+                        <div class="stats-row">
+                            <span class="label">
+                                <img src="activesender.png" alt="Sender Icon"> <span>Active Senders</span>
+                            </span>
+                            <span class="value" id="active-sender-stat">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="data-page" class="page">
+                 <div class="content-box">
+                    <h2>Account Data Dashboard</h2>
+                    <div class="input-group">
+                        <input type="search" id="search-account-input" placeholder="Search username...">
+                    </div>
+                    <p>Total Accounts: <b id="total-accounts-data">0</b></p>
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table class="account-data-table">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Password</th>
+                                    <th>Role</th>
+                                    <th style="width:15%">Action</th>
+                                    <th style="width:25%">Extend</th>
+                                </tr>
+                            </thead>
+                            <tbody id="account-list-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sender-page" class="page">
+                 <div class="content-box">
+
+                    <div class="main-banner"> 
+                        <video src="saitama1.mp4" autoplay muted loop style="width: 100%; display: block;">
+                            Browser kamu tidak support video.
+                        </video>
+                    </div>
+                    <h2>WhatsApp Bug</h2>
+                     <div id="prefix-settings" style="display: none; border-bottom: 1px solid #2a2a3a; padding-bottom: 15px; margin-bottom: 15px;">
+                        <h4>Prefix Settings (Admin)</h4>
+                        <div class="input-group"><label>Prefix Invisible Delay</label><input id="delay-prefix-input"></div>
+                        <div class="input-group"><label>Prefix iOS / Andro Crash</label><input id="bug-prefix-input"></div>
+                        <button class="submit-btn" id="save-prefix-btn" style="background-color:#3498db">Save Settings</button>
+                    </div>
+                    <form id="wa-form">
+                        <label style="text-align:left;display:block;margin-bottom:5px;">Select Mode</label>
+                        <div class="mode-selector">
+                            <button type="button" class="mode-btn active" data-mode="delay">Invisible Delay</button>
+                            <button type="button" class="mode-btn" data-mode="bug">iOS / Andro Crash</button>
+                        </div>
+                        <div class="input-group">
+                            <label for="target-number">Target Number</label>
+                            <input type="number" id="target-number" required>
+                        </div>
+                        
+                        <button type="button" id="send-bug-btn" class="submit-btn">
+                            <span>SEND</span> </button>
+                        <p id="cooldown-timer" style="margin-top:10px; color: #ff9e9e; font-weight: bold;"></p>
+
+                    </form>
+                </div>
+            </div>
+
+            <div id="admin-page" class="page">
+                <div class="content-box">
+                    <h2>ADMIN PANEL: Create Account</h2>
+                    <form id="create-account-form">
+                        <div class="input-group"><label for="new-username">New Username</label><input type="text" id="new-username" required></div>
+                        <div class="input-group"><label for="new-password">New Password</label><input type="text" id="new-password" required></div>
+                        <div class="input-group"><label for="new-role">Select Role</label><select id="new-role" required></select></div>
+                        
+                        <div class="input-group">
+                             <label>Duration</label>
+                             <div class="duration-group">
+                                <input type="number" id="new-duration-value" placeholder="e.g., 30" class="input-value" required>
+                                <select id="new-duration-unit" class="input-unit" required>
+                                    <option value="days">Days</option>
+                                    <option value="months">Months</option>
+                                    <option value="years">Years</option>
+                                </select>
+                             </div>
+                        </div>
+                        <button type="button" id="create-account-btn" class="submit-btn">Create Account</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="settings-page" class="page">
+                 <div class="content-box">
+                    <h2>Account Settings</h2>
+                    <div class="subscription-status">
+                        <p>Username: <span id="settings-username" style="color:white;"></span></p>
+                        <p>Role: <span id="settings-role" style="color:white;"></span></p><hr style="border-color:#2a2a3a; margin:10px 0;">
+                        <p>Purchase Date: <span id="purchase-date"></span></p>
+                        <p>Expires On: <span id="expiry-date"></span></p>
+                        <p>Application Status: <span id="app-status-display"></span></p>
+                        <a href="#" id="renew-link" class="action-btn renew-account-btn" style="display:block; text-decoration:none; margin-top:10px;">Request Extension</a>
+                    </div>
+                    <button id="logout-btn" style="width:100%; padding:12px; border:none; border-radius:8px; background:#c0392b; color:white; font-weight:bold;">Logout</button>
+
+                    <div id="owner-controls-container"></div>
+
+                </div>
+            </div>
+
+            <div id="messages-page" class="page">
+                <div class="content-box">
+                    <h2>Admin Inbox</h2>
+                    <div class="input-group">
+                        <label>Your WA Number (to reply)</label>
+                        <input type="number" id="admin-wa-number" placeholder="62...">
+                    </div>
+                    <div class="input-group">
+                        <label>Your Telegram Username/ID (to reply)</label>
+                        <input type="text" id="admin-tg-id" placeholder="@username or 12345678">
+                    </div>
+                     <div id="message-inbox-container" class="message-inbox"></div>
+                </div>
+            </div>
+
+            <div id="chat-list-page" class="page">
+                 <div class="content-box">
+                    <h2>Messages</h2>
+                    <button id="start-new-chat-btn" class="submit-btn" style="margin-bottom: 20px; background-color: #27ae60;">Start New Chat</button>
+                    <div id="conversation-list" style="max-height: 400px; overflow-y: auto;"></div>
+                </div>
+            </div>
+
+            <div id="chat-window-page" class="page">
+                <div class="content-box">
+                    <div id="chat-window-header">
+                        <button id="back-to-chat-list-btn" class="action-btn" style="width:auto;background-color:#555;">Back</button>
+                        <h3 id="chat-partner-username"></h3>
+                        <div></div> </div>
+                    <div id="message-container" style="position: relative;"></div>
+                    <form id="message-form">
+                        <input type="text" id="message-input" placeholder="Type message..." required>
+                        <button type="submit" class="submit-btn" style="width:auto;margin-top:0;">Send</button>
+                    </form>
+                </div>
+            </div>
+
+        </main>
+
+        <nav class="nav-bar">
+            <div class="nav-item" data-page="home-page"><img src="home.png" alt="Home"><span>Home</span></div>
+            <div class="nav-item" data-page="chat-list-page"><img src="pesan.png" alt="Messages"><span>Messages</span></div>
+            <div class="nav-item" data-page="messages-page"><img src="inbox.png" alt="Inbox"><span>Admin Inbox</span></div>
+            <div class="nav-item" data-page="data-page"><img src="data.png" alt="Data"><span>Data</span></div>
+            <div class="nav-item" data-page="sender-page"><img src="kumbang1.png" alt="Bug"><span>Bug</span></div>
+            <div class="nav-item" data-page="admin-page"><img src="tambah.png" alt="Create Account"><span>Create Account</span></div>
+            <div class="nav-item" data-page="settings-page"><img src="pengaturan.png" alt="Settings"><span>Settings</span></div>
+        </nav>
+    </div>
+
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal-box">
+            <h3 id="confirm-title" style="color: #e94560; margin-bottom: 10px;">Confirm Action</h3>
+            <p id="confirm-text">Are you sure?</p>
+            <div class="modal-buttons">
+                <button id="confirm-no-btn" style="background-color: #555; color: white;">Cancel</button>
+                <button id="confirm-yes-btn" style="background-color: #e94560; color: white;">Yes, Continue</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="user-search-modal">
+        <div class="modal-box">
+            <h3 style="color: #88d3ce; margin-bottom: 20px;">Start New Chat</h3>
+            <div class="input-group"><input type="search" id="user-search-input" placeholder="Type username to search..."></div>
+            <div id="user-search-results"></div>
+            <div class="modal-buttons" style="margin-top: 20px;"><button id="close-user-search-modal-btn" style="background-color: #555; color: white;">Close</button></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+    <script>
+        // --- FIREBASE CONFIG ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDmg3JbCywbOh__iDMgwbCGG480SzZSaiY",
+            authDomain: "ultragon-app.firebaseapp.com",
+            databaseURL: "https://ultragon-app-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "ultragon-app",
+            storageBucket: "ultragon-app.firebasestorage.app",
+            messagingSenderId: "119387094211",
+            appId: "1:119387094211:web:e43f951de20e793ac9b676"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // --- GLOBAL VARIABLES ---
+        let currentUserData = {};
+        let globalConfig = {};
+        let allUsers = {};
+        let chatsListener = null;
+        const userUid = localStorage.getItem('userUid'); // <<< Sudah localStorage
+        let currentChatPartnerUid = null;
+        let sessionListenerRef = null; // Untuk listener sesi
+
+        // --- UTILITY FUNCTIONS ---
+        function showNotification(message, type = 'info') {
+            const container = document.getElementById('notification-container');
+            if (!container) return;
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            container.appendChild(notification);
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s forwards';
+                setTimeout(() => { if (container.contains(notification)) container.removeChild(notification); }, 500);
+            }, 4000);
+        }
+
+        function showConfirm(text, onConfirm) {
+            const modal = document.getElementById('confirm-modal');
+            modal.classList.add('active');
+            const yesBtn = document.getElementById('confirm-yes-btn');
+            const noBtn = document.getElementById('confirm-no-btn');
+            document.getElementById('confirm-text').textContent = text;
+            const cleanup = () => {
+                yesBtn.removeEventListener('click', confirmHandler);
+                noBtn.removeEventListener('click', cancelHandler);
+            };
+            const confirmHandler = () => { onConfirm(); modal.classList.remove('active'); cleanup(); };
+            const cancelHandler = () => { modal.classList.remove('active'); cleanup(); };
+            yesBtn.addEventListener('click', confirmHandler);
+            noBtn.addEventListener('click', cancelHandler);
+        }
+
+        // --- Modifikasi Fungsi Logout ---
+        function logout() {
+            if (sessionListenerRef) { sessionListenerRef.off(); sessionListenerRef = null; }
+            if (currentUserData && currentUserData.uid) { const myNotifRef = db.ref('user_notifications/' + currentUserData.uid); myNotifRef.off(); }
+            localStorage.removeItem('userUid'); // <<< Sudah localStorage
+            localStorage.removeItem('sessionId'); // <<< Sudah localStorage
+            window.location.href = 'index.html';
+        }
+
+        
+        // --- Fungsi Cek Cooldown (dengan penghilangan gambar) ---
+        function checkBugCooldown() {
+            const btn = document.getElementById('send-bug-btn');
+            const timerEl = document.getElementById('cooldown-timer');
+            if (!btn || !timerEl || !currentUserData) return;
+            const now = Date.now();
+            const cooldownUntil = currentUserData.bugCooldownUntil || 0;
+            if (cooldownUntil > now) {
+                const remainingMs = cooldownUntil - now;
+                const remainingMinutes = Math.floor(remainingMs / 60000);
+                const remainingSeconds = Math.floor((remainingMs % 60000) / 1000);
+                const displaySeconds = remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds;
+                timerEl.textContent = `Please wait ${remainingMinutes}:${displaySeconds}`;
+                btn.disabled = true;
+                btn.innerHTML = `<span>COOLDOWN</span>`; // <<< HANYA TEKS
+            } else {
+                timerEl.textContent = '';
+                btn.disabled = false;
+                btn.innerHTML = `<span>SEND</span>`; // <<< HANYA TEKS
+            }
+        }
+        // --- AKHIR Fungsi Cek Cooldown ---
+
+
+        // --- Fungsi Listener Notifikasi ---
+        function listenForMyNotifications() {
+            if (!currentUserData || !currentUserData.uid) return;
+            const myNotifRef = db.ref('user_notifications/' + currentUserData.uid);
+            myNotifRef.on('child_added', (snapshot) => {
+                const notif = snapshot.val();
+                if (notif && notif.text && notif.type) {
+                    showNotification(notif.text, notif.type);
+                    db.ref('user_notifications/' + currentUserData.uid + '/' + snapshot.key).remove();
+                }
+            });
+        }
+
+        // --- (INI FITURNYA) Fungsi Pemeriksa Sesi Aktif ---
+        function listenForSessionChanges() {
+            if (!currentUserData || !currentUserData.uid) return;
+            const mySessionId = localStorage.getItem('sessionId'); // <<< Sudah localStorage
+            if (!mySessionId) { logout(); return; }
+
+            sessionListenerRef = db.ref('users/' + currentUserData.uid + '/currentSessionId');
+            sessionListenerRef.on('value', (snapshot) => {
+                const dbSessionId = snapshot.val();
+                if (sessionListenerRef && dbSessionId && dbSessionId !== mySessionId) {
+                    showNotification("Logged out: Account used on another device.", "error");
+                    logout();
+                }
+            });
+        }
+
+        // --- APP INITIALIZATION (Dimodifikasi) ---
+        async function initializeApp() {
+            const localUserUid = localStorage.getItem('userUid'); // <<< Sudah localStorage
+            const localSessionId = localStorage.getItem('sessionId'); // <<< Sudah localStorage
+            if (!localUserUid || !localSessionId) { logout(); return; }
+
+            try {
+                const userSnapshot = await db.ref('users/' + localUserUid).get();
+                if (!userSnapshot.exists()) { showNotification("Your data not found.", "error"); setTimeout(logout, 2000); return; }
+                currentUserData = userSnapshot.val();
+                currentUserData.uid = localUserUid;
+
+                // --- Cek Global App Status SAAT LOGIN ---
+                // Ambil config dulu sebelum lanjut
+                const configSnapshot = await db.ref('config').get();
+                globalConfig = configSnapshot.val() || {};
+
+                // Cek jika app OFF dan user BUKAN Owner
+                if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
+                    showNotification("Application is currently offline.", "error");
+                    // Tampilkan overlay beku dan hentikan loading
+                    const overlay = document.createElement('div');
+                    overlay.className = 'frozen-overlay';
+                    overlay.id = 'app-offline-overlay'; // Kasih ID unik
+                    overlay.innerHTML = `<div class="content-box"><h2>Application Offline</h2><p>The application is currently under maintenance. Only Owner can access.</p><button style="background:#c0392b; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px;" onclick="logout()">Logout</button></div>`;
+                    document.body.appendChild(overlay);
+                    return; // Hentikan inisialisasi aplikasi
+                }
+                // --- AKHIR Cek Global App Status ---
+
+
+                // --- (INI FITURNYA) Verifikasi Session ID Awal ---
+                if (!currentUserData.currentSessionId || currentUserData.currentSessionId !== localSessionId) {
+                    showNotification("Session invalid or expired. Please log in again.", "error");
+                    setTimeout(logout, 2000);
+                    return;
+                }
+                // --- AKHIR Verifikasi Session ID ---
+
+            } catch (error) {
+                showNotification("Failed to connect.", "error");
+                return;
+            }
+
+            // --- Lanjutkan inisialisasi ---
+            setupEventListeners();
+            checkAccountExpiration(); // Cek expired SETELAH cek app status
+            listenToGlobalConfig(); // Ini akan memanggil updateUI() pertama kali
+            listenToAllUsers();
+            listenForMyNotifications();
+            listenForSessionChanges(); // <-- (INI FITURNYA) Mulai listener sesi real-time
+
+             // Pastikan elemen welcome ada sebelum diubah
+             const welcomeEl = document.getElementById('welcome-username');
+             if(welcomeEl && currentUserData.username) {
+                welcomeEl.textContent = currentUserData.username;
+             }
+
+            setupRolePermissions();
+            // updateUI(); // Tidak perlu panggil lagi di sini, sudah dipanggil listenToGlobalConfig
+            showPage('home-page');
+
+            // Mulai Timer Cooldown
+            setInterval(checkBugCooldown, 1000);
+        }
+
+        // --- PAGE MANAGEMENT ---
+        function showPage(pageId, context = null) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) targetPage.classList.add('active');
+            const navItem = document.querySelector(`.nav-item[data-page='${pageId}']`) || document.querySelector(`.nav-item[data-page='${pageId.replace('-window', '').replace('-list','')}']`);
+            if (navItem) navItem.classList.add('active');
+
+            // Cek cooldown HANYA jika currentUserData sudah ada
+            if (pageId === 'sender-page' && currentUserData) {
+                checkBugCooldown();
+            }
+
+            // Call render function if exists
+            const renderFunctionName = 'render' + pageId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
+            if (typeof window[renderFunctionName] === 'function') {
+                window[renderFunctionName](context);
+            }
+        }
+
+        // --- REAL-TIME LISTENERS & DATA HANDLERS ---
+        function listenToGlobalConfig() {
+            db.ref('config').on('value', (snapshot) => {
+                globalConfig = snapshot.val() || {};
+
+                // --- Cek Global App Status SECARA REAL-TIME ---
+                if (globalConfig.appStatus === 'OFF' && currentUserData && currentUserData.role !== 'Owner') {
+                    // Jika app OFF dan user BUKAN Owner, bekukan layar
+                    if (!document.getElementById('app-offline-overlay')) { // Cek apa overlay sudah ada
+                        const overlay = document.createElement('div');
+                        overlay.className = 'frozen-overlay';
+                        overlay.id = 'app-offline-overlay'; // Kasih ID unik
+                        overlay.innerHTML = `<div class="content-box"><h2>Application Offline</h2><p>The application has been turned offline by the Owner.</p><button style="background:#c0392b; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px;" onclick="logout()">Logout</button></div>`;
+                        document.body.appendChild(overlay);
+                    }
+                } else if (globalConfig.appStatus === 'ON') {
+                    // Jika app ON, hapus overlay "offline" (JIKA ADA)
+                    const overlay = document.getElementById('app-offline-overlay');
+                    if (overlay) {
+                        overlay.remove();
+                    }
+                }
+                // --- AKHIR Cek Global App Status ---
+
+                updateUI(); // Panggil updateUI setiap kali config berubah
+            });
+        }
+
+        function listenToAllUsers() {
+             db.ref('users').on('value', (snapshot) => {
+                allUsers = snapshot.val() || {};
+                updateUI(); // Panggil updateUI setiap kali data users berubah
+             });
+        }
+
+        // --- PERMISSIONS AND EVENT SETUP ---
+        function setupRolePermissions() {
+             if (!currentUserData) return; // Jangan jalankan jika data user belum ada
+            
+            // (Reseller & Owner)
+            const isAdmin = ['Owner', 'Reseller'].includes(currentUserData.role); 
+            // (Owner SAJA)
+            const isOwner = currentUserData.role === 'Owner'; 
+
+            // --- Tampilkan/Sembunyikan Halaman Admin & Data (untuk Reseller & Owner) ---
+            document.querySelectorAll("[data-page='admin-page'], [data-page='data-page']").forEach(el => {
+                const isIconButton = el.classList.contains('icon-button');
+                const isNavItem = el.classList.contains('nav-item');
+                el.style.display = isAdmin ? (isIconButton ? 'flex' : (isNavItem ? 'block' : 'flex')) : 'none';
+            });
+
+            // --- Tampilkan/Sembunyikan Admin Inbox (HANYA Owner) ---
+            document.querySelectorAll("[data-page='messages-page']").forEach(el => {
+                const isIconButton = el.classList.contains('icon-button');
+                const isNavItem = el.classList.contains('nav-item');
+                el.style.display = isOwner ? (isIconButton ? 'flex' : (isNavItem ? 'block' : 'flex')) : 'none';
+            });
+            
+            // --- Tampilkan/Sembunyikan Prefix Settings (HANYA Owner) ---
+             const prefixSettings = document.getElementById('prefix-settings');
+             if (prefixSettings) prefixSettings.style.display = isOwner ? 'block' : 'none';
+        }
+
+        function setupEventListeners() {
+            // Kita pastikan elemennya ada sebelum menambahkan listener
+            const profileBtn = document.getElementById('profile-header-btn');
+            const menuBtn = document.getElementById('menu-btn');
+            const createAccBtn = document.getElementById('create-account-btn');
+            const searchAccInput = document.getElementById('search-account-input');
+            const accListBody = document.getElementById('account-list-body');
+            const sendBugBtn = document.getElementById('send-bug-btn');
+            const savePrefixBtn = document.getElementById('save-prefix-btn');
+            const senderPage = document.querySelector('#sender-page');
+            const settingsPage = document.getElementById('settings-page');
+            const logoutBtn = document.getElementById('logout-btn');
+            const messagesPage = document.getElementById('messages-page');
+            const startChatBtn = document.getElementById('start-new-chat-btn');
+            const closeSearchBtn = document.getElementById('close-user-search-modal-btn');
+            const userSearchInput = document.getElementById('user-search-input');
+            const convoList = document.getElementById('conversation-list');
+            const backChatListBtn = document.getElementById('back-to-chat-list-btn');
+            const msgForm = document.getElementById('message-form');
+            const msgContainer = document.getElementById('message-container');
+
+            if (profileBtn) profileBtn.addEventListener('click', () => showPage('settings-page'));
+            if (menuBtn) menuBtn.addEventListener('click', () => showPage('settings-page'));
+
+            document.querySelectorAll('.nav-item, .icon-button').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (btn.dataset.page) showPage(btn.dataset.page); // Pastikan dataset.page ada
+                });
+            });
+
+            if (createAccBtn) createAccBtn.addEventListener('click', handleCreateAccount);
+            if (searchAccInput) searchAccInput.addEventListener('input', populateDataPageTable);
+            if (accListBody) accListBody.addEventListener('click', handleDataPageActions);
+            if (sendBugBtn) sendBugBtn.addEventListener('click', handleBugSend);
+            if (savePrefixBtn) savePrefixBtn.addEventListener('click', handleSavePrefix);
+            if (senderPage) senderPage.addEventListener('click', (e) => {
+                if (e.target.classList.contains('mode-btn')) {
+                    document.querySelectorAll('#sender-page .mode-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                }
+            });
+
+            if (settingsPage) settingsPage.addEventListener('click', handleSettingsPageActions);
+            if (logoutBtn) logoutBtn.addEventListener('click', logout);
+            if (messagesPage) messagesPage.addEventListener('click', handleMessagesPageActions);
+            
+            if (startChatBtn) startChatBtn.addEventListener('click', () => {
+                 if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
+                    showNotification("Application is currently OFF.", "error");
+                    return; 
+                 }
+                 const modal = document.getElementById('user-search-modal');
+                 if (modal) modal.classList.add('active');
+            });
+
+            if (closeSearchBtn) closeSearchBtn.onclick = () => {
+                 const modal = document.getElementById('user-search-modal');
+                 if (modal) modal.classList.remove('active');
+            };
+            if (userSearchInput) userSearchInput.addEventListener('input', handleUserSearch);
+            if (convoList) convoList.addEventListener('click', handleConversationClick);
+            if (backChatListBtn) backChatListBtn.addEventListener('click', () => showPage('chat-list-page'));
+            if (msgForm) msgForm.addEventListener('submit', handleSendMessage);
+            if (msgContainer) msgContainer.addEventListener('click', handleDeleteMessageClick);
+        }
+
+        function checkAccountExpiration() {
+             if (!currentUserData || currentUserData.role === 'Owner') return;
+            const expiryDateISO = currentUserData.expiryDate;
+            if (!expiryDateISO || new Date() < new Date(expiryDateISO)) return;
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'frozen-overlay';
+            overlay.id = 'expired-overlay'; // Kasih ID unik
+            overlay.innerHTML = `<div class="content-box"><h2>Subscription Expired</h2><p>Contact admin for renewal.</p><button style="background:#c0392b; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px;" onclick="logout()">Logout</button></div>`;
+
+            if (document.body) {
+                 document.body.appendChild(overlay);
+            } else {
+                 document.addEventListener('DOMContentLoaded', () => document.body.appendChild(overlay));
+            }
+        }
+
+        // --- UI UPDATE FUNCTION ---
+        function updateUI() {
+             // Pastikan elemen ada sebelum mencoba update
+             const activeSenderEl = document.getElementById('active-sender-stat');
+             const onlineUsersEl = document.getElementById('online-users-stat');
+             const bannerLinkEl = document.getElementById('telegram-banner-link');
+             const bannerText1El = document.getElementById('banner-text-line1');
+             const bannerText2El = document.getElementById('banner-text-line2');
+             const newRoleSelect = document.getElementById('new-role');
+             const delayPrefixInput = document.getElementById('delay-prefix-input');
+             const bugPrefixInput = document.getElementById('bug-prefix-input');
+
+             if (activeSenderEl) activeSenderEl.textContent = globalConfig.activeSenderCount || '0';
+             if (onlineUsersEl) onlineUsersEl.textContent = Object.keys(allUsers).length;
+
+             // --- Update Banner Text & Link ---
+             if (bannerLinkEl) { bannerLinkEl.href = globalConfig.telegramBannerLink || 'https://t.me/ultragonpro'; }
+             if (bannerText1El) { bannerText1El.textContent = globalConfig.telegramBannerTextLine1 || '🔥 Telegram Channel: Join To Get'; }
+             if (bannerText2El) { bannerText2El.textContent = globalConfig.telegramBannerTextLine2 || 'More Info!'; }
+             // --- Akhir Update Banner ---
+
+             // --- Hapus teks durasi dari dropdown ---
+             if (newRoleSelect && currentUserData) { // Cek currentUserData sebelum akses role
+                 let roleOptions = `<option value="" disabled selected>Select a role</option><option value="Member">Member</option><option value="VIP">VIP</option>`;
+                 if (currentUserData.role === 'Owner') roleOptions += `<option value="Reseller">Reseller</option>`;
+                 newRoleSelect.innerHTML = roleOptions;
+             }
+             // --- AKHIR Hapus Teks Durasi ---
+
+             updateSettingsPageUI(); // Update bagian settings
+
+             if(delayPrefixInput) delayPrefixInput.value = globalConfig.customDelayPrefix || '.delay';
+             if(bugPrefixInput) bugPrefixInput.value = globalConfig.customBugPrefix || '.bug';
+
+             // Panggil fungsi populate hanya jika elemennya ada dan diperlukan
+             // Cek role Owner untuk inbox, isAdmin untuk data page
+             if (document.getElementById('message-inbox-container') && currentUserData?.role === 'Owner') populateMessagesInbox(); // Hanya Owner
+             const isAdmin = ['Owner', 'Reseller'].includes(currentUserData?.role);
+             if (document.getElementById('account-list-body') && isAdmin) populateDataPageTable(); // Owner & Reseller
+             if (document.getElementById('conversation-list')) populateChatList();
+        }
+
+        // --- EVENT HANDLER FUNCTIONS ---
+
+        // --- (PERUBAHAN DI SINI) EVENT HANDLER FUNCTIONS ---
+        async function handleCreateAccount(e) {
+            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
+                showNotification("Application is currently OFF.", "error");
+                return;
+            }
+
+            const btn = document.getElementById('create-account-btn');
+            const form = document.getElementById('create-account-form');
+            if (!btn || !form) return; 
+            btn.disabled = true; btn.textContent = 'Creating...';
+            
+            // --- Ambil elemen baru ---
+            const usernameInput = document.getElementById('new-username');
+            const passwordInput = document.getElementById('new-password');
+            const roleSelect = document.getElementById('new-role');
+            const durationValueInput = document.getElementById('new-duration-value'); // <-- BARU (Value)
+            const durationUnitSelect = document.getElementById('new-duration-unit'); // <-- BARU (Unit)
+            
+            if(!usernameInput || !passwordInput || !roleSelect || !durationValueInput || !durationUnitSelect) return; // Cek elemen
+            // --- AKHIR Ambil elemen baru ---
+
+            const newUsername = usernameInput.value;
+            const newPassword = passwordInput.value;
+            const newRole = roleSelect.value;
+            
+            // --- Baca & validasi durasi ---
+            const durationValue = parseInt(durationValueInput.value, 10); // <-- BARU
+            const durationUnit = durationUnitSelect.value; // <-- BARU ("days", "months", "years")
+
+            if (!newUsername || !newPassword || !newRole || !durationValue || !durationUnit) { // <-- Tambahkan cek durasi
+                showNotification('All fields are required!', 'error');
+                btn.disabled = false; btn.textContent = 'Create Account';
+                return;
+            }
+
+            if (isNaN(durationValue) || durationValue <= 0) { // <-- Validasi tambahan
+                 showNotification('Please enter a valid duration value.', 'error');
+                btn.disabled = false; btn.textContent = 'Create Account';
+                return;
+            }
+            // --- AKHIR Baca & validasi durasi ---
+
+            try {
+                if ((await db.ref('usernames/' + newUsername).get()).exists()) {
+                    showNotification(`Username "${newUsername}" is already taken!`, 'error'); throw new Error('Username taken');
+                }
+                const newUid = `user-${Date.now()}`;
+                
+                // --- Logika Expiry Baru ---
+                const now = new Date(); 
+                const expiry = new Date();
+                
+                if (durationUnit === 'days') {
+                    expiry.setDate(now.getDate() + durationValue); 
+                } else if (durationUnit === 'months') {
+                    expiry.setMonth(now.getMonth() + durationValue);
+                } else if (durationUnit === 'years') {
+                    expiry.setFullYear(now.getFullYear() + durationValue);
+                } else {
+                     showNotification('Invalid duration unit selected.', 'error'); // Seharusnya tidak terjadi
+                     throw new Error('Invalid unit');
+                }
+                // --- AKHIR Logika Expiry Baru ---
+
+                await db.ref('users/' + newUid).set({ 
+                    username: newUsername, 
+                    password: newPassword, 
+                    role: newRole, 
+                    purchaseDate: now.toISOString(), 
+                    expiryDate: expiry.toISOString() // Disimpan di sini
+                });
+                await db.ref('usernames/' + newUsername).set(newUid);
+                
+                // Capitalize the first letter of the unit for display
+                const displayUnit = durationUnit.charAt(0).toUpperCase() + durationUnit.slice(1);
+                showNotification(`Account ${newRole} "${newUsername}" created for ${durationValue} ${displayUnit}!`, 'success'); // <-- Notifikasi lebih baik
+                form.reset();
+            } catch (error) {
+                if (error.message !== 'Username taken' && error.message !== 'Invalid unit') showNotification('Failed to create account.', 'error');
+            } finally {
+                btn.disabled = false; btn.textContent = 'Create Account';
+            }
+        }
+        // --- (AKHIR PERUBAHAN) ---
+
+        function populateDataPageTable() {
+            const tableBody = document.getElementById('account-list-body');
+            const searchInput = document.getElementById('search-account-input');
+            const totalEl = document.getElementById('total-accounts-data');
+            if (!tableBody || !searchInput || !totalEl || !currentUserData) return;
+            const filter = searchInput.value.toLowerCase();
+
+            tableBody.innerHTML = '';
+            if (!allUsers) return;
+            const filtered = Object.entries(allUsers).filter(([uid, data]) => data && data.username && data.username.toLowerCase().includes(filter)); // Tambah cek data
+            totalEl.textContent = filtered.length;
+
+            filtered.forEach(([uid, data]) => {
+                let canDelete = !(data.role === 'Owner' || uid === currentUserData.uid || (currentUserData.role === 'Reseller' && data.role === 'Reseller'));
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${data.username}</td><td>${data.password || 'N/A'}</td><td>${data.role}</td>
+                <td><button class="action-btn delete-btn" data-uid="${uid}" data-uname="${data.username}" ${!canDelete ? 'disabled' : ''}>Delete</button></td>
+                <td>${data.role !== 'Owner' ? `<button class="action-btn renew-account-btn" data-uid="${uid}" data-uname="${data.username}">Extend</button>` : ''}</td>`;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function handleDataPageActions(e) {
+            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
+                showNotification("Application is currently OFF.", "error");
+                return;
+            }
+            
+            const target = e.target;
+            if (!target.dataset.uid || !currentUserData) return;
+            const uid = target.dataset.uid;
+            const uname = target.dataset.uname;
+            if (target.classList.contains('delete-btn')) {
+                showConfirm(`Are you sure you want to delete account "${uname}"?`, () => {
+                    db.ref('users/' + uid).remove();
+                    db.ref('usernames/' + uname).remove();
+                    showNotification(`Account "${uname}" has been deleted.`, 'success');
+                });
+            } else if (target.classList.contains('renew-account-btn')) {
+                if (!allUsers || !allUsers[uid]) return;
+                const expiry = new Date(allUsers[uid].expiryDate || Date.now());
+                const newExpiry = (new Date() > expiry ? new Date() : expiry);
+                newExpiry.setDate(newExpiry.getDate() + 30); // Extend selalu 30 hari
+                db.ref(`users/${uid}/expiryDate`).set(newExpiry.toISOString()).then(() => showNotification(`Subscription for "${uname}" extended by 30 days.`, 'success'));
+            }
+        }
+
+        
+        // --- Fungsi HandleBugSend (dengan Cooldown dan penghilangan gambar) ---
+        async function handleBugSend(e) {
+            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
+                showNotification("Application is currently OFF.", "error");
+                return;
+            }
+
+            const btn = document.getElementById('send-bug-btn');
+            if (!currentUserData || !btn) return;
+
+            if (btn.disabled) { showNotification("You have sent, please wait for 15 minutes!!", "error"); return; }
+            const now = Date.now();
+            if (currentUserData.bugCooldownUntil && currentUserData.bugCooldownUntil > now) { showNotification("You have sent, please wait for 15 minutes!!", "error"); checkBugCooldown(); return; }
+            btn.disabled = true;
+            btn.innerHTML = `<span>SENDING...</span>`; // <<< HANYA TEKS
+            const selectedModeEl = document.querySelector('#sender-page .mode-btn.active');
+            const selectedMode = selectedModeEl ? selectedModeEl.dataset.mode : 'delay'; // Default ke delay jika tidak ketemu
+            const prefixInput = selectedMode === 'delay' ? document.getElementById('delay-prefix-input') : document.getElementById('bug-prefix-input');
+            const prefix = prefixInput ? prefixInput.value : (selectedMode === 'delay' ? '.delay' : '.bug');
+            const targetNumberInput = document.getElementById('target-number');
+            const targetNumber = targetNumberInput ? targetNumberInput.value : '';
+
+            if (!targetNumber) { 
+                showNotification('Target number is required!', 'error'); 
+                btn.disabled = false; 
+                btn.innerHTML = `<span>SEND</span>`; // <<< HANYA TEKS
+                return; 
+            }
+            const payload = `${prefix} ${targetNumber}`;
+            try {
+                await db.ref('messageQueue').push({ senderUsername: currentUserData.username, senderUid: currentUserData.uid, payload: payload, timestamp: new Date().toISOString() });
+                showNotification('Bug request sent to Admin Inbox!', 'success');
+                const waForm = document.getElementById('wa-form'); if (waForm) waForm.reset();
+                const cooldownEndTime = Date.now() + 15 * 60 * 1000; // 15 menit
+                await db.ref('users/' + currentUserData.uid + '/bugCooldownUntil').set(cooldownEndTime);
+                currentUserData.bugCooldownUntil = cooldownEndTime;
+                checkBugCooldown();
+            } catch (error) { 
+                showNotification('Failed to send request.', 'error'); 
+                btn.disabled = false; 
+                btn.innerHTML = `<span>SEND</span>`; // <<< HANYA TEKS
+            }
+        }
+        // --- AKHIR Fungsi HandleBugSend ---
+
+
+        function handleSavePrefix() {
+            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
+                showNotification("Application is currently OFF.", "error");
+                return;
+            }
+
+            const delayInput = document.getElementById('delay-prefix-input');
+            const bugInput = document.getElementById('bug-prefix-input');
+            if(delayInput && bugInput){
+                 db.ref('config').update({ customDelayPrefix: delayInput.value, customBugPrefix: bugInput.value }).then(() => showNotification('Prefix settings saved!', 'success'));
+            }
+        }
+
+        // --- (PERUBAHAN DI SINI) updateSettingsPageUI ---
+        function updateSettingsPageUI() {
+            // Pastikan elemen ada sebelum diakses
+            const settingsUsername = document.getElementById('settings-username');
+            const settingsRole = document.getElementById('settings-role');
+            const purchaseDateEl = document.getElementById('purchase-date');
+            const expiryDateEl = document.getElementById('expiry-date');
+            const appStatusDisplay = document.getElementById('app-status-display');
+            const renewLink = document.getElementById('renew-link');
+            const ownerControlsContainer = document.getElementById('owner-controls-container');
+
+            if (!currentUserData) return; // Jangan update jika data user belum ada
+
+            if (settingsUsername) settingsUsername.textContent = currentUserData.username;
+            if (settingsRole) settingsRole.textContent = currentUserData.role;
+            const isOwner = currentUserData.role === 'Owner';
+            if (purchaseDateEl) purchaseDateEl.textContent = currentUserData.purchaseDate ? new Date(currentUserData.purchaseDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric'}) : 'N/A';
+            if (expiryDateEl) expiryDateEl.textContent = isOwner ? '∞ (Unlimited)' : (currentUserData.expiryDate ? new Date(currentUserData.expiryDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric'}) : 'N/A');
+            
+            if (appStatusDisplay) { 
+                appStatusDisplay.textContent = globalConfig.appStatus || 'ON'; 
+                appStatusDisplay.className = (globalConfig.appStatus || 'ON') === 'ON' ? 'status-active' : 'status-expired'; 
+            }
+
+            // --- PERUBAHAN: Gunakan nomor WA Extension ---
+            if (renewLink) {
+                 const extensionWaNumber = globalConfig.extensionWaNumber || ''; // Ambil nomor extension dari config
+                 renewLink.href = `https://wa.me/${extensionWaNumber}?text=Hello, I am ${currentUserData.username} and I want to request an extension.`;
+            }
+            // --- AKHIR PERUBAHAN ---
+
+            if (ownerControlsContainer) {
+                // --- Tambahkan Kontrol WA Extension ke HTML Owner ---
+                ownerControlsContainer.innerHTML = isOwner ? `
+                    <div class="owner-controls">
+                        <h3>Global Application Control</h3>
+                        <div class="control-buttons">
+                           <button class="apk-on-btn">APP ON</button>
+                           <button class="apk-off-btn">APP OFF</button>
+                        </div>
+                        <div style="margin-top:20px; border-top:1px solid #2a2a3a; padding-top:20px;">
+                            <div class="input-group"> <label>Set Active Senders</label> <input type="number" id="active-sender-input" value="${globalConfig.activeSenderCount || 0}"> </div>
+                            <button class="submit-btn" style="background-color:#3498db" id="save-sender-btn">Save</button>
+                        </div>
+                        <div style="margin-top:20px; border-top:1px solid #2a2a3a; padding-top:20px;">
+                            <label>Admin WA Number (Login)</label> <input type="number" id="admin-wa-input" value="${globalConfig.adminWaNumberLogin || ''}">
+                            <button class="submit-btn" style="background-color:#3498db" id="save-wa-btn">Save</button>
+                        </div>
+                        
+                        <div style="margin-top:20px; border-top:1px solid #2a2a3a; padding-top:20px;">
+                            <label>Extension Request WA Number</label> <input type="number" id="extension-wa-input" value="${globalConfig.extensionWaNumber || ''}" placeholder="e.g., 628...">
+                            <button class="submit-btn" style="background-color:#3498db" id="save-extension-wa-btn">Save</button>
+                        </div>
+                        <div class="banner-settings-section">
+                            <h4>Banner Settings (Home Page)</h4>
+                            <div class="input-group"> <label>Banner Text - Line 1</label> <input type="text" id="telegram-text1-input" value="${globalConfig.telegramBannerTextLine1 || '🔥 Telegram Channel: Join To Get'}"> </div>
+                            <div class="input-group"> <label>Banner Text - Line 2</label> <input type="text" id="telegram-text2-input" value="${globalConfig.telegramBannerTextLine2 || 'More Info!'}"> </div>
+                            <button class="submit-btn" style="background-color:#3498db" id="save-telegram-text-btn">Save Text</button>
+                            <div class="input-group" style="margin-top: 15px;"> <label>Banner Link (URL)</label> <input type="url" id="telegram-link-input" value="${globalConfig.telegramBannerLink || 'https://t.me/ultragonpro'}"> </div>
+                            <button class="submit-btn" style="background-color:#3498db" id="save-telegram-link-btn">Save Link</button>
+                        </div>
+                    </div>`
+                : ''; // Kosong jika bukan owner
+            }
+        }
+        // --- (AKHIR PERUBAHAN) ---
+
+        // --- (PERUBAHAN DI SINI) handleSettingsPageActions ---
+        function handleSettingsPageActions(e) {
+            const target = e.target;
+            // Pastikan elemennya ada sebelum mengambil value
+            const activeSenderInput = document.getElementById('active-sender-input');
+            const adminWaInput = document.getElementById('admin-wa-input');
+            const extensionWaInput = document.getElementById('extension-wa-input'); // <-- BARU
+            const telegramText1Input = document.getElementById('telegram-text1-input');
+            const telegramText2Input = document.getElementById('telegram-text2-input');
+            const telegramLinkInput = document.getElementById('telegram-link-input');
+
+            const actions = {
+                'apk-on-btn': () => { db.ref('config/appStatus').set('ON'); showNotification('Application Status: ON', 'success'); },
+                'apk-off-btn': () => { db.ref('config/appStatus').set('OFF'); showNotification('Application Status: OFF', 'error'); },
+                'save-sender-btn': () => { if(activeSenderInput) db.ref('config/activeSenderCount').set(activeSenderInput.value); showNotification('Active Senders saved!', 'success'); },
+                'save-wa-btn': () => { if(adminWaInput) db.ref('config/adminWaNumberLogin').set(adminWaInput.value); showNotification('Admin WA Number saved!', 'success'); },
+                
+                // --- PERUBAHAN: Aksi untuk tombol save WA Extension ---
+                'save-extension-wa-btn': () => { 
+                    if(extensionWaInput) {
+                        db.ref('config/extensionWaNumber').set(extensionWaInput.value); 
+                        showNotification('Extension Request WA Number saved!', 'success'); 
+                    }
+                },
+                // --- AKHIR PERUBAHAN ---
+
+                'save-telegram-text-btn': () => {
+                    if(telegramText1Input && telegramText2Input){
+                        const text1 = telegramText1Input.value;
+                        const text2 = telegramText2Input.value;
+                        db.ref('config').update({
+                            telegramBannerTextLine1: text1,
+                            telegramBannerTextLine2: text2
+                        }).then(() => showNotification('Banner Text saved!', 'success'));
+                    }
+                },
+                'save-telegram-link-btn': () => {
+                     if(telegramLinkInput) db.ref('config/telegramBannerLink').set(telegramLinkInput.value);
+                     showNotification('Banner Link saved!', 'success');
+                }
+            };
+            const action = actions[target.id] || (target.classList.length > 0 && actions[target.classList[0]]);
+            if (action) action();
+        }
+        // --- (AKHIR PERUBAHAN) ---
+
+        function populateMessagesInbox() {
+             const container = document.getElementById('message-inbox-container');
+             if (!container) return; // Tambah cek jika elemen tidak ada
+             db.ref('messageQueue').on('value', snapshot => {
+                if (!container) return; // Cek lagi di dalam callback
+                container.innerHTML = '';
+                if (!snapshot.exists()) { container.innerHTML = '<p>Inbox is empty.</p>'; return; }
+                snapshot.forEach(child => {
+                    const msg = child.val();
+                    const msgKey = child.key;
+                    const senderUid = msg.senderUid || '';
+                    const item = document.createElement('div');
+                    item.className = 'message-item';
+                    item.innerHTML = `<p><b>From:</b> ${msg.senderUsername}</p><p><b>Message:</b> ${msg.payload}</p> <div class="message-actions"> <button class="accept-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Reply (WA)</button> <button class="telegram-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Reply (TG)</button> <button class="reject-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Delete</button> </div>`;
+                    container.appendChild(item);
+                });
+                const adminWaInput = document.getElementById('admin-wa-number');
+                const adminTgInput = document.getElementById('admin-tg-id');
+
+                if(adminWaInput) adminWaInput.value = currentUserData.adminReplyPrefs?.waNumber || '';
+                if(adminTgInput) adminTgInput.value = currentUserData.adminReplyPrefs?.tgId || '';
+             });
+        }
+
+        // --- Fungsi Push Notifikasi ke User ---
+        function pushNotificationToUser(targetUid, message, type) {
+            if (!targetUid || !message || !type) return;
+            db.ref('user_notifications/' + targetUid).push({ text: message, type: type, timestamp: new Date().toISOString() });
+        }
+
+        // --- Fungsi Handle Aksi di Inbox Admin (Dirombak) ---
+        async function handleMessagesPageActions(e) {
+            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
+                showNotification("Application is currently OFF.", "error");
+                return;
+            }
+
+            const target = e.target;
+            if(!target.dataset.key) return;
+            const key = target.dataset.key;
+            const payload = target.dataset.payload;
+            const senderUid = target.dataset.senderUid;
+            const payloadParts = payload ? payload.split(' ') : [];
+            const targetNumber = payloadParts.length > 1 ? payloadParts[1] : '[unknown number]';
+            let notificationMessage = '';
+            let notificationType = '';
+
+            if(target.classList.contains('accept-btn') || target.classList.contains('telegram-btn')){
+                if (target.classList.contains('accept-btn')) {
+                    const waNumInput = document.getElementById('admin-wa-number');
+                    const waNum = waNumInput ? (waNumInput.value || globalConfig.adminWaNumberLogin) : globalConfig.adminWaNumberLogin;
+                    if(!waNum) { showNotification('Please set your WA number first!', 'error'); return; }
+                    
+                    if(waNumInput && waNumInput.value) {
+                        try {
+                            await db.ref(`users/${currentUserData.uid}/adminReplyPrefs/waNumber`).set(waNumInput.value);
+                            if (!currentUserData.adminReplyPrefs) currentUserData.adminReplyPrefs = {};
+                            currentUserData.adminReplyPrefs.waNumber = waNumInput.value; // Update objek lokal
+                        } catch (err) {
+                            showNotification('Failed to save WA number.', 'error');
+                        }
+                    }
+
+                    window.open(`https://wa.me/${waNum}?text=${encodeURIComponent(payload)}`, '_blank');
+                } else { // ini adalah telegram-btn
+                     const tgIdInput = document.getElementById('admin-tg-id');
+                     const tgId = tgIdInput ? tgIdInput.value : '';
+                     if (!tgId) { showNotification('Please set your Telegram Username/ID first!', 'error'); return; }
+                     
+                     if (tgIdInput && tgIdInput.value) {
+                         try {
+                            await db.ref(`users/${currentUserData.uid}/adminReplyPrefs/tgId`).set(tgIdInput.value);
+                            if (!currentUserData.adminReplyPrefs) currentUserData.adminReplyPrefs = {};
+                            currentUserData.adminReplyPrefs.tgId = tgIdInput.value; // Update objek lokal
+                         } catch (err) {
+                            showNotification('Failed to save TG ID.', 'error');
+                         }
+                     }
+
+                     const tgLink = tgId.startsWith('@') ? `https://t.me/${tgId.substring(1)}` : `tg://user?id=${tgId}`;
+                     window.open(`${tgLink}?text=${encodeURIComponent(payload)}`, '_blank') || window.location.assign(`${tgLink}?text=${encodeURIComponent(payload)}`);
+                }
+                notificationMessage = `send to ${targetNumber} Succeed`;
+                notificationType = 'success';
+            } else if (target.classList.contains('reject-btn')) {
+                notificationMessage = `Failed to send to ${targetNumber}`;
+                notificationType = 'error';
+            }
+
+            if(senderUid && notificationMessage) { pushNotificationToUser(senderUid, notificationMessage, notificationType); }
+            if (notificationMessage) { db.ref('messageQueue/' + key).remove(); }
+        }
+
+        function handleUserSearch(e) {
+             const term = e.target.value.toLowerCase();
+             const searchResults = document.getElementById('user-search-results');
+             if (!searchResults) return;
+             searchResults.innerHTML = '';
+             if (!term || !allUsers || !currentUserData) return;
+             Object.entries(allUsers).forEach(([uid, data]) => {
+                 if (data && data.username && data.username.toLowerCase().includes(term) && uid !== currentUserData.uid) {
+                     const item = document.createElement('div');
+                     item.className = 'search-result-item';
+                     item.textContent = data.username;
+                     item.onclick = () => {
+                          const modal = document.getElementById('user-search-modal'); if (modal) modal.classList.remove('active');
+                          currentChatPartnerUid = uid;
+                          showPage('chat-window-page', { partnerUid: uid, partnerUsername: data.username });
+                     };
+                     searchResults.appendChild(item);
+                 }
+             });
+         }
+
+        function populateChatList() {
+            const conversationList = document.getElementById('conversation-list');
+            if (!conversationList || !currentUserData) return;
+
+            const chatsRef = db.ref('chats').orderByChild(`participants/${currentUserData.uid}`).equalTo(true);
+            chatsRef.off('value');
+            chatsRef.on('value', snapshot => {
+                if (!conversationList) return;
+                conversationList.innerHTML = '';
+                if (!snapshot.exists()) { conversationList.innerHTML = '<p>No conversations yet.</p>'; return; }
+                let conversations = [];
+                snapshot.forEach(childSnapshot => {
+                    const convo = childSnapshot.val();
+                    const convoId = childSnapshot.key;
+                    const partnerUid = Object.keys(convo.participants || {}).find(uid => uid !== currentUserData.uid);
+                    if (partnerUid && allUsers && allUsers[partnerUid]) { conversations.push({ id: convoId, partnerUid: partnerUid, partnerUsername: allUsers[partnerUid].username, lastMessage: convo.lastMessage }); }
+                });
+                conversations.sort((a, b) => { const timeA = a.lastMessage?.timestamp ? new Date(a.lastMessage.timestamp).getTime() : 0; const timeB = b.lastMessage?.timestamp ? new Date(b.lastMessage.timestamp).getTime() : 0; return timeB - timeA; });
+                conversations.forEach(convo => {
+                    const lastMessageText = convo.lastMessage?.text || '';
+                    const lastMessage = lastMessageText ? lastMessageText.substring(0, 30) + (lastMessageText.length > 30 ? '...' : '') : 'No messages yet.';
+                    const item = document.createElement('div');
+                    item.className = 'conversation-list-item';
+                    item.dataset.uid = convo.partnerUid;
+                    item.dataset.uname = convo.partnerUsername;
+                    item.innerHTML = `<div class="conversation-info"><div class="username">${convo.partnerUsername}</div><div class="last-message">${lastMessage}</div></div>`;
+                    conversationList.appendChild(item);
+                });
+            });
+        }
+
+        function handleConversationClick(e) {
+            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
+                showNotification("Application is currently OFF.", "error");
+                return;
+            }
+
+            const item = e.target.closest('.conversation-list-item');
+            if (item && item.dataset.uid) {
+                currentChatPartnerUid = item.dataset.uid;
+                showPage('chat-window-page', { partnerUid: item.dataset.uid, partnerUsername: item.dataset.uname });
+            }
+        }
+
+        function renderChatWindowPage(context) {
+             if (!context || !currentUserData) return;
+             const { partnerUid, partnerUsername } = context;
+             currentChatPartnerUid = partnerUid;
+             const chatPartnerUsernameEl = document.getElementById('chat-partner-username');
+             const messageForm = document.getElementById('message-form');
+             if (chatPartnerUsernameEl) chatPartnerUsernameEl.textContent = partnerUsername;
+             if (messageForm) messageForm.dataset.partnerUid = partnerUid;
+
+             const messageContainer = document.getElementById('message-container');
+             if (!messageContainer) return;
+             messageContainer.innerHTML = '';
+             const conversationId = getConversationId(currentUserData.uid, partnerUid);
+             const messagesRef = db.ref(`chats/${conversationId}/messages`);
+
+             if(chatsListener) chatsListener.off();
+             chatsListener = messagesRef.limitToLast(50);
+
+             chatsListener.on('child_added', snapshot => {
+                 if (!messageContainer) return;
+                 const msg = snapshot.val();
+                 const msgKey = snapshot.key;
+                 if (!msg || !msg.sender || !msg.text || !msg.timestamp) return;
+                 const bubble = document.createElement('div');
+                 bubble.className = `message-bubble ${msg.sender === currentUserData.uid ? 'sent' : 'received'}`;
+                 bubble.dataset.msgKey = msgKey;
+                 const textNode = document.createTextNode(msg.text);
+                 const p = document.createElement('p');
+                 p.appendChild(textNode);
+                 bubble.appendChild(p);
+                 bubble.innerHTML += `<span class="timestamp">${new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>`;
+                 if (msg.sender === currentUserData.uid) { bubble.innerHTML += `<button class="delete-msg-btn" data-key="${msgKey}">×</button>`; }
+                 messageContainer.appendChild(bubble);
+                 messageContainer.scrollTop = messageContainer.scrollHeight;
+             });
+
+             chatsListener.on('child_removed', snapshot => {
+                 if (!messageContainer) return;
+                 const removedKey = snapshot.key;
+                 const bubbleToRemove = messageContainer.querySelector(`.message-bubble[data-msg-key="${removedKey}"]`);
+                 if (bubbleToRemove) bubbleToRemove.remove();
+             });
+        }
+
+        function handleSendMessage(e) {
+            e.preventDefault();
+
+            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
+                showNotification("Application is currently OFF.", "error");
+                return;
+            }
+
+            const input = document.getElementById('message-input');
+            const partnerUid = e.target.dataset.partnerUid;
+            if (!input || !partnerUid || !currentUserData) return;
+            const text = input.value.trim();
+            if (!text) return;
+            const conversationId = getConversationId(currentUserData.uid, partnerUid);
+            const messagesRef = db.ref(`chats/${conversationId}/messages`);
+            const newMessage = { sender: currentUserData.uid, text: text, timestamp: new Date().toISOString() };
+            const newMessageRef = messagesRef.push();
+            newMessageRef.set(newMessage);
+
+            db.ref(`chats/${conversationId}/lastMessage`).set({ ...newMessage, key: newMessageRef.key });
+            db.ref(`chats/${conversationId}/participants`).set({ [currentUserData.uid]: true, [partnerUid]: true });
+            input.value = '';
+         }
+
+        // --- Handler for deleting messages ---
+        function handleDeleteMessageClick(e) {
+            if (e.target.classList.contains('delete-msg-btn')) {
+                const messageKey = e.target.dataset.key;
+                if (!messageKey || !currentChatPartnerUid || !currentUserData) return;
+
+                const conversationId = getConversationId(currentUserData.uid, currentChatPartnerUid);
+                showConfirm("Delete this message?", () => {
+                    const messageRef = db.ref(`chats/${conversationId}/messages/${messageKey}`);
+                    messageRef.remove()
+                        .then(() => {
+                           db.ref(`chats/${conversationId}/lastMessage/key`).get().then(lastKeySnapshot => {
+                               if(lastKeySnapshot.exists() && lastKeySnapshot.val() === messageKey) {
+                                   db.ref(`chats/${conversationId}/messages`).orderByKey().limitToLast(1).once('value', newLastMsgSnapshot => {
+                                       if(newLastMsgSnapshot.exists()){
+                                            const newLastMsgData = newLastMsgSnapshot.val();
+                                            const newLastMsgKey = Object.keys(newLastMsgData)[0];
+                                            db.ref(`chats/${conversationId}/lastMessage`).set({ ...newLastMsgData[newLastMsgKey], key: newLastMsgKey });
+                                       } else {
+                                            db.ref(`chats/${conversationId}/lastMessage`).remove();
+                                       }
+                                   });
+                               }
+                           });
+                        })
+                        .catch(error => { showNotification("Failed to delete message.", "error"); console.error("Error deleting message:", error); });
+                });
+            }
+        }
+
+        // Helper function to generate unique IDs
+        function getConversationId(uid1, uid2) { return [uid1, uid2].sort().join('_'); }
+
+        // --- START APP ---
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    </script>
+</body>
+</html>
