@@ -14,6 +14,33 @@
         /* CSS Anda (Gabungan dan Modifikasi) */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', monospace; } 
 
+        /* 🔥 KODE UNTUK MENGHILANGKAN MENU KONTEKS/TELUSURI 🔥 */
+        
+        /* Mencegah seleksi teks dan menu konteks pada hampir semua elemen */
+        * {
+            -webkit-user-select: none; /* iOS/Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE/Edge */
+            user-select: none; /* Standar */
+            -webkit-touch-callout: none; /* iOS (Mencegah menu default saat tekan lama) */
+            -webkit-tap-highlight-color: transparent !important; /* Mencegah highlight biru saat tap */
+        }
+        
+        /* Khusus untuk INPUT dan TEXTAREA agar tetap bisa diedit/disalin/dipilih */
+        input, textarea {
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
+        }
+        
+        /* Khusus untuk GAMBAR (mencegah klik kanan/tekan lama pada gambar) */
+        img {
+            pointer-events: none;
+        }
+        
+        /* ----------------------------------------------------------- */
+        
         body { color: #e0e0e0; background-color: #000000; font-size: 14px; padding-bottom: 80px; }
         .header { display: flex; align-items: center; justify-content: space-between; padding: 15px; background-color: #191929; border-bottom: 1px solid #2a2a3a; position: sticky; top: 0; z-index: 20; height: 55px; /* Tinggi header yang diperkirakan */ }
         .header-left, .header-right { display: flex; align-items: center; flex: 1; }
@@ -253,13 +280,16 @@
             color: #999;
             cursor: not-allowed;
         }
-
-        .mode-selector { display: flex; width: 100%; background: #10101a; border-radius: 8px; overflow: hidden; border: 1px solid #2a2a3a; margin-bottom: 15px; }
+        
+        /* --- MENGHAPUS STYLE LAMA MODE SELECTOR BUG PAGE --- */
+        /* .mode-selector { display: flex; width: 100%; background: #10101a; border-radius: 8px; overflow: hidden; border: 1px solid #2a2a3a; margin-bottom: 15px; }
         .mode-btn { 
             flex: 1; padding: 12px; border: none; background-color: transparent; color: #a7a9be; cursor: pointer; font-size: 0.9em; transition: all 0.3s; font-weight: bold; 
             font-family: 'Orbitron', monospace; 
         }
-        .mode-btn.active { background-color: #88d3ce; color: #10101a; }
+        .mode-btn.active { background-color: #88d3ce; color: #10101a; } */
+        /* --- AKHIR MENGHAPUS STYLE LAMA --- */
+
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; }
         .modal-overlay.active { display: flex; opacity: 1; }
         .modal-box { background: #191929; padding: 25px; border-radius: 15px; text-align: center; width: 90%; max-width: 350px; border: 1px solid #2a2a3a; transform: scale(0.9); transition: transform 0.3s; }
@@ -691,22 +721,27 @@
                     </div>
                     <h2>WhatsApp Bug</h2>
                      <div id="prefix-settings" style="display: none; border-bottom: 1px solid #2a2a3a; padding-bottom: 15px; margin-bottom: 15px;">
-                        <h4>Prefix Settings (Admin)</h4>
-                        <div class="input-group"><label>Prefix Invisible Delay</label><input id="delay-prefix-input"></div>
-                        <div class="input-group"><label>Prefix iOS / Andro Crash</label><input id="bug-prefix-input"></div>
-                        <button class="submit-btn" id="save-prefix-btn" style="background-color:#3498db">Save Settings</button>
+                        <h4>Prefix Settings (Master Owner Only)</h4>
+                        <div class="input-group"><label>Prefix Invisible Delay (Mode: delay)</label><input id="delay-prefix-input"></div>
+                        <div class="input-group"><label>Prefix iOS / Andro Crash (Mode: bug)</label><input id="bug-prefix-input"></div>
+                        <div class="input-group"><label>Prefix Invisible Delay V2 (Mode: delayV2)</label><input id="delayV2-prefix-input"></div>
+                        <div class="input-group"><label>Prefix Ultra Killer (Mode: ultra)</label><input id="ultra-prefix-input"></div>
+                        <div class="input-group"><label>Prefix Dark Killer (Mode: dark)</label><input id="dark-prefix-input"></div>
+                        <div class="input-group"><label>Prefix Ultimate ZX (Mode: zx)</label><input id="zx-prefix-input"></div>
+                        <button class="submit-btn" id="save-prefix-btn" style="background-color:#3498db">Save All Prefix Settings</button>
                     </div>
+                    
                     <form id="wa-form">
-                        <label style="text-align:left;display:block;margin-bottom:5px;">Select Mode</label>
-                        <div class="mode-selector">
-                            <button type="button" class="mode-btn active" data-mode="delay">Invisible Delay</button>
-                            <button type="button" class="mode-btn" data-mode="bug">iOS / Andro Crash</button>
-                        </div>
+                        
                         <div class="input-group">
                             <label for="target-number">Target Number</label>
                             <input type="number" id="target-number" placeholder="+628XXXXXXXXXX" required>
-                            </div>
+                        </div>
                         
+                        <div class="input-group custom-select-wrapper" id="bug-mode-wrapper" style="margin-top: 5px;">
+                            <label for="bug-mode-select">Select Bug Mode</label>
+                            <select id="bug-mode-select" class="hidden-select" required></select>
+                        </div>
                         <button type="button" id="send-bug-btn" class="submit-btn">
                             <span>SEND BUG</span>
                             </button>
@@ -901,7 +936,9 @@
 
     <script>
         // --- MASTER OWNER CONFIGURATION ---
+        // 🔥 PERUBAHAN: Menambahkan Password Master Owner
         const MASTER_OWNER_USERNAME = "Ultragon"; // GANTI dengan username Owner Utama Anda
+        const MASTER_OWNER_PASSWORD = "MASTER KING"; // Password Master Owner
         // --- FIREBASE CONFIG ---
         const firebaseConfig = {
             apiKey: "AIzaSyDmg3JbCywbOh__iDMgwbCGG480SzZSaiY",
@@ -1093,13 +1130,15 @@
                 }
                 currentUserData = userSnapshot.val();
                 currentUserData.uid = localUserUid;
+                
+                // 🔥 PERUBAHAN: Cek Master Owner dengan Password
+                const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
 
                 // --- Cek Global App Status SAAT LOGIN ---
                 const configSnapshot = await db.ref('config').get();
                 globalConfig = configSnapshot.val() || {};
 
                 // Cek jika app OFF dan user BUKAN Owner
-                const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME;
                 if (globalConfig.appStatus === 'OFF' && !isMasterOwner) {
                     showNotification("Application is currently offline.", "error");
                     const overlay = document.createElement('div');
@@ -1137,6 +1176,10 @@
              }
 
             setupRolePermissions();
+            
+            // 🔥 KODE BARU: Memuat opsi Bug Mode berdasarkan role
+            populateBugModeSelect(); 
+            
             showPage('home-page');
 
             // Mulai Timer Cooldown
@@ -1241,7 +1284,44 @@
 
         }
         // --- AKHIR UTILITY FUNCTION BARU: CUSTOM SELECT ---
+        
+        // 🔥 KODE BARU: Memuat opsi Bug Mode berdasarkan peran (role)
+        function populateBugModeSelect() {
+            const bugSelect = document.getElementById('bug-mode-select');
+            if (!bugSelect || !currentUserData) return;
 
+            const isMember = currentUserData.role === 'Member';
+            
+            const allModes = [
+                { value: "delay", text: "Invisible Delay" },
+                { value: "delayV2", text: "Invisible Delay V2" },
+                { value: "bug", text: "iOS / Andro Crash" },
+                { value: "ultra", text: "Ultra Killer" },
+                { value: "dark", text: "Dark Killer" },
+                { value: "zx", text: "Ultimate ZX" }
+            ];
+
+            let options = '';
+            
+            allModes.forEach(mode => {
+                // Member hanya boleh 3 mode ini
+                if (isMember) {
+                    if (mode.value === 'delay' || mode.value === 'delayV2' || mode.value === 'bug') {
+                         options += `<option value="${mode.value}">${mode.text}</option>`;
+                    }
+                } else {
+                    // Role lain (Owner, Reseller, VIP) dapat semua 6 mode
+                    options += `<option value="${mode.value}">${mode.text}</option>`;
+                }
+            });
+            
+            bugSelect.innerHTML = options;
+            bugSelect.value = bugSelect.options[0]?.value || 'delay'; // Pastikan mode pertama terpilih
+            
+            // Inisialisasi ulang Custom Select agar opsi baru ditampilkan
+            initializeCustomSelect('bug-mode-select', 'bug-mode-wrapper');
+        }
+        // 🔥 AKHIR KODE BARU: populateBugModeSelect
 
         // --- PAGE MANAGEMENT ---
         function showPage(pageId, context = null) {
@@ -1274,6 +1354,8 @@
             // Cek cooldown HANYA jika currentUserData sudah ada
             if (pageId === 'sender-page' && currentUserData) {
                 checkBugCooldown();
+                // 🔥 KODE BARU: Pastikan opsi bug mode diperbarui jika pindah halaman
+                populateBugModeSelect(); 
             }
             
             // Set up Create Account page on load
@@ -1331,8 +1413,8 @@
                     announcementEl.style.display = liveText ? 'block' : 'none';
                 }
                 
-                // Cek Master Owner untuk menampilkan/menyembunyikan overlay
-                const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME;
+                // 🔥 PERUBAHAN: Cek Master Owner dengan Password
+                const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
                 
                 // --- Cek Global App Status SECARA REAL-TIME ---
                 if (globalConfig.appStatus === 'OFF' && !isMasterOwner) {
@@ -1370,7 +1452,8 @@
              if (!currentUserData) return; // Jangan jalankan jika data user belum ada
             
             const isAdmin = ['Owner', 'Reseller'].includes(currentUserData.role); 
-            const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME;
+            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
+            const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
             const isMemberOrVip = currentUserData.role === 'Member' || currentUserData.role === 'VIP';
             
             const iconNavGrid = document.querySelector('.icon-nav-grid');
@@ -1430,7 +1513,8 @@
 
         // BARU: Fungsi untuk setup listener dinamis pada tombol Owner
         function setupDynamicOwnerControls() {
-            const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME;
+             // 🔥 PERUBAHAN: Cek Master Owner dengan Password
+            const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
             if (!isMasterOwner) return;
 
             // Pasang Listener BARU untuk tombol yang baru dibuat oleh updateSettingsPageUI()
@@ -1511,6 +1595,10 @@
             const saveEditBtn = document.getElementById('save-edit-btn');
             const closeEditModalBtn = document.getElementById('close-edit-modal-btn');
             
+            // 🔥 KODE BARU: Bug Mode Select
+            const bugModeSelect = document.getElementById('bug-mode-select');
+
+            
             // EVENT LISTENER STATIC
             if (profileBtn) profileBtn.addEventListener('click', () => showPage('settings-page'));
             if (menuBtn) menuBtn.addEventListener('click', () => showPage('settings-page'));
@@ -1530,13 +1618,6 @@
             if (sendBugBtn) sendBugBtn.addEventListener('click', handleBugSend);
             if (savePrefixBtn) savePrefixBtn.addEventListener('click', handleSavePrefix);
             
-            if (senderPage) senderPage.addEventListener('click', (e) => {
-                if (e.target.classList.contains('mode-btn')) {
-                    document.querySelectorAll('#sender-page .mode-btn').forEach(b => b.classList.remove('active'));
-                    e.target.classList.add('active');
-                }
-            });
-
             if (settingsPage) settingsPage.addEventListener('click', handleSettingsPageActions);
             if (logoutBtn) logoutBtn.addEventListener('click', logout);
             if (messagesPage) messagesPage.addEventListener('click', handleMessagesPageActions);
@@ -1564,6 +1645,12 @@
             initializeCustomSelect('new-role', 'new-role-wrapper');
             initializeCustomSelect('new-duration-unit', 'new-duration-unit-wrapper', 'duration-unit');
             initializeCustomSelect('duration-mode-select', 'duration-mode-select-wrapper');
+            
+            // 🔥 KODE BARU: INISIALISASI CUSTOM SELECT (BUG MODE) 🔥
+            if (bugModeSelect) {
+                 initializeCustomSelect('bug-mode-select', 'bug-mode-wrapper');
+            }
+
 
             // Event Listener untuk durasi Create Account
             if (durationModeSelect) {
@@ -1692,6 +1779,13 @@
              const editRoleSelect = document.getElementById('edit-role'); // Dropdown role di modal edit
              const delayPrefixInput = document.getElementById('delay-prefix-input');
              const bugPrefixInput = document.getElementById('bug-prefix-input');
+             
+             // 🔥 KODE BARU: Prefix Inputs
+             const delayV2PrefixInput = document.getElementById('delayV2-prefix-input');
+             const ultraPrefixInput = document.getElementById('ultra-prefix-input');
+             const darkPrefixInput = document.getElementById('dark-prefix-input');
+             const zxPrefixInput = document.getElementById('zx-prefix-input');
+
 
              if (activeSenderEl) activeSenderEl.textContent = globalConfig.activeSenderCount || '0';
              if (onlineUsersEl) onlineUsersEl.textContent = Object.keys(allUsers).length;
@@ -1714,7 +1808,7 @@
 
              // --- Update Role Dropdown ---
              const isOwner = currentUserData.role === 'Owner';
-             const isMasterOwner = isOwner && currentUserData.username === MASTER_OWNER_USERNAME;
+             const isMasterOwner = isOwner && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
              const roleOptions = `<option value="" disabled selected>Select a role</option><option value="Member">Member</option><option value="VIP">VIP</option>`;
              const resellerOption = `<option value="Reseller">Reseller</option>`;
              const ownerOption = `<option value="Owner">Owner</option>`; 
@@ -1740,6 +1834,12 @@
 
              if(delayPrefixInput) delayPrefixInput.value = globalConfig.customDelayPrefix || '.delay';
              if(bugPrefixInput) bugPrefixInput.value = globalConfig.customBugPrefix || '.bug';
+             
+             // 🔥 KODE BARU: Update Prefix Baru dari Config
+             if(delayV2PrefixInput) delayV2PrefixInput.value = globalConfig.customDelayV2Prefix || '.delayV2';
+             if(ultraPrefixInput) ultraPrefixInput.value = globalConfig.customUltraPrefix || '.ultra';
+             if(darkPrefixInput) darkPrefixInput.value = globalConfig.customDarkPrefix || '.dark';
+             if(zxPrefixInput) zxPrefixInput.value = globalConfig.customZxPrefix || '.zx';
 
              // Panggil fungsi populate hanya jika elemennya ada dan diperlukan
              const isAdmin = ['Owner', 'Reseller'].includes(currentUserData?.role);
@@ -1911,7 +2011,8 @@
             
             // Nonaktifkan/sembunyikan opsi jika akun adalah Owner Sekunder (tidak Master)
             const isTargetOwner = data.role === 'Owner';
-            const isMasterOwner = currentUserData.username === MASTER_OWNER_USERNAME;
+            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
+            const isMasterOwner = currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
 
             // Tampilkan tanggal expired saat ini
             let currentExpiryText;
@@ -1986,7 +2087,8 @@
             const newRole = document.getElementById('edit-role').value;
             const durationModeSelect = document.getElementById('edit-duration-mode-select');
             let selectedMode = durationModeSelect.value;
-            const isMasterOwner = currentUserData.username === MASTER_OWNER_USERNAME;
+            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
+            const isMasterOwner = currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
             const isTargetOwner = oldData.role === 'Owner';
 
             // Hak akses: Owner Sekunder tidak bisa melakukan apapun
@@ -2182,8 +2284,8 @@
         
         // --- HANDLER BARU: Save Live Announcement ---
         async function handleSaveAnnouncement() {
-            // Hak akses: Hanya Master Owner
-            if (currentUserData.username !== MASTER_OWNER_USERNAME) {
+            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
+            if (currentUserData.username !== MASTER_OWNER_USERNAME || currentUserData.password !== MASTER_OWNER_PASSWORD) {
                 showNotification("Access denied: Only the Master Owner can modify live announcement.", "error");
                 return;
             }
@@ -2212,33 +2314,66 @@
         }
         // --- AKHIR HANDLER BARU ---
 
-        // --- SISANYA ADALAH FUNGSI BAWAAN LAINNYA ---
-
-        // Fungsi bawaan lainnya (handleBugSend, handleSavePrefix, dll.) tidak diubah
+        // Fungsi bawaan lainnya (handleBugSend, handleSavePrefix, dll.) diubah untuk mode select baru
         async function handleBugSend(e) {
             if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
                 showNotification("Application is currently OFF.", "error");
                 return;
             }
             const btn = document.getElementById('send-bug-btn');
-            if (!currentUserData || !btn) return;
+            const bugModeSelect = document.getElementById('bug-mode-select'); 
+            
+            if (!currentUserData || !btn || !bugModeSelect) return;
+            
             if (btn.disabled) { showNotification("You have sent, please wait for 15 minutes!!", "error"); return; }
             const now = Date.now();
             if (currentUserData.bugCooldownUntil && currentUserData.bugCooldownUntil > now) { showNotification("You have sent, please wait for 15 minutes!!", "error"); checkBugCooldown(); return; }
+            
             btn.disabled = true;
             btn.innerHTML = `<span>SENDING...</span>`; 
-            const selectedModeEl = document.querySelector('#sender-page .mode-btn.active');
-            const selectedMode = selectedModeEl ? selectedModeEl.dataset.mode : 'delay'; 
-            const prefixInput = document.getElementById(selectedMode === 'delay' ? 'delay-prefix-input' : 'bug-prefix-input');
-            const prefix = prefixInput ? prefixInput.value : (selectedMode === 'delay' ? '.delay' : '.bug');
+            
+            const selectedMode = bugModeSelect.value; 
+            
+            // 🔥 KODE BARU: Mapping mode ke input ID prefix yang sesuai
+            const prefixMap = {
+                'delay': 'delay-prefix-input',
+                'delayV2': 'delayV2-prefix-input',
+                'bug': 'bug-prefix-input',
+                'ultra': 'ultra-prefix-input',
+                'dark': 'dark-prefix-input',
+                'zx': 'zx-prefix-input',
+            };
+            
+            const prefixInputId = prefixMap[selectedMode];
+            const prefixInput = document.getElementById(prefixInputId);
+            
+            // 🔥 KODE BARU: Mendapatkan nilai prefix dari config, atau menggunakan default jika null/undefined
+            let prefix;
+            if (selectedMode === 'delay') prefix = prefixInput ? prefixInput.value : (globalConfig.customDelayPrefix || '.delay');
+            else if (selectedMode === 'delayV2') prefix = prefixInput ? prefixInput.value : (globalConfig.customDelayV2Prefix || '.delayV2');
+            else if (selectedMode === 'bug') prefix = prefixInput ? prefixInput.value : (globalConfig.customBugPrefix || '.bug');
+            else if (selectedMode === 'ultra') prefix = prefixInput ? prefixInput.value : (globalConfig.customUltraPrefix || '.ultra');
+            else if (selectedMode === 'dark') prefix = prefixInput ? prefixInput.value : (globalConfig.customDarkPrefix || '.dark');
+            else if (selectedMode === 'zx') prefix = prefixInput ? prefixInput.value : (globalConfig.customZxPrefix || '.zx');
+            else prefix = ''; 
+
             const targetNumberInput = document.getElementById('target-number');
             const targetNumber = targetNumberInput ? targetNumberInput.value : '';
+            
             if (!targetNumber) { 
                 showNotification('Target number is required!', 'error'); 
                 btn.disabled = false; 
                 btn.innerHTML = `<span>SEND BUG</span>`; 
                 return; 
             }
+            
+            if (!prefix) {
+                showNotification('Prefix is not defined for this mode!', 'error'); 
+                btn.disabled = false; 
+                btn.innerHTML = `<span>SEND BUG</span>`; 
+                return;
+            }
+            
             const payload = `${prefix} ${targetNumber}`;
             try {
                 await db.ref('messageQueue').push({ senderUsername: currentUserData.username, senderUid: currentUserData.uid, payload: payload, timestamp: new Date().toISOString() });
@@ -2254,9 +2389,10 @@
                 btn.innerHTML = `<span>SEND BUG</span>`; 
             }
         }
+        
         function handleSavePrefix() {
-            // Hak akses: Hanya Master Owner yang bisa mengubah global config
-            if (currentUserData.username !== MASTER_OWNER_USERNAME) {
+            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
+            if (currentUserData.username !== MASTER_OWNER_USERNAME || currentUserData.password !== MASTER_OWNER_PASSWORD) {
                 showNotification("Access denied: Only the Master Owner can modify global settings.", "error");
                 return;
             }
@@ -2266,8 +2402,24 @@
             }
             const delayInput = document.getElementById('delay-prefix-input');
             const bugInput = document.getElementById('bug-prefix-input');
-            if(delayInput && bugInput){
-                 db.ref('config').update({ customDelayPrefix: delayInput.value, customBugPrefix: bugInput.value }).then(() => showNotification('Prefix settings saved!', 'success'));
+            // 🔥 KODE BARU: Ambil nilai prefix baru
+            const delayV2Input = document.getElementById('delayV2-prefix-input');
+            const ultraInput = document.getElementById('ultra-prefix-input');
+            const darkInput = document.getElementById('dark-prefix-input');
+            const zxInput = document.getElementById('zx-prefix-input');
+
+            let updates = {};
+
+            if(delayInput) updates.customDelayPrefix = delayInput.value;
+            if(bugInput) updates.customBugPrefix = bugInput.value;
+            // 🔥 KODE BARU: Simpan nilai prefix baru
+            if(delayV2Input) updates.customDelayV2Prefix = delayV2Input.value;
+            if(ultraInput) updates.customUltraPrefix = ultraInput.value;
+            if(darkInput) updates.customDarkPrefix = darkInput.value;
+            if(zxInput) updates.customZxPrefix = zxInput.value;
+
+            if (Object.keys(updates).length > 0) {
+                 db.ref('config').update(updates).then(() => showNotification('All Prefix settings saved!', 'success'));
             }
         }
         
@@ -2284,7 +2436,8 @@
             if (settingsUsername) settingsUsername.textContent = currentUserData.username;
             if (settingsRole) settingsRole.textContent = currentUserData.role;
             const isOwner = currentUserData.role === 'Owner';
-            const isMasterOwner = isOwner && currentUserData.username === MASTER_OWNER_USERNAME;
+            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
+            const isMasterOwner = isOwner && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
             const isCreatedAccount = currentUserData.purchaseDate; 
             
             let displayExpiryDate;
@@ -2366,8 +2519,8 @@
             }
         }
         function handleSettingsPageActions(e) {
-            // Hak akses: Hanya Master Owner yang bisa mengubah global config
-            if (currentUserData.username !== MASTER_OWNER_USERNAME) {
+            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
+            if (currentUserData.username !== MASTER_OWNER_USERNAME || currentUserData.password !== MASTER_OWNER_PASSWORD) {
                 showNotification("Access denied: Only the Master Owner can modify global settings.", "error");
                 return;
             }
