@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ULTRAGON Support Chatbot</title>
+    
+    <style>
+        /* CSS CHATBOT MODAL (POSISI TENGAH) */
+        
+        /* Container Utama sebagai Overlay Modal */
+        .chat-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); 
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            z-index: 99999; 
+            font-family: Arial, sans-serif;
+        }
+
+        /* Kotak Chat (Modal) */
+        .chat-box {
+            width: 350px; 
+            height: 500px; 
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            display: flex; 
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(1); 
+            transition: transform 0.3s ease-out;
+            max-height: 95vh; 
+        }
+        
+        /* Header Chat */
+        .chat-header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            flex-shrink: 0; 
+        }
+
+        .agent-status { display: flex; align-items: center; }
+
+        /* Styling untuk gambar profil CS di header */
+        .agent-avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background-color: #f0f0f0; margin-right: 10px;
+            overflow: hidden; 
+        }
+        .agent-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .agent-info { line-height: 1.2; }
+        .agent-name { font-weight: bold; font-size: 16px; }
+        .agent-label { font-size: 12px; opacity: 0.8; }
+        .close-btn { 
+            font-size: 24px; cursor: pointer; font-weight: 300; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Area Body Pesan (Latarnya ala WA) */
+        .chat-body {
+            flex-grow: 1;
+            padding: 15px 15px 5px 15px; 
+            overflow-y: auto;
+            background-color: #e5ddd5; 
+        }
+
+        .message-wrapper {
+            display: flex;
+            align-items: flex-end; 
+            margin-bottom: 7px; 
+        }
+
+        .message-wrapper.user { justify-content: flex-end; }
+        .message-wrapper.bot { justify-content: flex-start; }
+
+        .message-wrapper.user .message-avatar { display: none; }
+        .message-wrapper.user .message { margin-left: auto; }
+
+        .message-avatar {
+            width: 30px; height: 30px; border-radius: 50%;
+            background-color: #e0e0e0; overflow: hidden;
+            margin-right: 8px; flex-shrink: 0; 
+        }
+        .message-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+
+        /* KUNCI: STYLING BUBBLE WA */
+        .message {
+            padding: 8px 10px 8px 10px; 
+            line-height: 1.4;
+            word-wrap: break-word;
+            max-width: 80%;
+            position: relative; 
+            box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13); 
+            /* Memberi ruang ekstra di bawah: 30px */
+            padding-bottom: 30px; 
+        }
+
+        .user-message {
+            background-color: #dcf8c6; 
+            border-radius: 7px 7px 0 7px; 
+            margin-right: -10px; 
+        }
+
+        .bot-message {
+            background-color: #ffffff; 
+            border-radius: 7px 7px 7px 0; 
+            margin-left: -10px; 
+        }
+        
+        .message a {
+            color: #004a99; font-weight: bold; text-decoration: none;
+        }
+        
+        /* KUNCI: Menghapus min-height dan memastikan teks punya z-index */
+        .message-text {
+            font-size: 14px;
+            padding-right: 0; 
+            /* min-height dihapus */
+            position: relative; 
+            z-index: 2; 
+        }
+
+        /* STYLING TIMESTAMP & CENTANG */
+        .timestamp-wrapper {
+            position: absolute;
+            /* Dibuat sangat rendah di dalam ruang padding besar */
+            bottom: 5px; 
+            right: 5px; 
+            min-width: 65px; 
+            display: flex;
+            align-items: center;
+            justify-content: flex-end; 
+            font-size: 0.7em;
+            color: rgba(0, 0, 0, 0.45); 
+            white-space: nowrap;
+            pointer-events: none; 
+            z-index: 1;
+        }
+
+        /* Centang Biru (SVG Simpel) */
+        .tick-icon {
+            margin-left: 4px;
+            width: 14px;
+            height: 14px;
+            fill: #4fc3f7; 
+            transform: scale(0.8);
+        }
+
+        /* Indikator Mengetik */
+        .typing-indicator {
+            display: flex; align-items: center; margin-bottom: 10px;
+            padding: 10px 15px; background-color: #ffffff;
+            border-radius: 7px 7px 7px 0; 
+            max-width: 150px; margin-right: auto;
+            margin-left: -10px;
+            box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13); 
+        }
+        
+        .typing-dot {
+            width: 8px; height: 8px; background-color: #6c757d;
+            border-radius: 50%; margin: 0 2px;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(2) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(3) { animation-delay: -0.16s; }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Form Input */
+        .chat-input {
+            padding: 10px 15px; 
+            display: flex;
+            border-top: 1px solid #ddd;
+            background-color: #f0f0f0; 
+            flex-shrink: 0; 
+        }
+        .chat-input input {
+            background-color: #fff;
+            padding: 10px; border: 1px solid #ccc; border-radius: 20px;
+            margin-right: 10px; outline: none;
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
+        }
+
+        .chat-input button {
+            background-color: #007bff; color: white; border: none;
+            padding: 10px 15px; border-radius: 20px; cursor: pointer;
+            transition: none; 
+            -webkit-tap-highlight-color: transparent !important; 
+            -webkit-user-select: none; -moz-user-select: none; 
+            -ms-user-select: none; user-select: none;
+            width: 70px; 
+        }
+        
+        .chat-input button:hover, 
+        .chat-input button:active { 
+            background-color: #007bff; 
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container" id="chat-container">
+        <div class="chat-box" id="chat-box"> 
+            <div class="chat-header">
+                <div class="agent-status">
+                    <div class="agent-avatar">
+                        <img src="cs.png" alt="CS Avatar">
+                    </div>
+                    <div class="agent-info">
+                        <div class="agent-name">ULTRAGON Support</div>
+                        <div class="agent-label">Customer Service Online</div>
+                    </div>
+                </div>
+                <div class="close-btn" id="close-chat">&times;</div>
+            </div>
+
+            <div class="chat-body" id="chat-body">
+                
+                <div class="message-wrapper bot">
+                    <div class="message-avatar">
+                        <img src="cs.png" alt="CS Avatar">
+                    </div>
+                    <div class="message bot-message">
+                        <div class="message-text">Halo! Saya <b>ULTRAGON Support</b>. Silakan sampaikan kendala teknis Anda.</div>
+                        <span class="timestamp-wrapper"><span class="timestamp">07:30 PM</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input">
+                <input type="text" id="user-input" placeholder="Ketik pesan Anda...">
+                <button id="send-btn" contenteditable="false">Kirim</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk mendapatkan waktu saat ini dalam format HH:MM AM/PM
+        function getCurrentTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12; 
+            const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+            return `${formattedHours}:${formattedMinutes} ${ampm}`;
+        }
+
+        // SVG untuk centang biru ganda (simulasi read status WA)
+        const doubleTickSVG = `<svg viewBox="0 0 24 24" class="tick-icon"><path d="M18.71 7.21l-9.2 9.2-4.5-4.5c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41l5.21 5.21c.2.2.45.29.71.29s.51-.1.71-.29l9.91-9.91c.39-.39.39-1.02 0-1.41-.39-.39-1.02-.39-1.41 0zM22.51 7.21l-9.91 9.91-4.5-4.5c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41l5.21 5.21c.2.2.45.29.71.29s.51-.1.71-.29l10.61-10.61c.39-.39.39-1.02 0-1.41-.39-.39-1.02-.39-1.41 0z"/></svg>`;
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const chatContainer = document.getElementById('chat-container');
+            const chatBox = document.getElementById('chat-box'); 
+            const closeChat = document.getElementById('close-chat');
+            const chatBody = document.getElementById('chat-body');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const emailCS = 'ultragonxtiktok@gmail.com';
+            const csAvatarSrc = 'cs.png'; 
+            const redirectPage = 'index1.html'; 
+            
+            // Variabel Status untuk Eskalasi Otomatis
+            let hasOfferedTroubleshooting = false; 
+            
+            // --- FUNGSI LOCAL STORAGE UNTUK CHAT HISTORY ---
+            
+            const HISTORY_KEY = 'ultragon_chat_history';
+
+            function saveChatHistory(historyHtml) {
+                try {
+                    localStorage.setItem(HISTORY_KEY, historyHtml);
+                } catch (e) {
+                    console.error("Gagal menyimpan riwayat chat:", e);
+                }
+            }
+
+            function loadChatHistory() {
+                const historyHtml = localStorage.getItem(HISTORY_KEY);
+                if (historyHtml) {
+                    // Hapus pesan pembuka default (yang ada di HTML)
+                    const defaultMessage = chatBody.querySelector('.message-wrapper.bot');
+                    if (defaultMessage) {
+                        defaultMessage.remove();
+                    }
+                    chatBody.innerHTML = historyHtml;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                    return true; // Riwayat berhasil dimuat
+                }
+                return false; // Tidak ada riwayat yang tersimpan
+            }
+            // ------------------------------------------------
+
+            userInput.focus(); 
+
+            // MUAT RIWAYAT CHAT SAAT INISIALISASI
+            loadChatHistory();
+
+            // PENGALIHAN HALAMAN SAAT TOMBOL TUTUP DITEKAN
+            closeChat.addEventListener('click', () => {
+                window.location.href = redirectPage;
+            });
+
+            // Fungsi Eskalasi Final
+            function getEscalationMessage() {
+                // Reset status agar chat baru tidak langsung eskalasi
+                hasOfferedTroubleshooting = false; 
+                return `Maaf, tampaknya masalah Anda belum teratasi dengan panduan kami. Kamu bisa menjelaskan informasi lebih lanjut ke Customer Service kita. Silakan 👉🏻<b><a href="mailto:${emailCS}" target="_blank">KLIK DI SINI</a></b>`;
+            }
+
+            // Fungsi untuk menambahkan pesan ke chat body
+            function addMessage(text, sender) {
+                const messageWrapper = document.createElement('div');
+                messageWrapper.classList.add('message-wrapper', sender);
+
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', `${sender}-message`);
+
+                // KONTEN PESAN: Teks utama
+                let messageContent = `<div class="message-text">${text}</div>`;
+                
+                // TIMESTAMP & TICK: Diletakkan di luar message-text
+                const timestamp = getCurrentTime();
+                let timestampHTML = `<span class="timestamp-wrapper"><span class="timestamp">${timestamp}</span>`;
+
+                if (sender === 'user') {
+                    timestampHTML += doubleTickSVG + `</span>`;
+                } else {
+                    timestampHTML += `</span>`;
+                }
+                
+                // Gabungkan konten pesan dan timestamp/tick
+                messageDiv.innerHTML = messageContent + timestampHTML;
+
+                // Tambahkan avatar
+                if (sender === 'bot') {
+                    const avatarDiv = document.createElement('div');
+                    avatarDiv.classList.add('message-avatar');
+                    // AVATAR TANPA TITIK ONLINE DI PESAN
+                    avatarDiv.innerHTML = `<img src="${csAvatarSrc}" alt="CS Avatar">`;
+                    messageWrapper.appendChild(avatarDiv);
+                    messageWrapper.appendChild(messageDiv);
+                } else {
+                    messageWrapper.appendChild(messageDiv);
+                }
+                
+                chatBody.appendChild(messageWrapper);
+                chatBody.scrollTop = chatBody.scrollHeight;
+                
+                // SIMPAN RIWAYAT SETELAH PESAN BARU DITAMBAHKAN
+                saveChatHistory(chatBody.innerHTML);
+            }
+
+            // Fungsi untuk menampilkan indikator mengetik
+            function showTypingIndicator() {
+                const typingIndicatorWrapper = document.createElement('div');
+                typingIndicatorWrapper.classList.add('message-wrapper', 'bot');
+                typingIndicatorWrapper.id = 'typing-indicator-wrapper'; 
+
+                const avatarDiv = document.createElement('div');
+                avatarDiv.classList.add('message-avatar');
+                // AVATAR TANPA TITIK ONLINE PADA TYPING INDICATOR
+                avatarDiv.innerHTML = `<img src="${csAvatarSrc}" alt="CS Avatar">`;
+                typingIndicatorWrapper.appendChild(avatarDiv);
+
+                const typingIndicatorDiv = document.createElement('div');
+                typingIndicatorDiv.classList.add('typing-indicator');
+                typingIndicatorDiv.innerHTML = `
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                `;
+                typingIndicatorWrapper.appendChild(typingIndicatorDiv);
+                chatBody.appendChild(typingIndicatorWrapper);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+
+            // Fungsi untuk menyembunyikan indikator mengetik
+            function hideTypingIndicator() {
+                const indicator = document.getElementById('typing-indicator-wrapper');
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+
+            // Logika pengiriman pesan
+            sendBtn.addEventListener('click', processUserInput);
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    processUserInput();
+                }
+            });
+
+            function processUserInput() {
+                const userText = userInput.value.trim();
+                if (userText === '') return;
+
+                addMessage(userText, 'user');
+                userInput.value = '';
+
+                showTypingIndicator(); 
+                
+                setTimeout(() => {
+                    hideTypingIndicator(); 
+                    getBotResponse(userText);
+                }, 1500); 
+            }
+
+            /*
+            ======================================================================
+            !!! LOGIKA CHATBOT SIMULASI KONTEKS ULTRAGON (ESKALASI OTOMATIS) !!!
+            ======================================================================
+            */
+            
+            // Kata kunci yang TIDAK boleh memicu eskalasi (yaitu: mengganti topik)
+            const newTopicKeywords = ['halo', 'hi', 'apa', 'siapa', 'ultragon', 'menu', 'fitur', 'bantu'];
+
+            function isNewTopic(text) {
+                const lowerText = text.toLowerCase();
+                return newTopicKeywords.some(keyword => lowerText.includes(keyword));
+            }
+
+
+            function getBotResponse(userText) {
+                let botResponse = '';
+                const lowerText = userText.toLowerCase();
+                let topicHandled = false;
+                
+                // Cek Eskalasi Otomatis (Jika sudah diberi saran dan pengguna tidak mengganti topik)
+                if (hasOfferedTroubleshooting && !isNewTopic(lowerText)) {
+                    // Masalah belum selesai, otomatis eskalasi
+                    botResponse = getEscalationMessage();
+                    topicHandled = true;
+                }
+
+                if (!topicHandled) {
+                    
+                    // 1. Masalah Cooldown Bug Sender
+                    if (lowerText.includes('cooldown') || lowerText.includes('bug sender') || lowerText.includes('15 menit') || lowerText.includes('sender')) {
+                        botResponse = `Fitur <b>Bug Sender</b> memiliki batasan waktu <b>Cooldown 15 Menit</b> untuk menghindari *spam*. Pastikan Anda sudah menunggu waktu tersebut. Jika Anda yakin sudah melewati 15 menit, coba <b>Logout</b> dan <b>Login</b> ulang untuk merefresh sesi Anda.`;
+                        hasOfferedTroubleshooting = true;
+                    }
+                    // 2. Masalah Login, Session, atau Expired
+                    else if (lowerText.includes('login') || lowerText.includes('sesi') || lowerText.includes('expired') || lowerText.includes('akun tidak aktif') || lowerText.includes('sesi invalid')) {
+                        botResponse = `Jika Anda mengalami masalah <b>Login</b> atau <b>Sesi Invalid</b>:<br>
+                                    <br>1. Perlu diingat, <b>ULTRAGON</b> memiliki fitur keamanan yang akan memutus sesi jika Anda login di perangkat lain.
+                                    <br>2. Coba <b>Logout</b> dan <b>Login</b> kembali.
+                                    <br>3. Cek halaman <b>Settings</b>, mungkin akun Anda sudah <b>Expired</b>.`;
+                        hasOfferedTroubleshooting = true;
+                    }
+                    // 3. Masalah Umum (Aplikasi/Koneksi)
+                    else if (lowerText.includes('tidak berfungsi') || lowerText.includes('error') || lowerText.includes('lag') || lowerText.includes('lemot') || lowerText.includes('masalah aplikasi') || lowerText.includes('aplikasi') || lowerText.includes('koneksi')) {
+                        botResponse = `Tentu, saya bantu cek masalah aplikasi Anda. Ketika <b>ULTRAGON</b> bermasalah, coba langkah-langkah ini dulu:<br>
+                                    <br>1. <b>Cek Koneksi Internet</b> Anda. Stabilitas koneksi sangat penting.
+                                    <br>2. Coba <b>Tutup dan Buka Kembali</b> aplikasi ULTRAGON.
+                                    <br>3. Pastikan aplikasi Anda sudah <b>Update</b> ke versi terbaru.`;
+                        hasOfferedTroubleshooting = true;
+                    } 
+                    // 4. Sambutan atau pertanyaan yang tidak jelas (Default)
+                    else if (lowerText.includes('halo') || lowerText.includes('hi') || lowerText.includes('bantu') || lowerText.includes('tanya')) {
+                        botResponse = `Halo! Saya <b>ULTRAGON Support</b>. Silakan jelaskan masalah teknis Anda terkait fitur <b>Bug Sender</b>, <b>Login</b>, atau kendala aplikasi lainnya.`;
+                        hasOfferedTroubleshooting = false; 
+                    }
+                    // 5. Jika respons sangat umum dan bot simulasi tidak memprosesnya
+                    else {
+                        if (!hasOfferedTroubleshooting) {
+                            botResponse = `Mohon maaf, saya kurang yakin dengan maksud Anda. Bisakah Anda jelaskan lebih spesifik mengenai kendala teknis Anda di <b>ULTRAGON</b>?`;
+                            hasOfferedTroubleshooting = true; 
+                        } else {
+                            botResponse = getEscalationMessage();
+                        }
+                    }
+                }
+
+                addMessage(botResponse, 'bot');
+            }
+            
+            /* ======================================================================
+            !!! PERBAIKAN KEYBOARD VIRTUAL (MOBILE) !!!
+            ======================================================================
+            */
+
+            let keyboardFocusActive = false;
+            
+            userInput.addEventListener('focus', () => {
+                keyboardFocusActive = true;
+                chatBody.scrollTop = chatBody.scrollHeight;
+                
+                setTimeout(() => {
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 100);
+            });
+
+            userInput.addEventListener('blur', () => {
+                keyboardFocusActive = false;
+            });
+
+        });
+    </script>
+</body>
+</html>

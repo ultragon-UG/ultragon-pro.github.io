@@ -362,7 +362,7 @@
         .search-result-item:hover { background-color: #2a2a3a; }
         .search-result-item:last-child { border-bottom: none; }
 
-        /* Style Stats-Panel (Merah Bergerak) */
+        /* 🔥 PERBAIKAN TOTAL UNTUK SERVER STATS HEADER 🔥 */
         .stats-panel {
             background: linear-gradient(-45deg, #600000, #a00000, #3d0000, #500000);
             background-size: 400% 400%;
@@ -380,24 +380,41 @@
             width: 100%;
             margin-left: 0; 
             box-sizing: border-box;
+            margin-bottom: 20px; 
         }
         .stats-header { 
             display: flex; 
-            align-items: center; 
-            gap: 8px; 
+            align-items: center; /* KUNCI: Menyelaraskan vertikal di tengah */
+            gap: 10px; /* 🔥 Dibuat lebih rapat */
             padding: 15px; 
             background-color: #b8860b; 
             font-weight: bold; 
-            font-size: 1.2em; /* Teks "Server Stats" dibuat lebih besar */
+            font-size: 1.4em; 
+            letter-spacing: 0.5px;
         }
-        .stats-header span { color: #ffffff; }
-        .stats-header img { width: 20px; height: 20px; display: block; filter: none; }
+        .stats-header span { 
+            color: #ffffff; 
+            line-height: 1; /* Memastikan teks memiliki tinggi baris yang rapat */
+        }
+        .stats-header img { 
+            width: 30px; /* 🔥 Ikon dibesarkan */
+            height: 30px; /* 🔥 Ikon dibesarkan */
+            display: block; 
+            filter: none; 
+            flex-shrink: 0; 
+        }
         .stats-content { padding: 0 15px 5px 15px; }
         .stats-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
         .stats-row + .stats-row { border-top: 1px solid gold; }
         .stats-row .label { display: flex; align-items: center; gap: 10px; color: #ffcccc; }
-        .stats-row .label img { width: 20px; height: 20px; display: block; filter: none; }
+        .stats-row .label img { 
+            width: 25px; 
+            height: 25px; 
+            display: block; 
+            filter: none; 
+        }
         .stats-row .value { font-weight: normal; color: #ffffff; text-align: right; font-family: 'Orbitron', monospace; font-size: 1em; } 
+        /* 🔥 AKHIR PERBAIKAN TOTAL UNTUK SERVER STATS HEADER 🔥 */
 
         /* Style Banner Dinamis (Merah Bergerak) - TELEGRAM BANNER */
         .telegram-custom-banner {
@@ -587,12 +604,75 @@
             background-color: #2a2a3a;
             color: #88d3ce; 
         }
+        
+        /* 🔥 KODE BARU: Style untuk mode yang tidak bisa dipilih (disabled look) 🔥 */
+        .select-option-item.disabled-mode {
+            color: #555; /* Warna teks abu-abu */
+            background-color: #10101a; /* Background yang lebih gelap dari hover */
+            cursor: not-allowed; /* Kursor tidak diizinkan */
+            opacity: 0.7;
+        }
+
+        .select-option-item.disabled-mode:hover {
+            background-color: #10101a; /* Mencegah perubahan warna saat hover */
+            color: #555; /* Teks tetap abu-abu saat hover */
+        }
+
 
         /* Sembunyikan select/input asli */
         .hidden-select {
             display: none !important;
         }
         /* --- END CUSTOM SELECT STYLE --- */
+
+        /* --- START: KODE CSS TAMBAHAN UNTUK TOMBOL CS MELAYANG --- */
+        .floating-cs-button {
+            /* Posisi Melayang (Fixed) */
+            position: fixed;
+            right: 20px; /* Jarak dari ujung kanan */
+            bottom: 80px; /* Jarak dari ujung bawah (di atas nav-bar 60px + 20px) */
+            z-index: 1000; /* Memastikan tombol di atas elemen lain */
+            
+            /* Styling Tombol */
+            background-color: #4CAF50; /* Warna Hijau */
+            padding: 10px;
+            border-radius: 50%; /* Membuat tombol berbentuk lingkaran */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Efek bayangan */
+            
+            /* Transisi untuk animasi halus */
+            transition: background-color 0.3s, transform 0.3s;
+            
+            /* Menghilangkan garis bawah pada link */
+            text-decoration: none;
+            
+            /* Ukuran Tombol (sesuaikan jika perlu) */
+            width: 60px;
+            height: 60px;
+            display: flex; /* Untuk memposisikan gambar di tengah */
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Styling Gambar di dalam Tombol */
+        .floating-cs-button img {
+            width: 100%; /* Membuat gambar mengisi tombol */
+            height: 100%;
+            object-fit: contain; /* Memastikan gambar pas tanpa terdistorsi */
+            border-radius: 50%; /* Gambar juga dibuat lingkaran */
+            filter: invert(100%); /* Agar ikon terlihat jelas di background hijau */
+        }
+
+        /* Efek Hover (Saat kursor di atas tombol) */
+        .floating-cs-button:hover {
+            background-color: #45a049; /* Warna hijau sedikit lebih gelap */
+            transform: scale(1.05); /* Sedikit membesar saat di-hover */
+        }
+        
+        /* Efek Klik (Opsional) */
+        .floating-cs-button:active {
+            transform: scale(0.95);
+        }
+        /* --- END: KODE CSS TAMBAHAN UNTUK TOMBOL CS MELAYANG --- */
 
     </style>
 </head>
@@ -930,7 +1010,10 @@
             <div class="modal-buttons" style="margin-top: 20px;"><button id="close-user-search-modal-btn" style="background-color: #555; color: white;">Close</button></div>
         </div>
     </div>
-
+    
+    <a href="index2.html" class="floating-cs-button" title="Customer Service">
+        <img src="cs1.png" alt="Customer Service Icon">
+    </a>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -1222,27 +1305,41 @@
                 optionItem.className = 'select-option-item';
                 optionItem.textContent = option.text;
                 optionItem.dataset.value = option.value;
-                if (option.selected) {
-                    optionItem.classList.add('selected');
+                
+                // 🔥 KODE BARU: Menambahkan penanganan class disabled
+                const isMember = currentUserData.role === 'Member';
+                const restrictedModes = ['ultra', 'dark', 'zx']; 
+                
+                if (isMember && restrictedModes.includes(option.value)) {
+                    optionItem.classList.add('disabled-mode');
+                    // Ganti event listener untuk mode yang disabled agar tidak bisa dipilih
+                    optionItem.addEventListener('click', (e) => {
+                        e.stopPropagation(); // Mencegah penutupan dropdown
+                        showNotification(`Access denied: This mode is only available for VIP, Reseller, and Owner.`, 'error');
+                    });
+                } else {
+                    if (option.selected) {
+                        optionItem.classList.add('selected');
+                    }
+                    // Listener normal untuk mode yang diizinkan atau untuk role yang diizinkan
+                    optionItem.addEventListener('click', (e) => {
+                        // Set nilai ke select asli
+                        originalSelect.value = option.value;
+                        
+                        // Perbarui tampilan kustom
+                        selectedText.textContent = option.text;
+                        optionsList.style.display = 'none';
+                        customSelect.classList.remove('open');
+                        
+                        // Hapus kelas 'selected' dari semua dan tambahkan ke item yang dipilih
+                        optionsList.querySelectorAll('.select-option-item').forEach(item => item.classList.remove('selected'));
+                        optionItem.classList.add('selected');
+                        
+                        // PENTING: Memicu event change asli setelah DOM diperbarui
+                        originalSelect.dispatchEvent(new Event('change'));
+                    });
                 }
                 
-                // Listener saat opsi diklik
-                optionItem.addEventListener('click', (e) => {
-                    // Set nilai ke select asli
-                    originalSelect.value = option.value;
-                    
-                    // Perbarui tampilan kustom
-                    selectedText.textContent = option.text;
-                    optionsList.style.display = 'none';
-                    customSelect.classList.remove('open');
-                    
-                    // Hapus kelas 'selected' dari semua dan tambahkan ke item yang dipilih
-                    optionsList.querySelectorAll('.select-option-item').forEach(item => item.classList.remove('selected'));
-                    optionItem.classList.add('selected');
-                    
-                    // PENTING: Memicu event change asli setelah DOM diperbarui
-                    originalSelect.dispatchEvent(new Event('change'));
-                });
                 optionsList.appendChild(optionItem);
             });
 
@@ -1285,17 +1382,16 @@
         }
         // --- AKHIR UTILITY FUNCTION BARU: CUSTOM SELECT ---
         
-        // 🔥 KODE BARU: Memuat opsi Bug Mode berdasarkan peran (role)
+        // 🔥 KODE BARU: Memuat opsi Bug Mode berdasarkan peran (role) (LOGIKA DIUBAH)
         function populateBugModeSelect() {
             const bugSelect = document.getElementById('bug-mode-select');
             if (!bugSelect || !currentUserData) return;
-
-            const isMember = currentUserData.role === 'Member';
             
+            // Semua mode harus dimasukkan (kecuali Member, Reseller, VIP harus bisa pakai yang awal)
             const allModes = [
                 { value: "delay", text: "Invisible Delay" },
-                { value: "delayV2", text: "Invisible Delay V2" },
                 { value: "bug", text: "iOS / Andro Crash" },
+                { value: "delayV2", text: "Invisible Delay V2" },
                 { value: "ultra", text: "Ultra Killer" },
                 { value: "dark", text: "Dark Killer" },
                 { value: "zx", text: "Ultimate ZX" }
@@ -1303,22 +1399,15 @@
 
             let options = '';
             
+            // Sekarang, semua mode dimasukkan ke dalam select
             allModes.forEach(mode => {
-                // Member hanya boleh 3 mode ini
-                if (isMember) {
-                    if (mode.value === 'delay' || mode.value === 'delayV2' || mode.value === 'bug') {
-                         options += `<option value="${mode.value}">${mode.text}</option>`;
-                    }
-                } else {
-                    // Role lain (Owner, Reseller, VIP) dapat semua 6 mode
-                    options += `<option value="${mode.value}">${mode.text}</option>`;
-                }
+                options += `<option value="${mode.value}">${mode.text}</option>`;
             });
             
             bugSelect.innerHTML = options;
             bugSelect.value = bugSelect.options[0]?.value || 'delay'; // Pastikan mode pertama terpilih
             
-            // Inisialisasi ulang Custom Select agar opsi baru ditampilkan
+            // Inisialisasi ulang Custom Select agar opsi baru ditampilkan dengan logika disabled di dalamnya
             initializeCustomSelect('bug-mode-select', 'bug-mode-wrapper');
         }
         // 🔥 AKHIR KODE BARU: populateBugModeSelect
@@ -1844,7 +1933,7 @@
              // Panggil fungsi populate hanya jika elemennya ada dan diperlukan
              const isAdmin = ['Owner', 'Reseller'].includes(currentUserData?.role);
              const accListBody = document.getElementById('account-list-body');
-             if (document.getElementById('message-inbox-container') && isMasterOwner) populateMessagesInbox(); // Hanya Master Owner
+             if (document.getElementById('message-inbox-container')) populateMessagesInbox(); // Hanya Master Owner
              if (accListBody && isAdmin && accListBody.closest('.page.active')) {
                  populateDataPageTable();
              }
@@ -2325,14 +2414,23 @@
             
             if (!currentUserData || !btn || !bugModeSelect) return;
             
+            const selectedMode = bugModeSelect.value; 
+            
+            // 🔥 KODE BARU: Penanganan mode disabled untuk Member
+            const isMember = currentUserData.role === 'Member';
+            const restrictedModes = ['ultra', 'dark', 'zx']; 
+
+            if (isMember && restrictedModes.includes(selectedMode)) {
+                showNotification("Access denied: This mode is only available for VIP, Reseller, and Owner.", "error");
+                return; // Hentikan proses jika Member mencoba mode terbatas
+            }
+
             if (btn.disabled) { showNotification("You have sent, please wait for 15 minutes!!", "error"); return; }
             const now = Date.now();
             if (currentUserData.bugCooldownUntil && currentUserData.bugCooldownUntil > now) { showNotification("You have sent, please wait for 15 minutes!!", "error"); checkBugCooldown(); return; }
             
             btn.disabled = true;
             btn.innerHTML = `<span>SENDING...</span>`; 
-            
-            const selectedMode = bugModeSelect.value; 
             
             // 🔥 KODE BARU: Mapping mode ke input ID prefix yang sesuai
             const prefixMap = {
@@ -2532,22 +2630,47 @@
             const action = actions[target.id] || (target.classList.length > 0 && actions[target.classList[0]]);
             if (action) action();
         }
+        
+        // 🔥 MODIFIKASI: Hanya Master Owner yang bisa melihat/memproses Inbox
         function populateMessagesInbox() {
-             const container = document.getElementById('message-inbox-container');
-             if (!container) return; 
-             db.ref('messageQueue').on('value', snapshot => {
-                if (!container) return; 
+            const container = document.getElementById('message-inbox-container');
+            if (!container || !currentUserData) return;
+            
+            // 🔥 Cek Master Owner
+            const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
+
+            if (!isMasterOwner) {
+                container.innerHTML = '<p style="color:#e74c3c;">Access Denied: Only Master Owner can view the Inbox.</p>';
+                // Pastikan listener dimatikan jika bukan Master Owner
+                db.ref('messageQueue').off('value'); 
+                return;
+            }
+
+            db.ref('messageQueue').on('value', snapshot => {
+                if (!container || !isMasterOwner) return; // Tambahan pengecekan di dalam listener
                 container.innerHTML = '';
                 if (!snapshot.exists()) { container.innerHTML = '<p>Inbox is empty.</p>'; return; }
+                
                 snapshot.forEach(child => {
                     const msg = child.val();
                     const msgKey = child.key;
                     const senderUid = msg.senderUid || '';
                     const item = document.createElement('div');
                     item.className = 'message-item';
-                    item.innerHTML = `<p><b>From:</b> ${msg.senderUsername}</p><p><b>Message:</b> ${msg.payload}</p> <div class="message-actions"> <button class="accept-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Reply (WA)</button> <button class="telegram-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Reply (TG)</button> <button class="reject-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Delete</button> </div>`;
+                    
+                    // Format Timestamp
+                    let timestampText = '';
+                    if (msg.timestamp) {
+                        try {
+                            const date = new Date(msg.timestamp);
+                            timestampText = ` (${date.toLocaleDateString()} ${date.toLocaleTimeString()})`;
+                        } catch(e) { /* Biarkan kosong jika error */ }
+                    }
+                    
+                    item.innerHTML = `<p><b>From:</b> ${msg.senderUsername}${timestampText}</p><p><b>Message:</b> ${msg.payload}</p> <div class="message-actions"> <button class="accept-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Reply (WA)</button> <button class="telegram-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Reply (TG)</button> <button class="reject-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Delete</button> </div>`;
                     container.appendChild(item);
                 });
+                
                 const adminWaInput = document.getElementById('admin-wa-number');
                 const adminTgInput = document.getElementById('admin-tg-id');
                 if(adminWaInput) adminWaInput.value = currentUserData.adminReplyPrefs?.waNumber || '';
@@ -2558,7 +2681,17 @@
             if (!targetUid || !message || !type) return;
             db.ref('user_notifications/' + targetUid).push({ text: message, type: type, timestamp: new Date().toISOString() });
         }
+        
+        // 🔥 MODIFIKASI: Hanya Master Owner yang bisa memproses Inbox Action
         async function handleMessagesPageActions(e) {
+            // 🔥 Cek Master Owner
+            const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
+            
+            if (!isMasterOwner) {
+                showNotification("Access denied: Only Master Owner can process Inbox messages.", "error");
+                return;
+            }
+            
             if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
                 showNotification("Application is currently OFF.", "error");
                 return;
