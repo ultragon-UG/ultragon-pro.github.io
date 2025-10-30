@@ -14,6 +14,31 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* 🔥 KODE CSS TAMBAHAN UNTUK MENGHILANGKAN SELEKSI DAN MENU KONTEKS 🔥 */
+        /* Mencegah seleksi teks dan menu konteks pada hampir semua elemen */
+        body, html, .login-container * {
+            -webkit-user-select: none; /* iOS/Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE/Edge */
+            user-select: none; /* Standar */
+            -webkit-touch-callout: none; /* iOS (Mencegah menu default saat tekan lama) */
+        }
+        
+        /* Khusus untuk INPUT agar tetap bisa diedit/diisi */
+        .input-group input, 
+        .input-group textarea {
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            user-select: text !important;
+        }
+        
+        /* Khusus untuk GAMBAR (mencegah klik kanan/tekan lama pada gambar) */
+        .logo-atas, .logo-sub {
+            pointer-events: none;
+        }
+        /* 🔥 AKHIR KODE PERBAIKAN SELEKSI 🔥 */
+
         /* Latar belakang animasi */
         body, html {
             height: 100%;
@@ -314,8 +339,7 @@
                 date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
                 expires = "; expires=" + date.toUTCString();
             }
-            // Set path=/ agar cookie berlaku untuk seluruh aplikasi, Secure/SameSite untuk standar keamanan
-            // Jika ini berjalan di server HTTP (bukan HTTPS), hapus `Secure;`
+            // Set path=/ agar cookie berlaku untuk seluruh aplikasi, SameSite untuk standar keamanan
             document.cookie = name + "=" + (value || "")  + expires + "; path=/; SameSite=Strict"; 
         }
 

@@ -178,6 +178,16 @@
         /* --- END MODIFIKASI UKURAN BANNER SAITAMA --- */
 
         .banner-overlay h2 { font-size: 1.5em; color: #fff; }
+        
+        /* --- START MODIFIKASI BANNER LOGO ULTRAGON (BARU) --- */
+        .banner-overlay .banner-logo-img { /* Aturan untuk gambar ULTRAGON di banner */
+            height: 35px; /* Sesuaikan tinggi yang Anda inginkan */
+            width: auto;
+            display: block; /* Pastikan gambar mengambil baris penuh */
+            margin: 0 0 5px 0; /* Margin bawah untuk memisahkan dari teks "Welcome" */
+        }
+        /* --- END MODIFIKASI BANNER LOGO ULTRAGON --- */
+        
         .banner-overlay p { font-size: 0.9em; color: #aaa; }
         .icon-nav-grid { 
             display: grid; 
@@ -702,7 +712,7 @@
 
                     <img src="saitama.png" alt="Main Banner">
                     <div class="banner-overlay">
-                        <h2>ULTRAGON</h2>
+                        <img src="ultragon.png" alt="ULTRAGON" class="banner-logo-img">
                         <p>Welcome, <span id="welcome-username">User</span>!</p>
                     </div>
                 </div>
@@ -2705,7 +2715,7 @@
             const targetNumber = payloadParts.length > 1 ? payloadParts[1] : '[unknown number]';
             let notificationMessage = '';
             let notificationType = '';
-            if(target.classList.contains('accept-btn') || target.classList.contains('telegram-btn')){
+            if (target.classList.contains('accept-btn') || target.classList.contains('telegram-btn')) {
                 if (target.classList.contains('accept-btn')) {
                     const waNumInput = document.getElementById('admin-wa-number');
                     const waNum = waNumInput ? (waNumInput.value || globalConfig.adminWaNumberLogin) : globalConfig.adminWaNumberLogin;
