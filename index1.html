@@ -1054,7 +1054,6 @@
     </style>
 </head>
 <body>
-    <audio id="ultragon-music-player" src="ultragon.mp3" preload="auto" loop></audio>
     
     <div id="app-wrapper">
         <div id="notification-container"></div>
@@ -1516,6 +1515,11 @@
         let currentChatPartnerUid = null;
         let sessionListenerRef = null; 
         let isMusicPlaying = false; 
+        // --- MODIFIKASI WEB AUDIO API (Bagian 1) ---
+        let audioCtx = null; // Ini akan jadi 'speaker' kita
+        let ultragonMusicBuffer = null; // Ini untuk menyimpan 'audio mentah'
+        let currentMusicSource = null; // Ini untuk kontrol play/stop
+        // --- AKHIR MODIFIKASI ---
         let globalInboxMessages = []; 
         let currentInboxFilters = { role: 'ALL', mode: 'ALL' }; 
         
@@ -1649,17 +1653,34 @@
 
         function logout() {
             if (sessionListenerRef) { sessionListenerRef.off(); sessionListenerRef = null; }
-            if (currentUserData && currentUserData.uid) { const myNotifRef = db.ref('user_notifications/' + currentUserData.uid); myNotifRef.off(); }
+            
+            // 🔥 MODIFIKASI: Hapus Sesi Saat Logout 🔥
+            // Pindahkan ini ke atas agar 'currentUserData' pasti masih ada
+            if (currentUserData && currentUserData.uid) { 
+                const myNotifRef = db.ref('user_notifications/' + currentUserData.uid); 
+                myNotifRef.off(); 
+                
+                // Ini adalah kunci agar orang lain bisa login
+                db.ref('users/' + currentUserData.uid + '/currentSessionId').set(null); // Diubah dari .remove() ke .set(null) untuk keamanan
+            }
+            // 🔥 AKHIR MODIFIKASI 🔥
+            
             
             // 🔥 MODIFIKASI (Permintaan #1): Hentikan listener notifikasi admin saat logout
             db.ref('admin_notifications').off(); 
 
-            const musicPlayer = document.getElementById('ultragon-music-player');
-            if (musicPlayer) {
-                musicPlayer.pause();
-                musicPlayer.currentTime = 0;
-                isMusicPlaying = false;
+            // --- MODIFIKASI WEB AUDIO API (Bagian 2) ---
+            // Hentikan musik dan tutup 'speaker' saat logout
+            if (currentMusicSource) {
+                currentMusicSource.stop();
+                currentMusicSource = null;
             }
+            if (audioCtx && audioCtx.state !== 'closed') {
+                audioCtx.close();
+                audioCtx = null;
+            }
+            isMusicPlaying = false;
+            // --- AKHIR MODIFIKASI ---
 
             eraseCookie('userUid'); 
             eraseCookie('sessionId'); 
@@ -1668,6 +1689,39 @@
         }
 
         
+        // --- MODIFIKASI WEB AUDIO API (Bagian 1) ---
+        // Fungsi baru untuk memuat audio mentah
+        async function loadMusic() {
+            // Jangan lakukan apa-apa jika audio context gagal dibuat
+            if (!audioCtx) return; 
+            
+            try {
+                // 1. Ambil file musiknya
+                const response = await fetch('ultragon.mp3');
+                if (!response.ok) {
+                    throw new Error('Gagal mengambil ultragon.mp3');
+                }
+                // 2. Ubah jadi data buffer
+                const arrayBuffer = await response.arrayBuffer();
+                
+                // 3. Ubah data buffer jadi 'audio mentah' yang bisa dimainkan
+                // Kita gunakan .then() di sini agar tidak memblokir kode lain
+                audioCtx.decodeAudioData(arrayBuffer).then((buffer) => {
+                    ultragonMusicBuffer = buffer; // Simpan di variabel global
+                    console.log("Musik Ultragon berhasil dimuat.");
+                }).catch((error) => {
+                    console.error('Gagal decode audio:', error);
+                    showNotification('Gagal memuat file musik.', 'error');
+                });
+
+            } catch (error) {
+                console.error('Error memuat musik:', error);
+                showNotification('File musik (ultragon.mp3) tidak ditemukan.', 'error');
+            }
+        }
+        // --- AKHIR MODIFIKASI ---
+
+
         // --- START MODIFIKASI: FUNGSI POP-UP BARU ---
         const popupOverlay = document.getElementById('popup-overlay');
         const menuPopup = document.getElementById('menu-popup');
@@ -1713,26 +1767,59 @@
             if (menuPopup) menuPopup.classList.remove('active');
             if (profilePopup) profilePopup.classList.remove('active');
         }
-        // --- END MODIFIKASI: FUNGSI POP-UP BARU ---
-
+        
+        // --- MODIFIKASI WEB AUDIO API (Bagian 3) ---
+        // Fungsi handleMusicToggle yang ditulis ulang
         function handleMusicToggle() {
-            const musicPlayer = document.getElementById('ultragon-music-player');
-            if (!musicPlayer) {
-                showNotification("Music player error.", "error");
+            // Cek 1: Pastikan 'speaker' (audioCtx) ada
+            if (!audioCtx) {
+                showNotification("Audio system error.", "error");
                 return;
             }
 
-            if (isMusicPlaying) {
-                musicPlayer.pause();
-                showNotification("Music off", "music"); 
-            } else {
-                musicPlayer.play().catch(e => {
-                    showNotification("Music failed to play. Click again.", "error");
-                });
-                showNotification("Music on🔥🔥", "music"); 
+            // Cek 2: Pastikan 'audio mentah' (buffer) sudah selesai dimuat
+            if (!ultragonMusicBuffer) {
+                showNotification("Music not loaded yet. Please wait...", "info");
+                return;
             }
-            isMusicPlaying = !isMusicPlaying;
+
+            // Jika musik sedang menyala (isMusicPlaying true)
+            if (isMusicPlaying) {
+                // Hentikan sumber suara yang sedang berjalan
+                if (currentMusicSource) {
+                    currentMusicSource.stop();
+                    currentMusicSource = null; // Hapus referensi
+                }
+                showNotification("Music off", "music");
+                isMusicPlaying = false; // Set status ke mati
+            
+            // Jika musik sedang mati (isMusicPlaying false)
+            } else {
+                // Buat sumber suara baru dari 'audio mentah'
+                currentMusicSource = audioCtx.createBufferSource();
+                currentMusicSource.buffer = ultragonMusicBuffer;
+                currentMusicSource.loop = true; // Set agar berulang (loop)
+                
+                // Sambungkan sumber suara ke 'speaker' (destination)
+                currentMusicSource.connect(audioCtx.destination);
+                
+                // Mulai mainkan
+                currentMusicSource.start();
+                
+                showNotification("Music on🔥🔥", "music");
+                isMusicPlaying = true; // Set status ke menyala
+
+                // Tambahan: 'Awasi' jika sumber suara selesai (meski loop, ini jaga-jaga)
+                currentMusicSource.onended = () => {
+                    // Jika selesai BUKAN karena kita klik stop
+                    if (isMusicPlaying) { 
+                        isMusicPlaying = false;
+                    }
+                };
+            }
         }
+        // --- AKHIR MODIFIKASI ---
+
 
         function checkBugCooldown() {
             const btn = document.getElementById('send-bug-btn');
@@ -1801,14 +1888,34 @@
             sessionListenerRef = db.ref('users/' + currentUserData.uid + '/currentSessionId');
             sessionListenerRef.on('value', (snapshot) => {
                 const dbSessionId = snapshot.val();
-                if (sessionListenerRef && dbSessionId && dbSessionId !== mySessionId) {
+                
+                // 🔥 MODIFIKASI: Perbarui logika.
+                // Jika session ID di database menjadi null/kosong (karena kita di-kick atau logout manual),
+                // DAN sessionListener-nya masih aktif, paksa logout.
+                if (sessionListenerRef && !dbSessionId) {
+                    showNotification("Logged out: Session has been cleared.", "error");
+                    logout(); // Panggil fungsi logout yang sudah dimodifikasi
+                }
+                // Jika session ID di database BEDA (orang lain login), paksa logout.
+                else if (sessionListenerRef && dbSessionId && dbSessionId !== mySessionId) {
                     showNotification("Logged out: Account used on another device.", "error");
                     logout();
                 }
             });
         }
-
         async function initializeApp() {
+            // --- MODIFIKASI WEB AUDIO API (Bagian 3) ---
+            // Buat AudioContext (speaker) SEBELUM hal lain
+            try {
+                // (window.AudioContext || window.webkitAudioContext) adalah untuk browser lama
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            } catch (e) {
+                console.error('Web Audio API tidak didukung!', e);
+                showNotification('Browser tidak support audio.', 'error');
+                // ... (lanjutkan tanpa audio)
+            }
+            // --- AKHIR MODIFIKASI ---
+            
             const localUserUid = getCookie('userUid'); 
             const localSessionId = getCookie('sessionId'); 
             
@@ -1858,11 +1965,21 @@
                     return; 
                 }
                 
+                // 🔥 MODIFIKASI: Pengecekan Sesi Aktif (Kunci Utama) 🔥
+                // Ini memvalidasi cookie DENGAN database.
                 if (!currentUserData.currentSessionId || currentUserData.currentSessionId !== localSessionId) {
+                    // Jika session ID di cookie tidak sama dengan di DB (mis. sudah di-logout dari device lain)
+                    // ATAU jika session ID di DB tidak ada (mis. habis di-kick 'onDisconnect' atau manual logout)
+                    // maka paksa logout.
                     showNotification("Session invalid or expired. Please log in again.", "error");
-                    setTimeout(logout, 2000);
+                    // Hapus cookie yang salah
+                    eraseCookie('userUid');
+                    eraseCookie('sessionId');
+                    // Paksa ke index.html (tanpa memanggil logout() agar tidak loop)
+                    window.location.href = 'index.html';
                     return;
                 }
+                // 🔥 AKHIR MODIFIKASI 🔥
 
             } catch (error) {
                 showNotification("Failed to connect or data corrupted.", "error");
@@ -1870,11 +1987,21 @@
             }
 
             setupEventListeners();
-            checkAccountExpiration(); 
+            checkAccountExpiration(); // <-- Pengecekan expired untuk user yang sedang login
             listenToGlobalConfig(); 
             listenToAllUsers();
             listenForMyNotifications();
             listenForSessionChanges(); 
+            
+            // 🔥 MODIFIKASI: onDisconnect() DIHAPUS 🔥
+            // Sesuai permintaan Anda, sesi TIDAK AKAN dihapus saat browser ditutup.
+            // Ini akan membuat fitur "Remember Me" berfungsi,
+            // TAPI akun bisa "terkunci" jika user tidak menekan logout manual.
+            
+            // db.ref('users/' + currentUserData.uid + '/currentSessionId').onDisconnect().remove(); // <-- BARIS INI SENGAJA DIHAPUS
+            
+            // 🔥 AKHIR MODIFIKASI 🔥
+            
             
             // 🔥 MODIFIKASI BARU (Permintaan #1): Panggil listener notifikasi admin
             listenForAdminNotifications(); 
@@ -1884,6 +2011,13 @@
                 welcomeEl.textContent = currentUserData.username;
              }
 
+            // --- MODIFIKASI WEB AUDIO API (Bagian 3) ---
+            // Panggil fungsi untuk memuat musik di background
+            if (audioCtx) {
+                loadMusic();
+            }
+            // --- AKHIR MODIFIKASI ---
+            
             setupRolePermissions();
             populateBugModeSelect(); 
             showPage('home-page');
@@ -2474,10 +2608,12 @@
 
             if (!expiryDateISO || new Date() < new Date(expiryDateISO)) return;
             
+            // 🔥 MODIFIKASI: Pengecekan Expired di Dashboard 🔥
             const overlay = document.createElement('div');
             overlay.className = 'frozen-overlay';
             overlay.id = 'expired-overlay'; 
-            overlay.innerHTML = `<div class="content-box"><h2>Subscription Expired</h2><p>Contact admin for renewal.</p><button style="background:#c0392b; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px;" onclick="logout()">Logout</button></div>`;
+            // Ubah pesan dan pastikan memanggil logout() yang sudah benar
+            overlay.innerHTML = `<div class="content-box"><h2>Subscription Expired</h2><p>Your account has expired. Contact admin for renewal.</p><button style="background:#c0392b; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px;" onclick="logout()">Logout</button></div>`;
 
             if (document.body) {
                  document.body.appendChild(overlay);

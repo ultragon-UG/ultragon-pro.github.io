@@ -95,7 +95,9 @@
         /* Grup input */
         .input-group {
             margin-bottom: 25px;
-            text-align: center; 
+            /* 🔥 MODIFIKASI: Ubah ke 'left' dan tambah 'relative' */
+            text-align: left; 
+            position: relative;
         }
 
         .input-group label {
@@ -105,16 +107,46 @@
         .input-group input {
             width: 100%;
             background-color: transparent; 
-            padding: 15px;
+            /* 🔥 MODIFIKASI: Padding diubah agar ada ruang di kiri */
+            padding: 15px 25px;
             border: 1px solid #777; 
             border-radius: 30px; 
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
             font-size: 16px;
             color: white; 
-            text-align: center;
+            /* 🔥 MODIFIKASI: Ubah ke 'left' */
+            text-align: left;
             transition: border-color 0.3s ease; /* Transisi untuk warna border */
         }
+        
+        /* 🔥 MODIFIKASI BARU: Beri ruang di kanan untuk ikon mata (hanya di kolom password) */
+        #password-group input {
+            padding-right: 60px; /* 25px padding asli + 35px ruang ikon */
+        }
+        
+        /* 🔥 MODIFIKASI BARU: Style untuk ikon mata */
+        .toggle-password-icon {
+            position: absolute;
+            right: 20px; /* Posisi ikon di kanan */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            /* Ikon default: Mata Tertutup (SVG Base64) */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>');
+        }
+        
+        /* 🔥 MODIFIKASI BARU: Style saat ikon mata diklik (Visible) */
+        .toggle-password-icon.visible {
+            /* Ikon: Mata Terbuka (SVG Base64) */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23aaa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>');
+        }
+
         
         /* Ganti warna placeholder */
         .input-group input::placeholder {
@@ -246,10 +278,11 @@
             <div class="input-group">
                 <input type="text" id="loginUser" placeholder="Username" required>
             </div>
-            <div class="input-group">
+            
+            <div class="input-group" id="password-group">
                 <input type="password" id="loginPass" placeholder="Password" required>
+                <span id="togglePassword" class="toggle-password-icon"></span>
             </div>
-
             <button type="submit" class="submit-button">LOGIN</button>
             <p id="loginError" class="error-text"></p>
         </form>
@@ -268,6 +301,7 @@
             </div>
         </div>
     </div>
+    
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -367,6 +401,22 @@
             const loginContainer = document.getElementById('loginContainer');
             const loginErrorEl = document.getElementById('loginError');
 
+            // 🔥 MODIFIKASI BARU: Logika untuk Ikon Mata
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('loginPass');
+
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', () => {
+                    // Cek tipe input password
+                    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    passwordInput.setAttribute('type', type);
+                    
+                    // Ganti ikon mata
+                    togglePassword.classList.toggle('visible');
+                });
+            }
+            // 🔥 AKHIR MODIFIKASI
+
             loginContainer.addEventListener('animationend', (e) => {
                 if (e.animationName === 'shake') {
                     loginContainer.classList.remove('shake-error');
@@ -433,11 +483,46 @@
                         }
                     }
 
-                    if (userData.role !== 'Developer' && userData.role !== 'Owner') {
+                    // --- 🔥 MODIFIKASI BARU: Logika Pengecekan Expired & Terkunci (URUTAN BARU) 🔥 ---
+                    
+                    let isExpired = false;
+                    if (userData.role !== 'Developer' && userData.role !== 'Owner' && userData.expiryDate !== 'UNLIMITED') {
+                        if (!userData.expiryDate) {
+                             throw new Error('Data akun tidak lengkap. Hubungi admin.');
+                        }
                         const expiryDate = new Date(userData.expiryDate);
-                        if (new Date() >= expiryDate) throw new Error('Akun kamu sudah expired. Silakan hubungi admin.');
+                        if (new Date() >= expiryDate) {
+                            isExpired = true;
+                        }
                     }
 
+                    const isLocked = !!userData.currentSessionId; // Cek apakah terkunci (true/false)
+
+                    if (isExpired) {
+                        if (isLocked) {
+                            // --- INI SOLUSINYA ---
+                            // Akunnya expired DAN terkunci. Buka kuncinya sekarang.
+                            // Kita panggil .set(null) daripada .remove() untuk keamanan
+                            db.ref('users/' + userUid + '/currentSessionId').set(null); 
+                        }
+                        // Tampilkan error expired (akun sudah tidak terkunci lagi)
+                        throw new Error('Akun kamu sudah expired. Silakan hubungi admin.');
+                    }
+
+                    // Jika sampai sini, berarti akun TIDAK expired.
+                    // Sekarang baru kita cek apakah terkunci.
+                    if (isLocked) {
+                        throw new Error('Akun sedang digunakan.');
+                    }
+                    // --- 🔥 AKHIR MODIFIKASI 🔥 ---
+
+
+                    // Jika sampai sini, berarti:
+                    // 1. Password benar
+                    // 2. Aplikasi ON
+                    // 3. Akun TIDAK Expired
+                    // 4. Akun TIDAK Terkunci
+                    // -> Lanjutkan login
                     const newSessionId = Date.now().toString() + Math.random().toString(36).substring(2);
                     return db.ref('users/' + userUid).update({ currentSessionId: newSessionId }).then(() => newSessionId); 
                 })
@@ -457,23 +542,27 @@
                     loginButton.classList.add('error');
                     loginButton.textContent = 'Gagal!';
                     
+                    // Logika penanganan error yang baru
                     if (error.message.includes('Aplikasi sedang') || error.message.includes('Aplikasi sedang update')) {
-                        // Pop-up sudah ditampilkan oleh showAppStatusModal, hanya perlu cleanup tombol
-                        setTimeout(() => {
-                            loginButton.classList.remove('error');
-                            loginButton.textContent = 'LOGIN';
-                        }, 1500);
+                        // Pop-up sudah ditampilkan oleh showAppStatusModal
+                    } else if (error.message.includes('Akun sedang digunakan.')) {
+                        // Pop-up "Terkunci"
+                        showAppStatusModal('❌', 'LOGIN FAILED', 'Cannot log in because the account is being used', '#ff5555');
+                    } else if (error.message.includes('Akun kamu sudah expired.')) {
+                        // Pop-up "Expired"
+                        showAppStatusModal('🚫', 'AKUN EXPIRED', error.message, '#ff5555');
                     } else {
-                        // GAGAL UMUM: Tampilkan error di bawah form
+                        // Error umum (password salah, dll)
                         loginErrorEl.textContent = error.message;
                         loginErrorEl.style.display = 'block';
                         loginContainer.classList.add('shake-error');
-                        
-                        setTimeout(() => {
-                            loginButton.classList.remove('error');
-                            loginButton.textContent = 'LOGIN';
-                        }, 1500);
                     }
+                    
+                    // Cleanup tombol
+                    setTimeout(() => {
+                        loginButton.classList.remove('error');
+                        loginButton.textContent = 'LOGIN';
+                    }, 1500);
                 });
             });
 
