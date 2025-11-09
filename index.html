@@ -15,16 +15,14 @@
         }
 
         /* 🔥 KODE CSS TAMBAHAN UNTUK MENGHILANGKAN SELEKSI DAN MENU KONTEKS 🔥 */
-        /* Mencegah seleksi teks dan menu konteks pada hampir semua elemen */
         body, html, .login-container * {
-            -webkit-user-select: none; /* iOS/Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE/Edge */
-            user-select: none; /* Standar */
-            -webkit-touch-callout: none; /* iOS (Mencegah menu default saat tekan lama) */
+            -webkit-user-select: none; 
+            -moz-user-select: none; 
+            -ms-user-select: none; 
+            user-select: none; 
+            -webkit-touch-callout: none; 
         }
         
-        /* Khusus untuk INPUT agar tetap bisa diedit/diisi */
         .input-group input, 
         .input-group textarea {
             -webkit-user-select: text !important;
@@ -33,32 +31,18 @@
             user-select: text !important;
         }
         
-        /* Khusus untuk GAMBAR (mencegah klik kanan/tekan lama pada gambar) */
         .logo-atas, .logo-sub {
             pointer-events: none;
         }
         /* 🔥 AKHIR KODE PERBAIKAN SELEKSI 🔥 */
 
-        /* Latar belakang animasi */
+        /* Latar belakang Hitam */
         body, html {
             height: 100%;
             margin: 0;
             font-family: 'Poppins', sans-serif;
             color: white;
-        }
-
-        body {
-            /* Gradient merah gelap */
-            background: linear-gradient(-45deg, #600000, #a00000, #3d0000, #500000);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-        }
-
-        /* Animasi keyframes untuk menggerakkan background */
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            background: #000000; /* Hitam Solid */
         }
 
         /* Kotak login di tengah */
@@ -67,125 +51,99 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.6);
-            padding: 30px;
+            padding: 20px 30px; 
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
             width: 300px;
+            max-width: 90%; 
             text-align: center;
         }
 
-        /* Logo di atas */
+        /* Logo/Gambar Utama */
         .logo-atas {
             display: block;
             margin-left: auto;
             margin-right: auto;
-            width: 80px;
-            height: 80px;
-            margin-bottom: 10px;
+            width: auto; 
+            height: auto;
+            max-width: 200px; 
+            max-height: 200px; 
+            margin-bottom: 20px; 
         }
 
-        /* Logo kedua (di bawah logo atas) */
+        /* Hapus Logo Sub */
         .logo-sub {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 100px;
-            height: 40px;
-            margin-bottom: 5px; 
+            display: none; 
         }
 
-        /* ============================================== */
-        /* STYLE BARU UNTUK LABEL VERSI "PRO" */
-        /* ============================================== */
-        .version-label {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700; 
-            font-size: 1.1em; 
-            color: #dcdcdc; 
-            margin-bottom: 15px; 
+        /* Text 'Please Log-in To Your Account' */
+        .login-title {
+            font-family: monospace, sans-serif; 
+            font-weight: 400;
+            font-size: 14px; 
+            color: #ffffff; 
+            margin-bottom: 30px; 
             text-align: center;
-            letter-spacing: 2px; 
+            letter-spacing: 1px;
+            font-style: italic; 
         }
-        /* ============================================== */
-
-
-        /* Tombol Tab (Login/Register) */
-        .tabs {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-        }
-
-        .tab-button {
-            background: none;
-            border: none;
-            color: #aaa;
-            font-size: 18px;
-            padding: 10px;
-            cursor: pointer;
-            flex: 1;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
-        }
-
-        /* Hilangkan outline di desktop */
-        .tab-button:focus,
-        .submit-button:focus,
-        .input-group input:focus {
-            outline: none;
-        }
-
-        .tab-button.active {
-            color: white;
-            border-bottom: 2px solid #a00000;
-        }
-
-        /* Judul di dalam form (Login Akun / Buat Akun) */
-        .form-content h2 {
-            font-weight: 600;
-            margin-top: 5px;
-            margin-bottom: 25px;
-            font-size: 22px;
+        
+        /* Hapus Label Versi */
+        .version-label {
+            display: none;
         }
 
         /* Grup input */
         .input-group {
-            margin-bottom: 20px;
-            text-align: left;
+            margin-bottom: 25px;
+            text-align: center; 
         }
 
         .input-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-            font-weight: 400;
+            display: none; 
         }
 
         .input-group input {
             width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
+            background-color: transparent; 
+            padding: 15px;
+            border: 1px solid #777; 
+            border-radius: 30px; 
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
-            font-size: 14px;
-            color: #333; 
+            font-size: 16px;
+            color: white; 
+            text-align: center;
+            transition: border-color 0.3s ease; /* Transisi untuk warna border */
+        }
+        
+        /* Ganti warna placeholder */
+        .input-group input::placeholder {
+            color: #aaa;
+            opacity: 1; 
+        }
+
+        /* Warna border input saat fokus menjadi Merah */
+        .input-group input:focus {
+            outline: none; 
+            border-color: #ff0000; /* Merah */
         }
 
         /* Tombol Submit */
         .submit-button {
             width: 100%;
-            padding: 12px;
-            background-color: #a00000;
+            padding: 15px;
+            background: linear-gradient(90deg, #e0c8ff, #ffffff, #e0c8ff);
             border: none;
-            border-radius: 5px;
-            color: white;
+            border-radius: 30px; 
+            color: #5d00a3; 
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease; /* Ganti transition ke 'all' */
             font-family: 'Poppins', sans-serif;
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 18px;
+            font-weight: 700; 
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); 
+            margin-top: 15px;
         }
 
         .submit-button:disabled {
@@ -194,14 +152,24 @@
         }
 
         .submit-button:hover:not(:disabled) {
-            background-color: #c00000;
+            opacity: 0.8;
         }
 
+        /* Warna Hijau untuk Sukses */
         .submit-button.success {
-            background-color: #2ecc71 !important; 
+            background: #2ecc71 !important; /* Hijau */
+            color: white; 
+            text-shadow: none;
         }
 
-        /* Animasi Guncang */
+        /* Warna Merah untuk Error */
+        .submit-button.error {
+            background: #e74c3c !important; /* Merah */
+            color: white; 
+            text-shadow: none;
+        }
+
+        /* CSS Lainnya */
         @keyframes shake {
             0%, 100% {
                 transform: translate(-50%, -50%) translateX(0);
@@ -218,95 +186,88 @@
             animation: shake 0.4s ease-in-out;
         }
 
-        /* CSS UNTUK TEKS ERROR */
         .error-text {
-            color: #ff9e9e;
+            color: #ff5555; 
             font-size: 14px;
             margin-top: 15px;
             display: none;
             font-weight: 400;
         }
-
-        /* Sembunyikan form yang tidak aktif */
-        .form-content {
-            display: block;
+        
+        .buy-link, .creator-name, .tabs, .form-content h2 {
+            display: none;
         }
-
-        /* Style untuk link WhatsApp */
-        .buy-link {
-            display: block;
-            margin-top: 20px;
-            color: #ddd;
-            font-size: 13px;
-            text-decoration: none;
+        
+        /* STYLE KHUSUS MODAL POP-UP (App Status) */
+        .modal-overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px); 
+            z-index: 1000; display: none; justify-content: center; align-items: center; 
+            opacity: 0; transition: opacity 0.3s; 
         }
-
-        .buy-link:hover {
-            color: #fff;
-            text-decoration: underline;
+        .modal-overlay.active { display: flex; opacity: 1; }
+        .modal-box { 
+            background: #191929; padding: 25px; border-radius: 15px; text-align: center; 
+            width: 90%; max-width: 320px; border: 2px solid #555; 
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3); transform: scale(0.9); 
+            transition: transform 0.3s; 
         }
-
-        /* Style untuk nama kreator */
-        .creator-name {
-            margin-top: 25px;
-            margin-bottom: -10px;
-            font-size: 12px;
-            color: #aaa;
-            opacity: 0.7;
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-status-title {
+            display: flex; align-items: center; justify-content: flex-start; 
+            color: #ff5555; /* Default: GAGAL LOGIN (Merah) */
+            font-size: 1.6em; font-weight: 900; margin-bottom: 20px;
         }
-
+        .modal-status-title.update-mode { color: #88d3ce; } /* Warna untuk Update */
+        .modal-status-title .icon-container { font-size: 1.2em; margin-right: 10px; line-height: 1;}
+        .modal-message {
+            text-align: left; color: #ccc; margin-bottom: 30px; line-height: 1.4;
+            font-family: 'Poppins', sans-serif; font-size: 0.95em;
+        }
+        .modal-buttons { justify-content: flex-end; display: flex; }
+        .modal-buttons button {
+            flex: unset; width: 80px; background-color: #ff5555; color: #fff; 
+            font-weight: 900; padding: 10px; border: none; border-radius: 8px; cursor: pointer;
+            font-family: 'Poppins', sans-serif; transition: transform 0.1s;
+        }
+        .modal-buttons button.update-ok { background-color: #88d3ce; color: #10101a; }
+        .modal-buttons button:active { transform: scale(0.95); }
     </style>
 </head>
 <body>
 
     <div class="login-container" id="loginContainer">
 
-        <img src="logoug.png" alt="Logo" class="logo-atas">
-        <img src="ultragon.png" alt="Ultragon Logo" class="logo-sub">
-
-        <p class="version-label"></p>
-        <div class="tabs">
-            <button id="tabLogin" class="tab-button active">Login</button>
-            <button id="tabRegister" class="tab-button">Register</button>
-        </div>
+        <img src="logoug1.png" alt="Logo" class="logo-atas">
+        
+        <p class="login-title">Please Log-in To Your Account</p>
 
         <form id="loginForm" class="form-content">
-            <h2>Login Akun</h2>
             <div class="input-group">
-                <label for="loginUser">Username</label>
-                <input type="text" id="loginUser" required>
+                <input type="text" id="loginUser" placeholder="Username" required>
             </div>
             <div class="input-group">
-                <label for="loginPass">Password</label>
-                <input type="password" id="loginPass" required>
+                <input type="password" id="loginPass" placeholder="Password" required>
             </div>
 
-            <button type="submit" class="submit-button">Masuk</button>
+            <button type="submit" class="submit-button">LOGIN</button>
             <p id="loginError" class="error-text"></p>
         </form>
 
-        <form id="registerForm" class="form-content" style="display: none;">
-            <h2>Buat Akun Baru</h2>
-            <div class="input-group">
-                <label for="regUser">Username Baru</label>
-                <input type="text" id="regUser" required>
-            </div>
-            <div class="input-group">
-                <label for="regPass">Password Baru</label>
-                <input type="password" id="regPass" required>
-            </div>
-            <button type="submit" class="submit-button">Daftar</button>
-            <p id="registerError" class="error-text"></p>
-        </form>
-
-        <a href="#" target="_blank" class="buy-link" id="buyLink">
-            Don't have an account? Buy here!
-        </a>
-
-        <p class="creator-name">ULTRAGON</p>
-
     </div>
-
+    
+    <div class="modal-overlay" id="app-status-modal">
+        <div class="modal-box">
+            <div class="modal-status-title" id="modal-status-title">
+                <span class="icon-container" id="modal-icon">🚫</span> 
+                <span id="modal-title-text">GAGAL LOGIN</span>
+            </div>
+            <p class="modal-message" id="modal-message-text">Gagal login karena aplikasi sedang off. Coba lagi nanti!</p>
+            <div class="modal-buttons">
+                <button id="modal-ok-btn">OK</button>
+            </div>
+        </div>
+    </div>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
 
@@ -322,16 +283,10 @@
             appId: "1:119387094211:web:e43f951de20e793ac9b676"
         };
 
-        // Inisialisasi Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-
-        // ===========================================
-        // ### START: COOKIE FUNCTIONS (PENTING)
-        // ===========================================
-
-        // Fungsi untuk mengatur cookie (disimpan selama 365 hari untuk permanen)
+        // --- COOKIE FUNCTIONS ---
         function setCookie(name, value, days) {
             let expires = "";
             if (days) {
@@ -339,11 +294,9 @@
                 date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
                 expires = "; expires=" + date.toUTCString();
             }
-            // Set path=/ agar cookie berlaku untuk seluruh aplikasi, SameSite untuk standar keamanan
             document.cookie = name + "=" + (value || "")  + expires + "; path=/; SameSite=Strict"; 
         }
 
-        // Fungsi untuk mendapatkan cookie
         function getCookie(name) {
             const nameEQ = name + "=";
             const ca = document.cookie.split(';');
@@ -355,84 +308,77 @@
             return null;
         }
 
-        // Fungsi untuk menghapus cookie (digunakan saat logout/redirect)
         function eraseCookie(name) {   
             document.cookie = name+'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
 
-        // ===========================================
-        // ### END: COOKIE FUNCTIONS
-        // ===========================================
+        // --- FUNGSI POP-UP STATUS BARU ---
+        function showAppStatusModal(icon, title, message, color) {
+            const modal = document.getElementById('app-status-modal');
+            const titleContainer = document.getElementById('modal-status-title');
+            const iconEl = document.getElementById('modal-icon');
+            const titleTextEl = document.getElementById('modal-title-text');
+            const messageEl = document.getElementById('modal-message-text');
+            const okBtn = document.getElementById('modal-ok-btn');
+            
+            if (!modal) return;
+            
+            iconEl.textContent = icon;
+            titleTextEl.textContent = title;
+            messageEl.textContent = message;
+            
+            titleContainer.style.color = color;
+            okBtn.style.backgroundColor = color;
+            
+            if (icon === '🌐') {
+                 titleContainer.classList.add('update-mode');
+                 okBtn.classList.add('update-ok');
+            } else {
+                 titleContainer.classList.remove('update-mode');
+                 okBtn.classList.remove('update-ok');
+            }
 
+            modal.classList.add('active');
+
+            const closeModal = () => {
+                modal.classList.remove('active');
+                okBtn.removeEventListener('click', closeModal);
+            };
+
+            okBtn.addEventListener('click', closeModal);
+        }
+
+        // --- LOGIC ---
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- Cek Sesi Cookie Saat Memuat Halaman ---
             const userUid = getCookie('userUid');
             const sessionId = getCookie('sessionId');
             
-            // JIKA Sesi DITEMUKAN, LANGSUNG MASUK KE DASHBOARD
             if (userUid && sessionId) {
-                // Hapus entry history saat ini agar tombol back di dashboard langsung keluar.
                 if (window.history && window.history.replaceState) {
                     window.history.replaceState(null, null, window.location.href);
                 }
                 window.location.href = 'index1.html';
-                return; // Hentikan eksekusi script selanjutnya
+                return; 
             }
-            // --- Akhir Cek Sesi Cookie ---
-
-
-            // --- Ambil Link WA Dinamis ---
-            function loadDynamicLinks() {
-                const buyLink = document.getElementById('buyLink');
-                if (!buyLink) return;
-                const defaultWaNumber = '6285664925502';
-                buyLink.href = `https://wa.me/${defaultWaNumber}?text=BELI%20USERNAME%20%26%20PW`;
-                db.ref('config/adminWaNumberLogin').get().then((snapshot) => {
-                    if (snapshot.exists() && snapshot.val()) {
-                        const waNumber = snapshot.val();
-                        buyLink.href = `https://wa.me/${waNumber}?text=BELI%20USERNAME%20%26%20PW`;
-                    }
-                }).catch((error) => {
-                    console.error("Gagal ambil nomor WA, pakai default:", error);
-                });
-            }
-            loadDynamicLinks();
-
-            // --- Ambil Elemen ---
-            const tabLogin = document.getElementById('tabLogin');
-            const tabRegister = document.getElementById('tabRegister');
+            
             const loginForm = document.getElementById('loginForm');
-            const registerForm = document.getElementById('registerForm');
             const loginButton = loginForm.querySelector('.submit-button');
             const loginContainer = document.getElementById('loginContainer');
             const loginErrorEl = document.getElementById('loginError');
-            const registerErrorEl = document.getElementById('registerError');
 
-            // --- Reset Animasi Guncang ---
             loginContainer.addEventListener('animationend', (e) => {
                 if (e.animationName === 'shake') {
                     loginContainer.classList.remove('shake-error');
                 }
             });
 
-            // --- Logika Tab ---
-            tabLogin.addEventListener('click', () => {
-                loginForm.style.display = 'block';
-                registerForm.style.display = 'none';
-                tabLogin.classList.add('active');
-                tabRegister.classList.remove('active');
-            });
-            tabRegister.addEventListener('click', () => {
-                loginForm.style.display = 'none';
-                registerForm.style.display = 'block';
-                tabRegister.classList.add('active');
-                tabLogin.classList.remove('active');
-            });
-
-            // --- LOGIKA LOGIN FIREBASE (Menggunakan Cookies) ---
             loginForm.addEventListener('submit', (event) => {
                 event.preventDefault();
+                
+                // Reset status tombol
+                loginButton.classList.remove('success', 'error');
+                
                 loginErrorEl.style.display = 'none';
                 const username = document.getElementById('loginUser').value;
                 const password = document.getElementById('loginPass').value;
@@ -441,6 +387,16 @@
                     loginErrorEl.textContent = 'Username dan Password harus diisi!';
                     loginErrorEl.style.display = 'block';
                     loginContainer.classList.add('shake-error');
+                    
+                    // Gagal: Tombol Merah
+                    loginButton.classList.add('error');
+                    loginButton.textContent = 'Gagal!';
+                    
+                    loginButton.disabled = false;
+                    setTimeout(() => {
+                        loginButton.classList.remove('error');
+                        loginButton.textContent = 'LOGIN';
+                    }, 1500);
                     return;
                 }
 
@@ -464,50 +420,61 @@
                 })
                 .then((statusSnapshot) => {
                     const appStatus = statusSnapshot.val() || 'ON';
-                    if (appStatus === 'OFF' && userData.role !== 'Owner') throw new Error('Aplikasi sedang non-aktif. Hanya Owner yang bisa login.');
-                    if (userData.role !== 'Owner') {
+                    
+                    // Cek Status Aplikasi/Update (Kecuali untuk role Developer)
+                    if (userData.role !== 'Developer') {
+                        if (appStatus === 'OFF') {
+                            showAppStatusModal('🚫', 'LOGIN FAILED', 'Login failed because the application is currently offline', '#ff5555');
+                            throw new Error('Aplikasi sedang non-aktif.');
+                        }
+                        if (appStatus === 'UPDATE_REQUIRED') {
+                            showAppStatusModal('🌐', 'UPDATE', 'The application is being updated!!', '#88d3ce');
+                            throw new Error('Aplikasi sedang update!!');
+                        }
+                    }
+
+                    if (userData.role !== 'Developer' && userData.role !== 'Owner') {
                         const expiryDate = new Date(userData.expiryDate);
                         if (new Date() >= expiryDate) throw new Error('Akun kamu sudah expired. Silakan hubungi admin.');
                     }
 
-                    // Buat Session ID Baru
                     const newSessionId = Date.now().toString() + Math.random().toString(36).substring(2);
-
-                    // Simpan Session ID Baru ke Database
                     return db.ref('users/' + userUid).update({ currentSessionId: newSessionId }).then(() => newSessionId); 
                 })
                 .then((newSessionId) => {
-                    // LOGIN BERHASIL!
+                    // BERHASIL: Tombol Hijau
                     loginButton.textContent = 'Login Berhasil!';
-                    loginButton.classList.add('success');
-
-                    // --- SIMPAN Sesi ke COOKIES (Mengganti localStorage) ---
-                    // Simpan selama 365 hari (agar permanen)
+                    loginButton.classList.add('success'); 
+                    
                     setCookie('userUid', userUid, 365); 
                     setCookie('sessionId', newSessionId, 365); 
-                    // --- Akhir SIMPAN Sesi ---
-
                     setTimeout(() => {
                         window.location.href = 'index1.html';
                     }, 1500);
                 })
                 .catch((error) => {
-                    // Tampilkan error & guncangkan
-                    loginErrorEl.textContent = error.message;
-                    loginErrorEl.style.display = 'block';
-                    loginContainer.classList.add('shake-error');
                     loginButton.disabled = false;
-                    loginButton.textContent = 'Masuk';
+                    loginButton.classList.add('error');
+                    loginButton.textContent = 'Gagal!';
+                    
+                    if (error.message.includes('Aplikasi sedang') || error.message.includes('Aplikasi sedang update')) {
+                        // Pop-up sudah ditampilkan oleh showAppStatusModal, hanya perlu cleanup tombol
+                        setTimeout(() => {
+                            loginButton.classList.remove('error');
+                            loginButton.textContent = 'LOGIN';
+                        }, 1500);
+                    } else {
+                        // GAGAL UMUM: Tampilkan error di bawah form
+                        loginErrorEl.textContent = error.message;
+                        loginErrorEl.style.display = 'block';
+                        loginContainer.classList.add('shake-error');
+                        
+                        setTimeout(() => {
+                            loginButton.classList.remove('error');
+                            loginButton.textContent = 'LOGIN';
+                        }, 1500);
+                    }
                 });
-            });
-
-            // --- Logika Register ---
-            registerForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-                registerErrorEl.style.display = 'none';
-                registerErrorEl.textContent = 'Fitur Register tidak tersedia. Silakan "Buy Here!"';
-                registerErrorEl.style.display = 'block';
-                loginContainer.classList.add('shake-error');
             });
 
         });

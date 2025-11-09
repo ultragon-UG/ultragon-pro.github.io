@@ -191,6 +191,7 @@
             flex-shrink: 0; 
         }
         .chat-input input {
+            flex-grow: 1; /* Ditambahkan agar input mengambil ruang yang tersisa */
             background-color: #fff;
             padding: 10px; border: 1px solid #ccc; border-radius: 20px;
             margin-right: 10px; outline: none;
@@ -247,7 +248,7 @@
             </div>
 
             <div class="chat-input">
-                <input type="text" id="user-input" placeholder="Ketik pesan Anda...">
+                <input type="text" id="user-input" placeholder="Ketik pesan Anda..." style="flex-grow: 1;">
                 <button id="send-btn" contenteditable="false">Kirim</button>
             </div>
         </div>
@@ -283,38 +284,16 @@
             // Variabel Status untuk Eskalasi Otomatis
             let hasOfferedTroubleshooting = false; 
             
-            // --- FUNGSI LOCAL STORAGE UNTUK CHAT HISTORY ---
-            
-            const HISTORY_KEY = 'ultragon_chat_history';
-
-            function saveChatHistory(historyHtml) {
-                try {
-                    localStorage.setItem(HISTORY_KEY, historyHtml);
-                } catch (e) {
-                    console.error("Gagal menyimpan riwayat chat:", e);
-                }
-            }
-
-            function loadChatHistory() {
-                const historyHtml = localStorage.getItem(HISTORY_KEY);
-                if (historyHtml) {
-                    // Hapus pesan pembuka default (yang ada di HTML)
-                    const defaultMessage = chatBody.querySelector('.message-wrapper.bot');
-                    if (defaultMessage) {
-                        defaultMessage.remove();
-                    }
-                    chatBody.innerHTML = historyHtml;
-                    chatBody.scrollTop = chatBody.scrollHeight;
-                    return true; // Riwayat berhasil dimuat
-                }
-                return false; // Tidak ada riwayat yang tersimpan
-            }
-            // ------------------------------------------------
+            // --- FUNGSI LOCAL STORAGE UNTUK CHAT HISTORY DIHAPUS ---
+            // const HISTORY_KEY = 'ultragon_chat_history';
+            // function saveChatHistory(historyHtml) { /* FUNGSI DIHAPUS */ }
+            // function loadChatHistory() { /* FUNGSI DIHAPUS */ }
+            // --------------------------------------------------------
 
             userInput.focus(); 
 
-            // MUAT RIWAYAT CHAT SAAT INISIALISASI
-            loadChatHistory();
+            // MUAT RIWAYAT CHAT SAAT INISIALISASI (FUNGSI DIHAPUS, RIWAYAT SELALU KOSONG)
+            // loadChatHistory();
 
             // PENGALIHAN HALAMAN SAAT TOMBOL TUTUP DITEKAN
             closeChat.addEventListener('click', () => {
@@ -367,8 +346,8 @@
                 chatBody.appendChild(messageWrapper);
                 chatBody.scrollTop = chatBody.scrollHeight;
                 
-                // SIMPAN RIWAYAT SETELAH PESAN BARU DITAMBAHKAN
-                saveChatHistory(chatBody.innerHTML);
+                // SIMPAN RIWAYAT SETELAH PESAN BARU DITAMBAHKAN (FUNGSI DIHAPUS)
+                // saveChatHistory(chatBody.innerHTML);
             }
 
             // Fungsi untuk menampilkan indikator mengetik

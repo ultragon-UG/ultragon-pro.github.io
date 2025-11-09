@@ -14,46 +14,94 @@
         /* CSS Anda (Gabungan dan Modifikasi) */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', monospace; } 
 
-        /* 🔥 KODE UNTUK MENGHILANGKAN MENU KONTEKS/TELUSURI 🔥 */
+        /* 🔥 KODE UNTUK MENGHILANGKAN SOROTAN ABU-ABU MAKSIMAL 🔥 */
         
-        /* Mencegah seleksi teks dan menu konteks pada hampir semua elemen */
         * {
             -webkit-user-select: none; /* iOS/Safari */
             -moz-user-select: none; /* Firefox */
             -ms-user-select: none; /* IE/Edge */
             user-select: none; /* Standar */
             -webkit-touch-callout: none; /* iOS (Mencegah menu default saat tekan lama) */
-            -webkit-tap-highlight-color: transparent !important; /* Mencegah highlight biru saat tap */
+            
+            /* 🔥 MODIFIKASI: Mencegah 'ghost image' saat drag/geser tombol/link 🔥 */
+            -webkit-user-drag: none;
+            -moz-user-drag: none;
+            -ms-user-drag: none;
+            user-drag: none; 
+            /* 🔥 AKHIR MODIFIKASI 🔥 */
+            
+            -webkit-tap-highlight-color: transparent !important; 
+            -moz-tap-highlight-color: transparent !important;
+            -ms-tap-highlight-color: transparent !important;
+            -o-tap-highlight-color: transparent !important;
+            outline: none !important; 
+            box-shadow: none !important;
         }
         
-        /* Khusus untuk INPUT dan TEXTAREA agar tetap bisa diedit/disalin/dipilih */
+        /* 🔥 MODIFIKASI BARU: Menghilangkan KOTAK BIRU saat klik/fokus 🔥 */
+        button:focus, a:focus, .nav-item:focus, .icon-button:focus, .submit-btn:focus, .action-btn:focus, .custom-select:focus {
+            outline: none !important;
+            -webkit-tap-highlight-color: transparent !important;
+            box-shadow: none !important;
+        }
+        *:focus-visible {
+             outline: none !important;
+             box-shadow: none !important;
+        }
+        /* 🔥 AKHIR MODIFIKASI KOTAK BIRU 🔥 */
+
+
+        
+        /* Khusus untuk INPUT dan TEXTAREA */
         input, textarea {
             -webkit-user-select: text !important;
             -moz-user-select: text !important;
             -ms-user-select: text !important;
             user-select: text !important;
+            -webkit-tap-highlight-color: initial !important; 
         }
         
-        /* Khusus untuk GAMBAR (mencegah klik kanan/tekan lama pada gambar) */
+        /* Khusus untuk GAMBAR */
         img {
             pointer-events: none;
         }
         
         /* ----------------------------------------------------------- */
         
-        body { color: #e0e0e0; background-color: #000000; font-size: 14px; padding-bottom: 80px; }
-        .header { display: flex; align-items: center; justify-content: space-between; padding: 15px; background-color: #191929; border-bottom: 1px solid #2a2a3a; position: sticky; top: 0; z-index: 20; height: 55px; /* Tinggi header yang diperkirakan */ }
+        /* 🔥 MODIFIKASI (Permintaan #4): Mengubah padding-bottom body agar pas 60px */
+        body { color: #e0e0e0; background-color: #000000; font-size: 14px; padding-bottom: 60px; } 
+
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 15px; background-color: #191929; border-bottom: 1px solid #2a2a3a; position: sticky; top: 0; z-index: 20; height: 55px; }
         .header-left, .header-right { display: flex; align-items: center; flex: 1; }
         .header-left { justify-content: flex-start; }
         .header-right { justify-content: flex-end; gap: 10px; }
         .header-center { flex: 2; text-align: center; }
-        .header-title-img { height: 35px; width: auto; vertical-align: middle; }
+        
+        /* 🔥 MODIFIKASI: Mengganti ultragon.png jadi teks 𝐔𝐋𝐓𝐑𝐀𝐆𝐎𝐍 🔥 */
+        .header-title-img { display: none; /* Sembunyikan img asli */ }
+        .header-title-text {
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 1.8em;
+            color: #fff;
+            vertical-align: middle;
+            height: 35px; 
+            line-height: 35px; 
+            display: inline-block;
+        }
+        /* 🔥 AKHIR MODIFIKASI 🔥 */
+        
         .header-logo { height: 30px; width: auto; }
-        .header-btn { background: none; border: none; cursor: pointer; padding: 5px; border-radius: 50%; }
+        .header-btn { background: none; border: none; cursor: pointer; padding: 5px; border-radius: 50%; 
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .header-btn:active {
+             transform: scale(0.95);
+             background-color: #2a2a3a;
+        }
         .header-btn img, .nav-item img, .icon-button img { width: 24px; height: 24px; filter: invert(30%) sepia(90%) saturate(2000%) hue-rotate(340deg) brightness(100%) contrast(100%); transition: filter 0.3s; }
         .nav-item.active img { filter: invert(30%) sepia(90%) saturate(2000%) hue-rotate(340deg) brightness(120%) contrast(100%); }
         
-        /* Modifikasi untuk mencegah gulir halus (body/html) pada konten pendek */
         main { 
             padding: 20px 15px; 
         }
@@ -89,7 +137,19 @@
             min-width: 0; 
             padding: 0; 
             box-sizing: border-box; 
+            transition: background-color 0.2s, transform 0.1s;
         }
+        .nav-item:active {
+            transform: scale(0.95);
+            background-color: transparent !important; 
+            -webkit-tap-highlight-color: transparent !important;
+        }
+        .nav-item:focus {
+             outline: none !important;
+             background-color: transparent !important;
+        }
+        /* AKHIR MODIFIKASI NAV BAR */
+
         .nav-item span { 
             font-size: 0.7em; 
             display: block; 
@@ -102,41 +162,66 @@
             padding: 0 1px;
         }
         .nav-item.active span { color: #ffffff; filter: brightness(1); font-weight: bold; }
-        /* Sembunyikan tombol-tombol Admin/Owner secara default di nav-bar */
         .nav-bar .admin-only,
         .nav-bar .owner-only {
             display: none !important; 
         }
         /* --- END MODIFIKASI NAV BAR --- */
-
-        button, a, input, select, .nav-item, .header-btn, .icon-button { 
-            outline: none !important; 
-            box-shadow: none !important; 
-            -webkit-tap-highlight-color: transparent !important; /* Hapus sorotan biru/abu-abu saat tap */
-        }
         
-        /* --- START MODIFIKASI UKURAN BANNER SAITAMA (FINAL & BERSIH) --- */
         .main-banner { 
             position: relative; 
-            border-radius: 16px; 
+            /* 🔥 MODIFIKASI (Permintaan #3): Mengubah radius 16px -> 14px */
+            border-radius: 14px; 
             overflow: hidden; 
             margin-bottom: 20px; 
             box-shadow: 0 8px 25px rgba(0,0,0,0.3); 
             display: block; 
-            
-            /* DIBERSIHKAN: 100% di dalam padding main */
             width: 100%; 
             margin-left: 0;
-            
             max-width: 100%; 
-            box-sizing: border-box; /* Memastikan border 2px dihitung di dalam lebar 100% */
-            border: 2px solid rgba(255, 255, 255, 0.5); 
+            box-sizing: border-box;
+            border: none; 
         }
         
-        /* BARU: Pastikan pengumuman di atas semua elemen banner */
+        /* 🔥 MODIFIKASI (Permintaan #3): border-radius 14px */
+        .main-banner img, .main-banner video { 
+            width: 100%; 
+            display: block; 
+            height: auto; 
+            border-radius: 14px; 
+            border: 2px solid white !important; 
+            box-sizing: border-box;
+            position: relative; 
+            z-index: 1; 
+            background-color: #000000;
+        }
+
+        /* 🔥 MODIFIKASI: Mengganti ultragon.png jadi teks 𝐔𝐋𝐓𝐑𝐀𝐆𝐎𝐍 🔥 */
+        .banner-overlay .banner-logo-img { 
+             display: none; /* Sembunyikan img asli */
+        }
+        .banner-overlay .banner-logo-text { 
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 1.8em; /* Samakan dengan header */
+            color: #fff;
+            display: block; 
+            
+            /* 🔥 MODIFIKASI: Menghapus margin -10px agar lurus/rapih 🔥 */
+            margin: 0 0 5px 0; /* Diubah dari margin: 0 0 5px -10px; */
+            
+            border: none !important; 
+            pointer-events: all; 
+            mix-blend-mode: lighten; /* Pertahankan blend mode */
+            height: 35px; /* Pertahankan tinggi */
+            line-height: 35px; /* Vertikal center */
+        }
+        /* 🔥 AKHIR PERBAIKAN BANNER */
+
+
         #live-announcement {
             position: absolute; 
-            top: 15px; /* Jarak dari atas */
+            top: 15px; 
             left: 50%;
             transform: translateX(-50%);
             z-index: 5; 
@@ -145,71 +230,65 @@
             font-weight: 900; 
             font-size: 0.9em; 
             text-shadow: 0 0 5px #000; 
-            background: rgba(0, 0, 0, 0.4); /* Background tipis agar teks lebih terbaca */
+            background: rgba(0, 0, 0, 0.4); 
             padding: 2px 8px;
             border-radius: 5px;
             width: 90%;
             display: none; 
         }
-
-        .main-banner img { 
-            width: 100%; 
-            display: block; 
-            height: auto; 
-            border-radius: 14px; 
-            border: none; 
-            position: relative; 
-            z-index: 1; 
-        }
-
+        
+        /* 🔥 PERBAIKAN BORDER SAITAMA.PNG 🔥 */
         .banner-overlay { 
             position: absolute; 
-            bottom: 0; 
-            left: 0; 
+            bottom: 2px; 
+            left: 2px; 
             transform: none; 
-            width: 100%; 
+            width: calc(100% - 4px); 
             max-width: 100%; 
-            padding: 10px 20px; /* Padding dikurangi */
+            padding: 10px 20px; 
             background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); 
             z-index: 2; 
-            border-bottom-left-radius: 14px; 
-            border-bottom-right-radius: 14px; 
+            /* 🔥 MODIFIKASI (Permintaan #3): Mengubah radius 11px -> 12px agar cocok dgn 14px */
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
         }
-        /* --- END MODIFIKASI UKURAN BANNER SAITAMA --- */
+        /* 🔥 AKHIR PERBAIKAN BORDER 🔥 */
 
+        
         .banner-overlay h2 { font-size: 1.5em; color: #fff; }
         
-        /* --- START MODIFIKASI BANNER LOGO ULTRAGON (BARU) --- */
-        .banner-overlay .banner-logo-img { /* Aturan untuk gambar ULTRAGON di banner */
-            height: 35px; /* Sesuaikan tinggi yang Anda inginkan */
-            width: auto;
-            display: block; /* Pastikan gambar mengambil baris penuh */
-            margin: 0 0 5px 0; /* Margin bawah untuk memisahkan dari teks "Welcome" */
-        }
-        /* --- END MODIFIKASI BANNER LOGO ULTRAGON --- */
         
         .banner-overlay p { font-size: 0.9em; color: #aaa; }
+        
         .icon-nav-grid { 
             display: grid; 
-            /* Grid default untuk 6 ikon Admin/Reseller (2 baris @ 3) */
-            grid-template-columns: repeat(3, 1fr); 
+            grid-template-columns: repeat(4, 1fr); 
             gap: 15px; 
             margin-bottom: 20px; 
         }
-        
-        /* KUNCI: Untuk Member/VIP, hanya boleh ada 3 kolom (Messages, Bug, Settings) */
-        .icon-nav-grid.member-layout {
-            grid-template-columns: repeat(3, 1fr);
-        }
 
-        .icon-button { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: #ccc; }
+        .icon-button .icon-bg { 
+            width: 50px; height: 50px; background-color: #191929; border-radius: 50%; display: flex; justify-content: center; align-items: center; 
+            border: 2px solid red !important; 
+            transition: background-color 0.3s; 
+        }
         
-        /* Garis luar merah untuk tombol icon */
-        .icon-button .icon-bg { width: 50px; height: 50px; background-color: #191929; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid red; transition: background-color 0.3s; }
+        .icon-button { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 8px; 
+            text-decoration: none; 
+            color: #ccc; 
+            transition: transform 0.15s;
+        }
+        .icon-button:active {
+             transform: scale(0.9);
+        }
+        
         
         .icon-button:hover .icon-bg { background-color: #2a2a3a; }
 
-        /* Perbaikan Teks Create Account */
         .icon-button span {
             font-size: 0.8em;
             text-align: center;
@@ -218,27 +297,33 @@
 
         .input-group { text-align: left; margin-bottom: 15px; }
         .input-group label { display: block; margin-bottom: 5px; color: #a7a9be; }
+        
+        .content-box input:focus, 
+        .content-box select:focus, 
+        .input-group input:focus {
+            outline: 2px solid #88d3ce !important; 
+            border-color: #88d3ce !important; 
+            box-shadow: 0 0 5px rgba(136, 211, 206, 0.7) !important;
+        }
+
         .input-group input, .input-group select { 
             width: 100%; padding: 12px; border: 1px solid #2a2a3a; background: #10101a; border-radius: 8px; color: #fff; font-size: 1em; 
             font-family: 'Orbitron', monospace; 
         }
         
-        /* Style khusus untuk group durasi */
         .duration-group { display: flex; gap: 10px; align-items: flex-end; }
         
-        /* Menyembunyikan input dan unit jika mode unlimited dipilih */
         .unlimited-mode .input-value, 
         .unlimited-mode .input-unit {
             display: none !important;
         }
 
-        /* Menampilkan placeholder untuk unlimited mode */
         .unlimited-mode .unlimited-placeholder {
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
-            height: 44px; /* Tinggi yang sama dengan input */
+            height: 44px; 
             padding: 12px;
             border: 1px solid #2a2a3a;
             background: #10101a;
@@ -248,7 +333,6 @@
             font-weight: bold;
         }
         
-        /* Menyembunyikan placeholder di mode normal */
         .input-group .unlimited-placeholder {
             display: none;
         }
@@ -273,33 +357,61 @@
             justify-content: center; 
             gap: 8px;
             font-family: 'Orbitron', monospace; 
+            transition: background-color 0.2s, transform 0.1s, opacity 0.2s;
+        }
+        
+        .submit-btn:active {
+             transform: scale(0.98);
         }
         
         .submit-btn img { 
-            display: none; 
+            display: none;
         }
         
-        /* PENTING: MENAMBAH ATURAN INI UNTUK MEMASTIKAN TEKS TOMBOL SELALU TEBAL */
         .submit-btn span {
             font-weight: 900; 
         }
 
-        /* Style untuk Tombol Abu-abu (Disabled) */
         .submit-btn:disabled {
             background-color: #555;
             color: #999;
             cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 🔥 MODIFIKASI: Tombol Kirim Bug 🔥 */
+        #send-bug-btn {
+             position: relative;
+        }
+        #send-bug-btn img { 
+            width: 28px; 
+            height: 28px; 
+            display: inline-block !important; 
+            filter: none; 
+            pointer-events: none; 
+            
+            /* 🔥 MODIFIKASI: Menggeser 24% -> 26% (Permintaan user) */
+            position: absolute;
+            left: 26%; /* Diubah dari 24% */
+            top: 50%;
+            transform: translateY(-50%); 
+            margin-right: 0;
+        }
+        #send-bug-btn span {
+             /* Teks otomatis center karena <img> position: absolute */
+        }
+        /* 🔥 AKHIR MODIFIKASI TOMBOL KIRIM BUG 🔥 */
+
+
+        /* Wrapper untuk tombol send-bug untuk menangani event klik saat disabled */
+        #send-bug-wrapper {
+             width: 100%;
+             margin-top: 10px;
+        }
+        #send-bug-wrapper .submit-btn {
+             margin-top: 0;
         }
         
-        /* --- MENGHAPUS STYLE LAMA MODE SELECTOR BUG PAGE --- */
-        /* .mode-selector { display: flex; width: 100%; background: #10101a; border-radius: 8px; overflow: hidden; border: 1px solid #2a2a3a; margin-bottom: 15px; }
-        .mode-btn { 
-            flex: 1; padding: 12px; border: none; background-color: transparent; color: #a7a9be; cursor: pointer; font-size: 0.9em; transition: all 0.3s; font-weight: bold; 
-            font-family: 'Orbitron', monospace; 
-        }
-        .mode-btn.active { background-color: #88d3ce; color: #10101a; } */
-        /* --- AKHIR MENGHAPUS STYLE LAMA --- */
-
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 1000; display: none; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; }
         .modal-overlay.active { display: flex; opacity: 1; }
         .modal-box { background: #191929; padding: 25px; border-radius: 15px; text-align: center; width: 90%; max-width: 350px; border: 1px solid #2a2a3a; transform: scale(0.9); transition: transform 0.3s; }
@@ -309,28 +421,79 @@
         .modal-buttons button { 
             flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; 
             font-family: 'Orbitron', monospace; 
+            transition: background-color 0.2s, transform 0.1s;
         }
+        .modal-buttons button:active {
+             transform: scale(0.95);
+        }
+        
         .profile-info { text-align: left; margin-bottom: 25px; }
         .profile-info p { border-bottom: 1px solid #2a2a3a; padding: 10px 0; color: #fff; display: flex; justify-content: space-between; }
         .profile-info p span { color: #aaa; }
         .status-active { color: #2ecc71 !important; } .status-expired { color: #e74c3c !important; }
         .account-data-table { width: 100%; border-collapse: collapse; margin-top: 20px; table-layout: fixed; }
-        /* Modifikasi Data Table untuk tombol edit */
         .account-data-table th, .account-data-table td { padding: 8px; border: 1px solid #2a2a3a; text-align: left; font-size: 0.9em; word-wrap: break-word; }
         .account-data-table th { background-color: #10101a; }
         .online-status { display: inline-block; width: 10px; height: 10px; background-color: #e74c3c; border-radius: 50%; margin-right: 5px; }
         .online-status.online { background-color: #2ecc71; }
-        .action-btn { border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; color: white; margin: 2px 0; display: inline-block; width: 100%; }
+        .action-btn { 
+             border: none; padding: 5px 8px; border-radius: 5px; cursor: pointer; color: white; margin: 2px 0; display: inline-block; width: 100%; 
+             transition: background-color 0.2s, transform 0.1s;
+        }
+        .action-btn:active {
+             transform: scale(0.95);
+        }
+        .action-btn:disabled {
+             opacity: 0.6;
+             transform: none;
+             cursor: not-allowed;
+        }
         .delete-btn { background-color: #c0392b; }
-        .edit-btn { background-color: #3498db; } /* Tombol Edit Baru */
+        .edit-btn { background-color: #3498db; }
         .renew-account-btn { background-color: #3498db; }
         .frozen-overlay { width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; flex-direction: column; position: fixed; top: 0; left: 0; background: rgba(0,0,0,0.8); z-index: 9999; }
-        #notification-container { position: fixed; top: 20px; right: 20px; z-index: 10001; }
-        .notification { padding: 15px; border-radius: 8px; color: #fff; font-weight: bold; background: #333; margin-bottom: 10px; animation: slideIn 0.5s forwards; }
-        .notification.success { background: #2ecc71; } .notification.error { background: #e74c3c; }
+        
+        /* --- START MODIFIKASI: NOTIFIKASI SAVE --- */
+        #notification-container {
+             position: fixed;
+             top: 60px; /* Di bawah header */
+             right: 15px;
+             z-index: 9999;
+             width: 90%;
+             max-width: 350px;
+             pointer-events: none;
+             display: block !important; /* Pastikan terlihat */
+        }
+        .notification {
+            background: #27ae60; /* Hijau sukses */
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.9em;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            animation: slideIn 0.5s forwards; /* Pakai keyframes user */
+            opacity: 1; /* Mulai dari opacity 1 setelah slideIn */
+        }
+        .notification.error {
+            background: #c0392b; /* Merah error */
+        }
+        .notification.info {
+            background: #3498db; /* Biru info */
+        }
+        
+        /* 🔥 PERMINTAAN MUSIK: Notifikasi khusus untuk musik 🔥 */
+        .notification.music {
+            background: #191929; /* Warna gelap agar emoji 🔥🔥 terlihat */
+            border: 1px solid #88d3ce;
+        }
+        /* --- END MODIFIKASI: NOTIFIKASI SAVE --- */
+        
         @keyframes slideIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
         @keyframes slideOut { to { opacity: 0; transform: translateX(100%); } }
-        .subscription-status { background: #10101a; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: left; font-size: 0.9em; border: 1px solid #2a2a3a;}
+        .subscription-status { background: #10101a; border-radius: 8px; padding: 15px; margin-bottom: 20px; text-align: left; border: 1px solid #2a2a3a;}
         .owner-controls { margin-top: 20px; border-top: 1px solid #2a2a3a; padding-top: 20px; }
         .control-buttons { display: flex; gap: 10px; }
         .control-buttons button { 
@@ -348,11 +511,71 @@
             width: 100%; padding: 8px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; 
             font-family: 'Orbitron', monospace; 
         }
+        
+        /* 🔥 CSS UNTUK TAB INBOX & DATA (Permintaan #6) 🔥 */
+        .inbox-tabs {
+            display: flex;
+            flex-wrap: wrap; /* Biar bisa ke bawah kalo ga muat */
+            gap: 8px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a2a3a;
+        }
+        /* Style untuk tombol filter data page (menggunakan style yg sama) */
+        #data-page .inbox-tabs {
+             border-bottom: none; 
+             padding-bottom: 0; 
+        }
+        
+        .inbox-tab-btn {
+            background-color: #10101a;
+            border: 1px solid #2a2a3a;
+            color: #a7a9be;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9em;
+            transition: background-color 0.2s, color 0.2s, transform 0.1s;
+        }
+        .inbox-tab-btn:active {
+            transform: scale(0.95);
+        }
+        .inbox-tab-btn.active {
+            background-color: #88d3ce;
+            color: #10101a;
+            font-weight: bold;
+            border-color: #88d3ce;
+        }
+        /* 🔥 AKHIR CSS TAB INBOX & DATA 🔥 */
+
         .accept-btn { background-color: #27ae60; color: white; }
         .telegram-btn { background-color: #3498db; color: white; }
         .reject-btn { background-color: #c0392b; color: white; }
-        .conversation-list-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #2a2a3a; cursor: pointer; }
+        .conversation-list-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #2a2a3a; cursor: pointer; position: relative; }
         .conversation-list-item:hover { background-color: #10101a; }
+        
+        .delete-chat-btn {
+            position: absolute;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #c0392b;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 5px;
+            z-index: 5;
+            opacity: 0.7;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .delete-chat-btn:hover {
+            color: #e74c3c;
+            opacity: 1;
+        }
+        .delete-chat-btn:active {
+             transform: scale(0.9);
+        }
+
         .conversation-info { text-align: left; flex-grow: 1; margin-right: 10px; }
         .conversation-info .username { font-weight: bold; color: #fff; }
         .conversation-info .last-message { font-size: 0.9em; color: #aaa; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -362,9 +585,10 @@
         .message-bubble .timestamp { font-size: 0.7em; color: #bbb; display: block; margin-top: 5px; text-align: right; }
         .sent { background-color: #3498db; color: white; align-self: flex-end; }
         .received { background-color: #2c3e50; color: white; align-self: flex-start; }
-        .delete-msg-btn { position: absolute; top: 2px; left: -25px; background: none; border: none; color: #999; cursor: pointer; font-size: 1.2em; padding: 0; line-height: 1; opacity: 0; transition: opacity 0.2s; } /* Initially hidden */
+        .delete-msg-btn { position: absolute; top: 2px; left: -25px; background: none; border: none; color: #999; cursor: pointer; font-size: 1.2em; padding: 0; line-height: 1; opacity: 0; transition: opacity 0.2s; } 
         .message-bubble.sent:hover .delete-msg-btn { opacity: 1; }
         .delete-msg-btn:hover { color: #ff4d4d; }
+        .delete-msg-btn:active { transform: scale(0.9); }
         #message-form { display: flex; margin-top: 10px; gap: 10px; }
         #message-input { flex-grow: 1; }
         #user-search-results { max-height: 200px; overflow-y: auto; margin-top: 15px; border: 1px solid #2a2a3a; border-radius: 8px;}
@@ -372,7 +596,6 @@
         .search-result-item:hover { background-color: #2a2a3a; }
         .search-result-item:last-child { border-bottom: none; }
 
-        /* 🔥 PERBAIKAN TOTAL UNTUK SERVER STATS HEADER 🔥 */
         .stats-panel {
             background: linear-gradient(-45deg, #600000, #a00000, #3d0000, #500000);
             background-size: 400% 400%;
@@ -385,17 +608,15 @@
             font-size: 14px;
             color: #ffffff;
             overflow: hidden;
-            
-            /* DIBERSIHKAN: 100% di dalam padding main */
             width: 100%;
             margin-left: 0; 
             box-sizing: border-box;
-            margin-bottom: 20px; 
+            margin-bottom: 0px; 
         }
         .stats-header { 
             display: flex; 
-            align-items: center; /* KUNCI: Menyelaraskan vertikal di tengah */
-            gap: 10px; /* 🔥 Dibuat lebih rapat */
+            align-items: center; 
+            gap: 10px; 
             padding: 15px; 
             background-color: #b8860b; 
             font-weight: bold; 
@@ -404,11 +625,11 @@
         }
         .stats-header span { 
             color: #ffffff; 
-            line-height: 1; /* Memastikan teks memiliki tinggi baris yang rapat */
+            line-height: 1; 
         }
         .stats-header img { 
-            width: 30px; /* 🔥 Ikon dibesarkan */
-            height: 30px; /* 🔥 Ikon dibesarkan */
+            width: 30px; 
+            height: 30px; 
             display: block; 
             filter: none; 
             flex-shrink: 0; 
@@ -424,9 +645,7 @@
             filter: none; 
         }
         .stats-row .value { font-weight: normal; color: #ffffff; text-align: right; font-family: 'Orbitron', monospace; font-size: 1em; } 
-        /* 🔥 AKHIR PERBAIKAN TOTAL UNTUK SERVER STATS HEADER 🔥 */
 
-        /* Style Banner Dinamis (Merah Bergerak) - TELEGRAM BANNER */
         .telegram-custom-banner {
             display: flex;
             align-items: center;
@@ -436,12 +655,9 @@
             animation: gradientBG 15s ease infinite;
             border-radius: 12px;
             padding: 10px 15px; 
-            
-            /* DIBERSIHKAN: 100% di dalam padding main */
             width: 100%;
             margin-left: 0;
             box-sizing: border-box;
-
             border: 1px solid rgba(255, 100, 100, 0.2);
             box-shadow: 0 4px 10px rgba(0,0,0,0.25);
             text-decoration: none;
@@ -450,27 +666,27 @@
             cursor: pointer;
             height: 65px; 
             margin-bottom: 20px; 
+            transition: transform 0.1s;
         }
+        .telegram-custom-banner:active {
+             transform: scale(0.98);
+        }
+        
         .telegram-custom-banner .banner-content { 
             display: flex; 
             align-items: center; 
-            /* JANGAN stretch konten vertikal */
-            gap: 15px; /* Jarak antara ikon dan teks ditingkatkan */
+            gap: 15px; 
             flex-grow: 1; 
         }
         
-        /* PERBAIKAN BANNER ICON */
         .telegram-custom-banner .banner-icon-img { 
             width: 45px; 
             height: 45px; 
-            filter: invert(100%); 
             flex-shrink: 0; 
             display: block; 
             margin-left: -5px; 
-            /* Pastikan ikon tidak melebar/terdeformasi */
             object-fit: contain; 
         }
-        /* PERBAIKAN BANNER TEXT agar tidak tertutup/tertindih */
         .telegram-custom-banner .banner-text { 
             flex-grow: 1; 
             margin-right: 0px; 
@@ -480,25 +696,21 @@
             font-family: 'Press Start 2P', cursive; 
             font-size: 0.9em; 
             letter-spacing: -0.5px; 
-            /* Tambahkan min-width agar teks mengambil ruangnya */
             min-width: 0; 
         }
         .telegram-custom-banner .banner-text span { 
             display: block; 
             font-size: 1em; 
         }
-        /* Akhir Modifikasi Telegram Banner */
 
         .telegram-custom-banner .arrow-icon { font-size: 1.5em; color: #ffffff; flex-shrink: 0; }
 
-        /* Animasi Gradient (Merah Bergerak) */
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Style Tambahan untuk Bagian Banner Settings */
         .banner-settings-section {
              margin-top: 20px;
              border-top: 1px solid #2a2a3a;
@@ -517,7 +729,6 @@
              margin-top: 5px; 
         }
 
-        /* Style <select> agar mirip <input> */
         .input-group select {
             appearance: none; 
             -webkit-appearance: none; 
@@ -530,23 +741,16 @@
             padding-right: 40px; 
         }
 
-        /* Hilangkan panah default di Firefox */
         select::-moz-focus-inner {
             border: 0;
         }
-        /* Hilangkan panah default di IE */
         select::-ms-expand {
             display: none;
         }
 
-        /* Solusi Scroll Home Page */
         #home-page {
-            /* Tinggi total viewport - Tinggi Header - Tinggi Navbar - Padding Vertikal Main (20px + 20px) */
-            height: calc(100vh - 55px - 60px - 40px); 
-            /* overflow-y dikontrol oleh JS. */
         }
         
-        /* --- START CUSTOM SELECT STYLE (MODERN) --- */
         .custom-select-wrapper {
             position: relative;
             display: block; 
@@ -568,12 +772,16 @@
             align-items: center;
             font-family: 'Orbitron', monospace;
             z-index: 1;
-            outline: none !important; /* Menghilangkan outline fokus bawaan browser */
-            -webkit-tap-highlight-color: transparent !important; /* Menghilangkan sorotan saat ditekan (mobile) */
-            user-select: none; /* Mencegah seleksi teks saat tap */
+            outline: none !important; 
+            -webkit-tap-highlight-color: transparent !important; 
+            user-select: none; 
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .custom-select:active {
+             border-color: #88d3ce;
         }
 
-        /* Icon Panah ke Bawah */
+
         .custom-select-arrow {
             font-size: 1.2em;
             color: #88d3ce; 
@@ -605,7 +813,7 @@
             color: #a7a9be;
             transition: background-color 0.2s, color 0.2s;
             font-family: 'Orbitron', monospace;
-            -webkit-tap-highlight-color: transparent !important; /* Menghilangkan sorotan saat tap pada item */
+            -webkit-tap-highlight-color: transparent !important; 
             user-select: none;
         }
 
@@ -615,92 +823,253 @@
             color: #88d3ce; 
         }
         
-        /* 🔥 KODE BARU: Style untuk mode yang tidak bisa dipilih (disabled look) 🔥 */
         .select-option-item.disabled-mode {
-            color: #555; /* Warna teks abu-abu */
-            background-color: #10101a; /* Background yang lebih gelap dari hover */
-            cursor: not-allowed; /* Kursor tidak diizinkan */
+            color: #555; 
+            background-color: #10101a; 
+            cursor: not-allowed; 
             opacity: 0.7;
         }
 
         .select-option-item.disabled-mode:hover {
-            background-color: #10101a; /* Mencegah perubahan warna saat hover */
-            color: #555; /* Teks tetap abu-abu saat hover */
+            background-color: #10101a; 
+            color: #555; 
         }
 
-
-        /* Sembunyikan select/input asli */
         .hidden-select {
             display: none !important;
         }
-        /* --- END CUSTOM SELECT STYLE --- */
-
-        /* --- START: KODE CSS TAMBAHAN UNTUK TOMBOL CS MELAYANG --- */
+        
         .floating-cs-button {
-            /* Posisi Melayang (Fixed) */
             position: fixed;
-            right: 20px; /* Jarak dari ujung kanan */
-            bottom: 80px; /* Jarak dari ujung bawah (di atas nav-bar 60px + 20px) */
-            z-index: 1000; /* Memastikan tombol di atas elemen lain */
-            
-            /* Styling Tombol */
-            background-color: #4CAF50; /* Warna Hijau */
+            right: 20px; 
+            bottom: 80px; 
+            z-index: 1000; 
+            background-color: #4CAF50; 
             padding: 10px;
-            border-radius: 50%; /* Membuat tombol berbentuk lingkaran */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Efek bayangan */
-            
-            /* Transisi untuk animasi halus */
+            border-radius: 50%; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); 
             transition: background-color 0.3s, transform 0.3s;
-            
-            /* Menghilangkan garis bawah pada link */
             text-decoration: none;
-            
-            /* Ukuran Tombol (sesuaikan jika perlu) */
             width: 60px;
             height: 60px;
-            display: flex; /* Untuk memposisikan gambar di tengah */
+            display: flex; 
             align-items: center;
             justify-content: center;
         }
 
-        /* Styling Gambar di dalam Tombol */
         .floating-cs-button img {
-            width: 100%; /* Membuat gambar mengisi tombol */
+            width: 100%; 
             height: 100%;
-            object-fit: contain; /* Memastikan gambar pas tanpa terdistorsi */
-            border-radius: 50%; /* Gambar juga dibuat lingkaran */
-            filter: invert(100%); /* Agar ikon terlihat jelas di background hijau */
+            object-fit: contain; 
+            border-radius: 50%; 
+            filter: invert(100%); 
         }
 
-        /* Efek Hover (Saat kursor di atas tombol) */
         .floating-cs-button:hover {
-            background-color: #45a049; /* Warna hijau sedikit lebih gelap */
-            transform: scale(1.05); /* Sedikit membesar saat di-hover */
+            background-color: #45a049; 
+            transform: scale(1.05); 
         }
         
-        /* Efek Klik (Opsional) */
         .floating-cs-button:active {
             transform: scale(0.95);
         }
-        /* --- END: KODE CSS TAMBAHAN UNTUK TOMBOL CS MELAYANG --- */
+        
+        /* STYLE KHUSUS MODAL BUG UMUM */
+        #bug-success-modal .modal-box,
+        #cooldown-modal .modal-box { 
+            max-width: 320px;
+            background-color: #111; 
+            border: 2px solid #555; 
+            box-shadow: 0 0 20px rgba(136, 211, 206, 0.3); 
+        }
+        
+        #bug-success-modal .bug-status-title,
+        #cooldown-modal .cooldown-status-title {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; 
+            color: #88d3ce; 
+            font-size: 1.6em; 
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        
+        /* Ikon Centang (Success) dan Jam Pasir (Cooldown) */
+        #bug-success-modal .bug-status-title .icon-container,
+        #cooldown-modal .cooldown-status-title .icon-container {
+             font-size: 1.2em; 
+             margin-right: 10px;
+             line-height: 1;
+        }
+
+        /* Style untuk teks Judul */
+        #bug-success-modal .bug-status-title span,
+        #cooldown-modal .cooldown-status-title span {
+            font-family: 'Orbitron', monospace;
+            text-shadow: 0 0 5px rgba(136, 211, 206, 0.7); 
+        }
+        
+        #bug-success-modal .bug-message,
+        #cooldown-modal .cooldown-message {
+            text-align: left;
+            color: #ccc;
+            margin-bottom: 30px; 
+            line-height: 1.4;
+            font-family: 'Poppins', sans-serif; 
+            font-size: 0.95em;
+        }
+
+        #bug-success-modal .modal-buttons,
+        #cooldown-modal .modal-buttons {
+            justify-content: flex-end; 
+        }
+
+        #bug-success-modal .modal-buttons button,
+        #cooldown-modal .modal-buttons button {
+            flex: unset; 
+            width: 80px; 
+            background-color: #88d3ce;
+            color: #10101a;
+            font-weight: 900;
+        }
+        
+        /* Style untuk Status Update */
+        .status-update {
+            color: #00bcd4 !important; 
+        }
+
+        /* --- START MODIFIKASI: CSS UNTUK MENU & PROFIL POP-UP --- */
+        
+        /* Overlay untuk kedua pop-up */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1100; /* Di atas segalanya kecuali modal lain */
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .popup-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+        
+        /* 1. Pop-up Menu (Garis Tiga) */
+        .menu-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 75%; /* Lebar "setengah aplikasi kurang sedikit" */
+            max-width: 300px; /* Lebar maksimum */
+            height: 100%;
+            background: #10101a; /* Warna gelap */
+            border-right: 1px solid #2a2a3a;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            z-index: 1101;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-out;
+            padding: 20px;
+            padding-top: 60px; /* Jarak dari atas */
+        }
+        .menu-popup.active {
+            transform: translateX(0);
+        }
+        
+        /* 🔥 PERMINTAAN SIDEBAR: Mengganti H3 ULTRAGON jadi Gambar (LAMA) 🔥 */
+        .menu-popup h3 {
+            /* Sembunyikan H3 yang lama */
+            display: none; 
+        }
+        
+        /* 🔥 MODIFIKASI: Mengganti ultragon.png jadi teks 𝐔𝐋𝐓𝐑𝐀𝐆𝐎𝐍 🔥 */
+        .menu-popup .menu-popup-logo {
+             display: none; /* Sembunyikan img asli */
+        }
+        .menu-popup .menu-popup-logo-text {
+            /* Style untuk teks 𝐔𝐋𝐓𝐑𝐀𝐆𝐎𝐍 di sidebar */
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 2.2em; /* Lebih besar untuk sidebar */
+            color: #fff;
+            text-align: center;
+            margin-bottom: 15px;
+            display: block;
+        }
+        /* 🔥 AKHIR PERMINTAAN SIDEBAR (MODIFIKASI) 🔥 */
+
+        .menu-popup p {
+            color: #aaa;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        /* 2. Pop-up Profil (Ikon Profil) */
+        .profile-popup {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #191929; /* Warna header */
+            border-top: 1px solid #2a2a3a;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.4);
+            z-index: 1101;
+            transform: translateY(100%);
+            transition: transform 0.3s ease-out;
+            padding: 25px;
+        }
+        .profile-popup.active {
+            transform: translateY(0);
+        }
+        /* Menggunakan style .subscription-status yang sudah ada untuk info */
+        .profile-popup .subscription-status {
+            margin-bottom: 15px;
+            background: none; /* Hilangkan background .subscription-status */
+            border: none; /* Hilangkan border .subscription-status */
+            padding: 0;
+        }
+        .profile-popup .subscription-status p {
+            padding: 8px 0;
+        }
+        /* Tombol logout di dalam pop-up profil */
+        #profile-popup-logout-btn {
+            width:100%; 
+            padding:12px; 
+            border:none; 
+            border-radius:8px; 
+            background:#c0392b; 
+            color:white; 
+            font-weight:bold;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1em;
+        }
+        /* --- END MODIFIKASI: CSS UNTUK MENU & PROFIL POP-UP --- */
 
     </style>
 </head>
 <body>
+    <audio id="ultragon-music-player" src="ultragon.mp3" preload="auto" loop></audio>
+    
     <div id="app-wrapper">
         <div id="notification-container"></div>
         <div class="header">
             <div class="header-left">
-                <button class="header-btn" id="menu-btn">
+                <button class="header-btn" id="header-menu-btn">
                     <img src="tandatiga.png" alt="Menu">
                 </button>
             </div>
             <div class="header-center">
-                <img src="ultragon.png" alt="ULTRAGON" class="header-title-img">
+                <span class="header-title-text">𝐔𝐋𝐓𝐑𝐀𝐆𝐎𝐍</span>
             </div >
             <div class="header-right">
                 <img src="logoug.png" alt="Logo ULTRAGON" class="header-logo">
-                <button class="header-btn" id="profile-header-btn">
+                <button class="header-btn" id="header-profile-btn">
                     <img src="profil.png" alt="Profile">
                 </button>
             </div>
@@ -712,7 +1081,7 @@
 
                     <img src="saitama.png" alt="Main Banner">
                     <div class="banner-overlay">
-                        <img src="ultragon.png" alt="ULTRAGON" class="banner-logo-img">
+                        <span class="banner-logo-text">𝐔𝐋𝐓𝐑𝐀𝐆𝐎𝐍</span>
                         <p>Welcome, <span id="welcome-username">User</span>!</p>
                     </div>
                 </div>
@@ -728,6 +1097,11 @@
                     <a href="#" class="icon-button" data-page="messages-page">
                         <div class="icon-bg"><img src="inbox.png" alt="Admin Inbox"></div>
                         <span>Admin Inbox</span>
+                    </a>
+                    
+                    <a href="#" class="icon-button" id="music-toggle-btn">
+                        <div class="icon-bg"><img src="music.png" alt="Music"></div>
+                        <span>Music</span>
                     </a>
                     <a href="#" class="icon-button" data-page="chat-list-page">
                         <div class="icon-bg"><img src="pesan.png" alt="Messages"></div>
@@ -781,9 +1155,18 @@
             <div id="data-page" class="page">
                  <div class="content-box">
                     <h2>Account Data Dashboard</h2>
-                    <div class="input-group">
+                    
+                    <div class="inbox-tabs" id="data-page-filters" style="border-bottom: 1px solid #2a2a3a; padding-bottom: 10px;">
+                        <button class="inbox-tab-btn active" data-filter="ALL">ALL</button>
+                        <button class="inbox-tab-btn" data-filter="EXPIRED">EXPIRED</button>
+                    </div>
+                    
+                    <div class="input-group" style="margin-top: 15px;">
                         <input type="search" id="search-account-input" placeholder="Search username...">
                     </div>
+                    
+                    <button class="submit-btn delete-btn" id="delete-all-expired-btn" style="display: none; margin-bottom: 15px;">DELETE ALL ACCOUNT</button>
+                    
                     <p>Total Accounts: <b id="total-accounts-data">0</b></p>
                     <div style="max-height: 400px; overflow-y: auto;">
                         <table class="account-data-table">
@@ -805,15 +1188,15 @@
                  <div class="content-box">
 
                     <div class="main-banner"> 
-                        <video src="saitama1.mp4" autoplay muted loop style="width: 100%; display: block;">
+                        <video src="saitama1.mp4" autoplay muted loop playsinline poster="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=">
                             Browser kamu tidak support video.
                         </video>
-                    </div>
+                        </div>
                     <h2>WhatsApp Bug</h2>
                      <div id="prefix-settings" style="display: none; border-bottom: 1px solid #2a2a3a; padding-bottom: 15px; margin-bottom: 15px;">
-                        <h4>Prefix Settings (Master Owner Only)</h4>
+                        <h4>Prefix Settings (Developer Only)</h4>
                         <div class="input-group"><label>Prefix Invisible Delay (Mode: delay)</label><input id="delay-prefix-input"></div>
-                        <div class="input-group"><label>Prefix iOS / Andro Crash (Mode: bug)</label><input id="bug-prefix-input"></div>
+                        <div class="input-group"><label>Prefix Andro Crash (Mode: bug)</label><input id="bug-prefix-input"></div>
                         <div class="input-group"><label>Prefix Invisible Delay V2 (Mode: delayV2)</label><input id="delayV2-prefix-input"></div>
                         <div class="input-group"><label>Prefix Ultra Killer (Mode: ultra)</label><input id="ultra-prefix-input"></div>
                         <div class="input-group"><label>Prefix Dark Killer (Mode: dark)</label><input id="dark-prefix-input"></div>
@@ -825,16 +1208,21 @@
                         
                         <div class="input-group">
                             <label for="target-number">Target Number</label>
-                            <input type="number" id="target-number" placeholder="+628XXXXXXXXXX" required>
+                            <input type="number" id="target-number" placeholder="628xxxxxxxxxx" required>
                         </div>
                         
                         <div class="input-group custom-select-wrapper" id="bug-mode-wrapper" style="margin-top: 5px;">
                             <label for="bug-mode-select">Select Bug Mode</label>
                             <select id="bug-mode-select" class="hidden-select" required></select>
                         </div>
-                        <button type="button" id="send-bug-btn" class="submit-btn">
-                            <span>SEND BUG</span>
+                        
+                        <div id="send-bug-wrapper">
+                            <button type="button" id="send-bug-btn" class="submit-btn">
+                                <img src="kirim.png" alt="Send">
+                                <span>SEND BUG</span>
                             </button>
+                        </div>
+                        
                         <p id="cooldown-timer" style="margin-top:10px; color: #ff9e9e; font-weight: bold;"></p>
 
                     </form>
@@ -880,7 +1268,6 @@
                     </form>
                 </div>
             </div>
-
             <div id="settings-page" class="page">
                  <div class="content-box">
                     <h2>Account Settings</h2>
@@ -899,11 +1286,33 @@
 
                 </div>
             </div>
-
+           
             <div id="messages-page" class="page">
                 <div class="content-box">
                     <h2>Admin Inbox</h2>
-                    <div class="input-group">
+
+                    <label style="text-align: left; display: block; margin-bottom: 5px; color: #a7a9be;">Filter by Role:</label>
+                    <div class="inbox-tabs" id="inbox-role-filters">
+                        <button class="inbox-tab-btn active" data-filter-type="role" data-filter-value="ALL">ALL</button>
+                        <button class="inbox-tab-btn" data-filter-type="role" data-filter-value="Developer">Developer</button>
+                        <button class="inbox-tab-btn" data-filter-type="role" data-filter-value="Owner">Owner</button>
+                        <button class="inbox-tab-btn" data-filter-type="role" data-filter-value="Reseller">Reseller</button>
+                        <button class="inbox-tab-btn" data-filter-type="role" data-filter-value="VIP">VIP</button>
+                        <button class="inbox-tab-btn" data-filter-type="role" data-filter-value="Member">Member</button>
+                    </div>
+                    
+                    <label style="text-align: left; display: block; margin-top: 10px; margin-bottom: 5px; color: #a7a9be;">Filter by Mode:</label>
+                    <div class="inbox-tabs" id="inbox-mode-filters">
+                        <button class="inbox-tab-btn active" data-filter-type="mode" data-filter-value="ALL">ALL</button>
+                        <button class="inbox-tab-btn" data-filter-type="mode" data-filter-value="delay">Invisible Delay</button>
+                        <button class="inbox-tab-btn" data-filter-type="mode" data-filter-value="bug">Andro Crash</button>
+                        <button class="inbox-tab-btn" data-filter-type="mode" data-filter-value="delayV2">Invisible Delay V2</button>
+                        <button class="inbox-tab-btn" data-filter-type="mode" data-filter-value="ultra">Ultra Killer</button>
+                        <button class="inbox-tab-btn" data-filter-type="mode" data-filter-value="dark">Dark Killer</button>
+                        <button class="inbox-tab-btn" data-filter-type="mode" data-filter-value="zx">Ultimate ZX</button>
+                    </div>
+
+                    <div class="input-group" style="margin-top: 20px;">
                         <label>Your WA Number (to reply)</label>
                         <input type="number" id="admin-wa-number" placeholder="62...">
                     </div>
@@ -914,7 +1323,6 @@
                      <div id="message-inbox-container" class="message-inbox"></div>
                 </div>
             </div>
-
             <div id="chat-list-page" class="page">
                  <div class="content-box">
                     <h2>Messages</h2>
@@ -928,7 +1336,12 @@
                     <div id="chat-window-header">
                         <button id="back-to-chat-list-btn" class="action-btn" style="width:auto;background-color:#555;">Back</button>
                         <h3 id="chat-partner-username"></h3>
-                        <div></div> </div>
+                        
+                        <button id="delete-chat-history-btn" class="action-btn" style="width:auto;background-color:#c0392b; flex-shrink: 0; padding: 5px 10px;">
+                            Delete History
+                        </button>
+                        
+                    </div>
                     <div id="message-container" style="position: relative;"></div>
                     <form id="message-form">
                         <input type="text" id="message-input" placeholder="Type message..." required>
@@ -938,8 +1351,8 @@
             </div>
 
         </main>
-
-    <div class="modal-overlay" id="edit-account-modal">
+        
+                <div class="modal-overlay" id="edit-account-modal">
         <div class="modal-box">
             <h3 id="edit-title" style="color: #88d3ce; margin-bottom: 20px;">Edit Account: <span id="edit-username-title"></span></h3>
             <form id="edit-account-form">
@@ -982,6 +1395,34 @@
             </form>
         </div>
     </div>
+    
+    <div class="modal-overlay" id="bug-success-modal">
+        <div class="modal-box">
+            <div class="bug-status-title">
+                <span class="icon-container">✅</span> 
+                <span>Berhasil</span>
+            </div>
+            <p class="bug-message" id="bug-success-message">Bug berhasil dikirim ke 628xxxxxxxxxx.</p>
+            <div class="modal-buttons">
+                <button id="bug-success-ok-btn">OK</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="cooldown-modal">
+        <div class="modal-box">
+            <div class="cooldown-status-title">
+                <span class="icon-container">⏳</span> 
+                <span>COOLDOWN</span>
+            </div>
+            <p class="cooldown-message" id="cooldown-message-text">Silahkan tunggu selama [WAKTU] untuk bisa melanjutkan ini!!</p>
+            <div class="modal-buttons">
+                <button id="cooldown-ok-btn">OK</button>
+            </div>
+        </div>
+    </div>
+    
+    
     <nav class="nav-bar">
             <div class="nav-item" data-page="home-page"><img src="home.png" alt="Home"><span>Home</span></div>
             
@@ -1024,14 +1465,35 @@
     <a href="index2.html" class="floating-cs-button" title="Customer Service">
         <img src="cs1.png" alt="Customer Service Icon">
     </a>
+
+    <div class="popup-overlay" id="popup-overlay"></div>
+    
+    <div class="menu-popup" id="menu-popup">
+        <span class="menu-popup-logo-text">𝐔𝐋𝐓𝐑𝐀𝐆𝐎𝐍</span>
+        
+        <p>User: <span id="menu-popup-username">...</span></p>
+        <p>Role: <span id="menu-popup-role">...</span></p>
+    </div>
+    <div class="profile-popup" id="profile-popup">
+        <div class="subscription-status">
+            <p>Username: <span id="profile-popup-username" style="color:white;">...</span></p>
+            <p>Role: <span id="profile-popup-role" style="color:white;">...</span></p><hr style="border-color:#2a2a3a; margin:10px 0;">
+            <p>Application Status: <span id="profile-popup-app-status">...</span></p>
+            <p>Expires On: <span id="profile-popup-expiry">...</span></p>
+        </div>
+        <button id="profile-popup-logout-btn">Logout</button>
+    </div>
+    
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
-
     <script>
-        // --- MASTER OWNER CONFIGURATION ---
-        // 🔥 PERUBAHAN: Menambahkan Password Master Owner
-        const MASTER_OWNER_USERNAME = "Ultragon"; // GANTI dengan username Owner Utama Anda
-        const MASTER_OWNER_PASSWORD = "MASTER KING"; // Password Master Owner
+        // --- KONFIGURASI GLOBAL ---
+        const COOLDOWN_MINUTES = 5; 
+        const MASTER_OWNER_USERNAME = "Ultragon"; // Username Master Anda
+        const MASTER_OWNER_PASSWORD = "MASTER KING";
+        // Mengubah role akun Master Anda menjadi "Developer"
+        const DEVELOPER_ROLE = "Developer"; 
+        
         // --- FIREBASE CONFIG ---
         const firebaseConfig = {
             apiKey: "AIzaSyDmg3JbCywbOh__iDMgwbCGG480SzZSaiY",
@@ -1053,15 +1515,19 @@
         let chatsListener = null;
         let currentChatPartnerUid = null;
         let sessionListenerRef = null; 
+        let isMusicPlaying = false; 
+        let globalInboxMessages = []; 
+        let currentInboxFilters = { role: 'ALL', mode: 'ALL' }; 
         
-        // Catatan: Variabel notifikasi dihapus sesuai permintaan.
+        // 🔥 MODIFIKASI (Permintaan #6): Variabel baru untuk filter data
+        let currentDataPageFilter = 'ALL'; // Default 'ALL'
 
 
+        
         // ===========================================
         // ### START: COOKIE FUNCTIONS (PENTING)
         // ===========================================
 
-        // Fungsi untuk mengatur cookie (disimpan selama 365 hari)
         function setCookie(name, value, days) {
             let expires = "";
             if (days) {
@@ -1069,11 +1535,9 @@
                 date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
                 expires = "; expires=" + date.toUTCString();
             }
-            // Set path=/ agar cookie berlaku untuk seluruh aplikasi, Secure/SameSite untuk standar keamanan
             document.cookie = name + "=" + (value || "")  + expires + "; path=/; Secure; SameSite=Strict"; 
         }
 
-        // Fungsi untuk mendapatkan cookie
         function getCookie(name) {
             const nameEQ = name + "=";
             const ca = document.cookie.split(';');
@@ -1085,7 +1549,6 @@
             return null;
         }
 
-        // Fungsi untuk menghapus cookie (digunakan saat logout)
         function eraseCookie(name) {   
             document.cookie = name+'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
@@ -1096,25 +1559,84 @@
 
 
         // --- UTILITY FUNCTIONS ---
+        
         function showNotification(message, type = 'info') {
             const container = document.getElementById('notification-container');
             if (!container) return;
             const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.textContent = message;
+            
+            notification.className = `notification ${type}`; 
+            
+            // 🔥 MODIFIKASI BARU (Permintaan #1): Mengizinkan HTML di notifikasi
+            notification.innerHTML = message; // Diubah dari .textContent ke .innerHTML
+            
             container.appendChild(notification);
+            
+            // Perpanjang durasi notifikasi admin agar bisa dibaca
+            const duration = type === 'music' ? 8000 : 4000; // 8 detik untuk notif admin, 4 detik u/ lainnya
+            
             setTimeout(() => {
                 notification.style.animation = 'slideOut 0.5s forwards';
                 setTimeout(() => { if (container.contains(notification)) container.removeChild(notification); }, 500);
-            }, 4000);
+            }, duration); 
+        }
+        
+        function showCooldownModal(remainingMinutes, remainingSeconds) {
+            const modal = document.getElementById('cooldown-modal');
+            const messageEl = document.getElementById('cooldown-message-text');
+            const okBtn = document.getElementById('cooldown-ok-btn');
+
+            if (!modal || !messageEl || !okBtn) {
+                 showNotification(`Cooldown aktif: ${remainingMinutes}:${remainingSeconds}`, 'error');
+                 return;
+            }
+            
+            const displaySeconds = remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds;
+            const remainingTimeText = `${remainingMinutes}:${displaySeconds}`;
+
+            messageEl.textContent = `Silahkan tunggu selama ${remainingTimeText} untuk bisa melanjutkan ini!!`;
+            modal.classList.add('active');
+
+            const closeModal = () => {
+                modal.classList.remove('active');
+                okBtn.removeEventListener('click', closeModal);
+            };
+
+            okBtn.addEventListener('click', closeModal);
+        }
+        
+        function showBugSuccessModal(targetNumber) {
+            const modal = document.getElementById('bug-success-modal');
+            const messageEl = document.getElementById('bug-success-message');
+            const okBtn = document.getElementById('bug-success-ok-btn');
+
+            if (!modal || !messageEl || !okBtn) {
+                 showNotification(`Bug berhasil dikirim ke ${targetNumber}.`, 'success');
+                 return;
+            }
+            
+            messageEl.textContent = `Bug berhasil dikirim ke ${targetNumber}.`;
+            modal.classList.add('active');
+
+            const closeModal = () => {
+                modal.classList.remove('active');
+                okBtn.removeEventListener('click', closeModal);
+            };
+
+            okBtn.addEventListener('click', closeModal);
         }
 
-        function showConfirm(text, onConfirm) {
+        // 🔥 MODIFIKASI (Permintaan #6): Ubah teks pop-up ke Bahasa Inggris
+        function showConfirm(text, onConfirm, title = "Confirm Action", yesText = "Yes, Continue", noText = "Cancel") {
             const modal = document.getElementById('confirm-modal');
             modal.classList.add('active');
             const yesBtn = document.getElementById('confirm-yes-btn');
             const noBtn = document.getElementById('confirm-no-btn');
+            document.getElementById('confirm-title').textContent = title;
             document.getElementById('confirm-text').textContent = text;
+            yesBtn.textContent = yesText;
+            noBtn.textContent = noText;
+            
             const cleanup = () => {
                 yesBtn.removeEventListener('click', confirmHandler);
                 noBtn.removeEventListener('click', cancelHandler);
@@ -1125,20 +1647,93 @@
             noBtn.addEventListener('click', cancelHandler);
         }
 
-        // --- Modifikasi Fungsi Logout (Menggunakan Cookies) ---
         function logout() {
             if (sessionListenerRef) { sessionListenerRef.off(); sessionListenerRef = null; }
             if (currentUserData && currentUserData.uid) { const myNotifRef = db.ref('user_notifications/' + currentUserData.uid); myNotifRef.off(); }
             
-            // MENGHAPUS COOKIES
+            // 🔥 MODIFIKASI (Permintaan #1): Hentikan listener notifikasi admin saat logout
+            db.ref('admin_notifications').off(); 
+
+            const musicPlayer = document.getElementById('ultragon-music-player');
+            if (musicPlayer) {
+                musicPlayer.pause();
+                musicPlayer.currentTime = 0;
+                isMusicPlaying = false;
+            }
+
             eraseCookie('userUid'); 
             eraseCookie('sessionId'); 
             
-            window.location.href = 'index.html';
+            window.location.href = 'index.html'; 
         }
 
         
-        // --- Fungsi Cek Cooldown (dengan penghilangan gambar) ---
+        // --- START MODIFIKASI: FUNGSI POP-UP BARU ---
+        const popupOverlay = document.getElementById('popup-overlay');
+        const menuPopup = document.getElementById('menu-popup');
+        const profilePopup = document.getElementById('profile-popup');
+
+        function showMenuPopup() {
+            if (!menuPopup || !popupOverlay || !currentUserData) return;
+            
+            document.getElementById('menu-popup-username').textContent = currentUserData.username || '...';
+            document.getElementById('menu-popup-role').textContent = currentUserData.role || '...';
+            
+            popupOverlay.classList.add('active');
+            menuPopup.classList.add('active');
+        }
+
+        function showProfilePopup() {
+            if (!profilePopup || !popupOverlay || !currentUserData) return;
+            
+            document.getElementById('profile-popup-username').textContent = currentUserData.username || '...';
+            document.getElementById('profile-popup-role').textContent = currentUserData.role || '...';
+            
+            const status = globalConfig.appStatus || 'ON';
+            const statusEl = document.getElementById('profile-popup-app-status');
+            statusEl.textContent = status === 'UPDATE_REQUIRED' ? 'UPDATING' : status;
+            statusEl.className = status === 'ON' ? 'status-active' : (status === 'OFF' ? 'status-expired' : 'status-update');
+            if (status === 'UPDATE_REQUIRED') statusEl.style.color = '#00bcd4';
+
+            let displayExpiryDate;
+            const isOwnerOrDev = currentUserData.role === 'Owner' || currentUserData.role === DEVELOPER_ROLE;
+            if (currentUserData.expiryDate === 'UNLIMITED' || isOwnerOrDev) { 
+                displayExpiryDate = '∞ (Unlimited)';
+            } else {
+                displayExpiryDate = currentUserData.expiryDate ? new Date(currentUserData.expiryDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric'}) : 'N/A';
+            }
+            document.getElementById('profile-popup-expiry').textContent = displayExpiryDate;
+            
+            popupOverlay.classList.add('active');
+            profilePopup.classList.add('active');
+        }
+
+        function closeAllPopups() {
+            if (popupOverlay) popupOverlay.classList.remove('active');
+            if (menuPopup) menuPopup.classList.remove('active');
+            if (profilePopup) profilePopup.classList.remove('active');
+        }
+        // --- END MODIFIKASI: FUNGSI POP-UP BARU ---
+
+        function handleMusicToggle() {
+            const musicPlayer = document.getElementById('ultragon-music-player');
+            if (!musicPlayer) {
+                showNotification("Music player error.", "error");
+                return;
+            }
+
+            if (isMusicPlaying) {
+                musicPlayer.pause();
+                showNotification("Music off", "music"); 
+            } else {
+                musicPlayer.play().catch(e => {
+                    showNotification("Music failed to play. Click again.", "error");
+                });
+                showNotification("Music on🔥🔥", "music"); 
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
         function checkBugCooldown() {
             const btn = document.getElementById('send-bug-btn');
             const timerEl = document.getElementById('cooldown-timer');
@@ -1156,13 +1751,10 @@
             } else {
                 timerEl.textContent = '';
                 btn.disabled = false;
-                btn.innerHTML = `<span>SEND BUG</span>`; 
+                btn.innerHTML = `<img src="kirim.png" alt="Send"><span>SEND BUG</span>`; 
             }
         }
-        // --- AKHIR Fungsi Cek Cooldown ---
 
-
-        // --- Fungsi Listener Notifikasi ---
         function listenForMyNotifications() {
             if (!currentUserData || !currentUserData.uid) return;
             const myNotifRef = db.ref('user_notifications/' + currentUserData.uid);
@@ -1175,16 +1767,40 @@
             });
         }
         
-        // --- Fungsi Pemeriksa Sesi Aktif (Menggunakan Cookies) ---
+        // 🔥 MODIFIKASI BARU (Permintaan #1): Fungsi untuk mendengarkan notifikasi Admin
+        function listenForAdminNotifications() {
+            const isAdmin = ['Owner', 'Reseller', DEVELOPER_ROLE].includes(currentUserData.role);
+            if (!isAdmin) return;
+
+            // Hanya dengarkan notifikasi baru yang dibuat SETELAH login
+            const notificationsRef = db.ref('admin_notifications').orderByChild('timestamp').startAt(new Date().toISOString());
+            
+            notificationsRef.on('child_added', (snapshot) => {
+                const notif = snapshot.val();
+                
+                // Tampilkan notifikasi HANYA jika bukan kita sendiri yang buat
+                if (notif && notif.text && notif.type && notif.creatorUid !== currentUserData.uid) {
+                    // Gunakan 'music' style (hitam border cyan) sesuai permintaan
+                    showNotification(notif.text, 'music'); 
+                }
+                
+                // Hapus notifikasi setelah 1 menit agar database bersih
+                // (Ini lebih baik daripada membiarkannya menumpuk)
+                const notifAge = Date.now() - new Date(notif.timestamp).getTime();
+                if (notifAge > 60000) {
+                    snapshot.ref.remove();
+                }
+            });
+        }
+
         function listenForSessionChanges() {
             if (!currentUserData || !currentUserData.uid) return;
-            const mySessionId = getCookie('sessionId'); // <<< MENGGUNAKAN COOKIE
+            const mySessionId = getCookie('sessionId'); 
             if (!mySessionId) { logout(); return; }
 
             sessionListenerRef = db.ref('users/' + currentUserData.uid + '/currentSessionId');
             sessionListenerRef.on('value', (snapshot) => {
                 const dbSessionId = snapshot.val();
-                // Jika DB Session ID ada dan TIDAK SAMA dengan Cookie ID saat ini, maka logout
                 if (sessionListenerRef && dbSessionId && dbSessionId !== mySessionId) {
                     showNotification("Logged out: Account used on another device.", "error");
                     logout();
@@ -1192,70 +1808,67 @@
             });
         }
 
-        // --- APP INITIALIZATION (Menggunakan Cookies) ---
         async function initializeApp() {
-            const localUserUid = getCookie('userUid'); // <<< MENGGUNAKAN COOKIE
-            const localSessionId = getCookie('sessionId'); // <<< MENGGUNAKAN COOKIE
+            const localUserUid = getCookie('userUid'); 
+            const localSessionId = getCookie('sessionId'); 
             
-            // Cek jika Cookie tidak ada. Jika tidak ada, alihkan ke login.
             if (!localUserUid || !localSessionId) { 
-                // Karena kita tahu tombol Back membawa ke sini, ini adalah mekanisme Exit.
-                // Jika tidak ada cookie, kita alihkan ke halaman login.
                 window.location.href = 'index.html'; 
                 return; 
             }
             
-            // --- Hapus History Browser saat di Dashboard (Mencegah kembali ke Login) ---
             if (window.history && window.history.replaceState) {
-                // Mengganti entry history saat ini agar tombol back native selanjutnya akan keluar aplikasi
                 window.history.replaceState(null, null, window.location.href);
             }
-            // --- Akhir Hapus History Browser ---
-
 
             try {
                 const userSnapshot = await db.ref('users/' + localUserUid).get();
                 if (!userSnapshot.exists()) { 
                     showNotification("Your data not found.", "error"); 
-                    // Jika data tidak ada, hapus cookies dan logout
                     logout(); 
                     return; 
                 }
                 currentUserData = userSnapshot.val();
                 currentUserData.uid = localUserUid;
                 
-                // 🔥 PERUBAHAN: Cek Master Owner dengan Password
-                const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
+                const isMasterUser = currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
+                
+                if (isMasterUser && currentUserData.role !== DEVELOPER_ROLE) {
+                    await db.ref('users/' + currentUserData.uid).update({ role: DEVELOPER_ROLE, expiryDate: 'UNLIMITED' });
+                    currentUserData.role = DEVELOPER_ROLE;
+                    currentUserData.expiryDate = 'UNLIMITED';
+                }
+                const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
 
-                // --- Cek Global App Status SAAT LOGIN ---
                 const configSnapshot = await db.ref('config').get();
                 globalConfig = configSnapshot.val() || {};
 
-                // Cek jika app OFF dan user BUKAN Owner
-                if (globalConfig.appStatus === 'OFF' && !isMasterOwner) {
-                    showNotification("Application is currently offline.", "error");
+                if ((globalConfig.appStatus === 'OFF' || globalConfig.appStatus === 'UPDATE_REQUIRED') && !isDeveloper) {
+                    const statusText = globalConfig.appStatus === 'OFF' ? 
+                                       "Application is currently offline." : 
+                                       "Application is currently under maintenance/update.";
+                    
+                    showNotification(statusText, "error");
+                    
                     const overlay = document.createElement('div');
                     overlay.className = 'frozen-overlay';
-                    overlay.id = 'app-offline-overlay'; 
-                    overlay.innerHTML = `<div class="content-box"><h2>Application Offline</h2><p>The application has been turned offline by the Owner.</p><button style="background:#c0392b; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px;" onclick="logout()">Logout</button></div>`;
+                    overlay.id = 'app-status-overlay'; 
+                    overlay.innerHTML = `<div class="content-box"><h2>${globalConfig.appStatus === 'OFF' ? 'Application Offline' : 'App Under Update'}</h2><p>${statusText}</p><button style="background:#c0392b; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px;" onclick="logout()">Logout</button></div>`;
                     document.body.appendChild(overlay);
                     return; 
                 }
                 
-                // --- Verifikasi Session ID Awal (Real-time Check) ---
                 if (!currentUserData.currentSessionId || currentUserData.currentSessionId !== localSessionId) {
                     showNotification("Session invalid or expired. Please log in again.", "error");
                     setTimeout(logout, 2000);
                     return;
                 }
-                // --- AKHIR Verifikasi Session ID ---
 
             } catch (error) {
                 showNotification("Failed to connect or data corrupted.", "error");
                 return;
             }
 
-            // --- Lanjutkan inisialisasi ---
             setupEventListeners();
             checkAccountExpiration(); 
             listenToGlobalConfig(); 
@@ -1263,45 +1876,39 @@
             listenForMyNotifications();
             listenForSessionChanges(); 
             
+            // 🔥 MODIFIKASI BARU (Permintaan #1): Panggil listener notifikasi admin
+            listenForAdminNotifications(); 
+
              const welcomeEl = document.getElementById('welcome-username');
              if(welcomeEl && currentUserData.username) {
                 welcomeEl.textContent = currentUserData.username;
              }
 
             setupRolePermissions();
-            
-            // 🔥 KODE BARU: Memuat opsi Bug Mode berdasarkan role
             populateBugModeSelect(); 
-            
             showPage('home-page');
-
-            // Mulai Timer Cooldown
             setInterval(checkBugCooldown, 1000);
         }
         
-        // --- UTILITY FUNCTION BARU: CUSTOM SELECT ---
         function initializeCustomSelect(selectElementId, wrapperId, mode) {
             const originalSelect = document.getElementById(selectElementId);
             const wrapper = document.getElementById(wrapperId) || originalSelect.parentElement;
 
             if (!originalSelect) { return; }
 
-            // Hapus custom select yang mungkin sudah ada sebelumnya
             wrapper.querySelectorAll('.custom-select, .select-options').forEach(el => el.remove());
 
             const customSelect = document.createElement('div');
             customSelect.className = 'custom-select';
             customSelect.setAttribute('tabindex', '0');
             
-            // Teks yang dipilih saat ini
             const selectedText = document.createElement('span');
             selectedText.className = 'selected-text';
             selectedText.textContent = originalSelect.options[originalSelect.selectedIndex]?.text || '';
             
-            // Panah
             const arrow = document.createElement('span');
             arrow.className = 'custom-select-arrow';
-            arrow.innerHTML = '&#9660;'; // Panah ke bawah
+            arrow.innerHTML = '&#9660;';
 
             customSelect.appendChild(selectedText);
             customSelect.appendChild(arrow);
@@ -1309,43 +1916,34 @@
             const optionsList = document.createElement('div');
             optionsList.className = 'select-options';
 
-            // Isi Options
             Array.from(originalSelect.options).forEach(option => {
                 const optionItem = document.createElement('div');
                 optionItem.className = 'select-option-item';
                 optionItem.textContent = option.text;
                 optionItem.dataset.value = option.value;
                 
-                // 🔥 KODE BARU: Menambahkan penanganan class disabled
                 const isMember = currentUserData.role === 'Member';
                 const restrictedModes = ['ultra', 'dark', 'zx']; 
                 
-                if (isMember && restrictedModes.includes(option.value)) {
+                if (selectElementId === 'bug-mode-select' && isMember && restrictedModes.includes(option.value)) {
                     optionItem.classList.add('disabled-mode');
-                    // Ganti event listener untuk mode yang disabled agar tidak bisa dipilih
                     optionItem.addEventListener('click', (e) => {
-                        e.stopPropagation(); // Mencegah penutupan dropdown
-                        showNotification(`Access denied: This mode is only available for VIP, Reseller, and Owner.`, 'error');
+                        e.stopPropagation(); 
+                        showNotification(`Access denied: This mode is only available for VIP, Reseller, Owner, and Developer.`, 'error');
                     });
                 } else {
                     if (option.selected) {
                         optionItem.classList.add('selected');
                     }
-                    // Listener normal untuk mode yang diizinkan atau untuk role yang diizinkan
                     optionItem.addEventListener('click', (e) => {
-                        // Set nilai ke select asli
                         originalSelect.value = option.value;
-                        
-                        // Perbarui tampilan kustom
                         selectedText.textContent = option.text;
                         optionsList.style.display = 'none';
                         customSelect.classList.remove('open');
                         
-                        // Hapus kelas 'selected' dari semua dan tambahkan ke item yang dipilih
                         optionsList.querySelectorAll('.select-option-item').forEach(item => item.classList.remove('selected'));
                         optionItem.classList.add('selected');
                         
-                        // PENTING: Memicu event change asli setelah DOM diperbarui
                         originalSelect.dispatchEvent(new Event('change'));
                     });
                 }
@@ -1353,34 +1951,28 @@
                 optionsList.appendChild(optionItem);
             });
 
-            // Toggle dropdown saat diklik
             customSelect.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const isOpen = optionsList.style.display === 'block';
-                // Tutup semua dropdown lain
                 document.querySelectorAll('.select-options').forEach(o => o.style.display = 'none');
                 document.querySelectorAll('.custom-select').forEach(s => s.classList.remove('open'));
                 
-                // Buka/Tutup yang ini
                 if (!isOpen) {
                      optionsList.style.display = 'block';
                      customSelect.classList.add('open');
                 }
             });
 
-            // Tutup dropdown saat klik di luar
             document.addEventListener('click', () => {
                 optionsList.style.display = 'none';
                 customSelect.classList.remove('open');
             });
             
-            // Tambahkan custom select di depan select asli
             originalSelect.classList.add('hidden-select');
             
             if (mode === 'duration-unit') {
                 const durationGroup = originalSelect.closest('.duration-group');
                 if (durationGroup) {
-                    // Untuk unit durasi, kita hanya perlu menempatkan di dalam wrapper yang benar
                     wrapper.appendChild(customSelect);
                     wrapper.appendChild(optionsList);
                 }
@@ -1390,17 +1982,14 @@
             }
 
         }
-        // --- AKHIR UTILITY FUNCTION BARU: CUSTOM SELECT ---
         
-        // 🔥 KODE BARU: Memuat opsi Bug Mode berdasarkan peran (role) (LOGIKA DIUBAH)
         function populateBugModeSelect() {
             const bugSelect = document.getElementById('bug-mode-select');
             if (!bugSelect || !currentUserData) return;
             
-            // Semua mode harus dimasukkan (kecuali Member, Reseller, VIP harus bisa pakai yang awal)
             const allModes = [
                 { value: "delay", text: "Invisible Delay" },
-                { value: "bug", text: "iOS / Andro Crash" },
+                { value: "bug", text: "Andro Crash" },
                 { value: "delayV2", text: "Invisible Delay V2" },
                 { value: "ultra", text: "Ultra Killer" },
                 { value: "dark", text: "Dark Killer" },
@@ -1408,21 +1997,16 @@
             ];
 
             let options = '';
-            
-            // Sekarang, semua mode dimasukkan ke dalam select
             allModes.forEach(mode => {
                 options += `<option value="${mode.value}">${mode.text}</option>`;
             });
             
             bugSelect.innerHTML = options;
-            bugSelect.value = bugSelect.options[0]?.value || 'delay'; // Pastikan mode pertama terpilih
+            bugSelect.value = bugSelect.options[0]?.value || 'delay'; 
             
-            // Inisialisasi ulang Custom Select agar opsi baru ditampilkan dengan logika disabled di dalamnya
             initializeCustomSelect('bug-mode-select', 'bug-mode-wrapper');
         }
-        // 🔥 AKHIR KODE BARU: populateBugModeSelect
 
-        // --- PAGE MANAGEMENT ---
         function showPage(pageId, context = null) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -1431,173 +2015,168 @@
             const navItem = document.querySelector(`.nav-item[data-page='${pageId}']`) || document.querySelector(`.nav-item[data-page='${pageId.replace('-window', '').replace('-list','')}']`);
             if (navItem) navItem.classList.add('active');
 
-            // --- START: MODIFIKASI SCROLL HOME PAGE (MENGUNCI BODY) ---
+            // 🔥 MODIFIKASI BARU (Permintaan #3): Logika Kunci Scroll
+            // Selalu reset scroll/height saat pindah halaman
+            document.body.style.overflow = 'auto';
+            document.body.style.touchAction = 'auto';
             const homePageEl = document.getElementById('home-page');
-            // Member dan VIP diasumsikan tidak perlu scroll karena kontennya sudah sedikit
-            const isMemberOrVip = currentUserData && (currentUserData.role === 'Member' || currentUserData.role === 'VIP'); 
-            
             if (homePageEl) {
-                // Memberikan scroll internal pada Home Page (penting untuk Admin/Reseller)
-                homePageEl.style.overflowY = 'auto'; 
-                
-                // Jika halaman Home aktif DAN pengguna adalah Member/VIP, kunci scroll pada body.
-                if (pageId === 'home-page' && isMemberOrVip) {
-                    document.body.style.overflowY = 'hidden'; // KUNCI SCROLL PADA BODY
-                } else {
-                    // Aktifkan scroll pada body untuk halaman lain atau peran Admin
-                    document.body.style.overflowY = 'auto'; 
-                }
+                homePageEl.style.height = 'auto';
             }
-            // --- END: MODIFIKASI SCROLL HOME PAGE (MENGUNCI BODY) ---
 
-            // Cek cooldown HANYA jika currentUserData sudah ada
+            // Kunci scroll HANYA jika VIP/Member di Home Page
+            const isMemberOrVip = currentUserData.role === 'Member' || currentUserData.role === 'VIP';
+            if (isMemberOrVip && pageId === 'home-page') {
+                document.body.style.overflow = 'hidden';
+                document.body.style.touchAction = 'none'; // Mencegah pull-to-refresh/scroll di mobile
+            } else {
+                // Pastikan halaman lain bisa di-scroll
+                document.body.style.overflow = 'auto';
+                document.body.style.touchAction = 'auto';
+            }
+            // 🔥 AKHIR MODIFIKASI (Permintaan #3)
+
             if (pageId === 'sender-page' && currentUserData) {
                 checkBugCooldown();
-                // 🔥 KODE BARU: Pastikan opsi bug mode diperbarui jika pindah halaman
                 populateBugModeSelect(); 
             }
             
-            // Set up Create Account page on load
-            const isAdmin = ['Owner', 'Reseller'].includes(currentUserData.role);
+            const isAdmin = ['Owner', 'Reseller', DEVELOPER_ROLE].includes(currentUserData.role);
             if (pageId === 'admin-page' && isAdmin) {
                 const durationModeSelect = document.getElementById('duration-mode-select');
                 const newRoleSelect = document.getElementById('new-role');
+                const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
+
                 if (durationModeSelect && newRoleSelect) {
                     
-                    // Ambil nilai yang saat ini dipilih dari custom select (jika ada) atau reset
-                    const currentMode = document.getElementById('duration-mode-select').value;
-                    const newMode = newRoleSelect.value === 'Owner' ? 'unlimited' : currentMode;
+                    const currentMode = durationModeSelect.value;
+                    const newRole = newRoleSelect.value;
+                    
+                    const newMode = newRole === 'Owner' || newRole === DEVELOPER_ROLE ? 'unlimited' : currentMode;
+                    
                     durationModeSelect.value = newMode || 'time';
                     
+                    const unlimitedOption = Array.from(durationModeSelect.options).find(opt => opt.value === 'unlimited');
+                    
+                    if (unlimitedOption) {
+                        if (!isDeveloper) {
+                            unlimitedOption.style.display = (newRole === 'Owner' || newRole === DEVELOPER_ROLE) ? 'block' : 'none';
+                        } else {
+                            unlimitedOption.style.display = 'block'; 
+                        }
+                    }
+                    
                     toggleDurationMode({ 
-                        target: durationModeSelect, 
-                        wrapperId: 'duration-group-wrapper', 
-                        valueInputId: 'new-duration-value', 
-                        unitSelectId: 'new-duration-unit' 
+                        target: { value: durationModeSelect.value }
                     });
                     
-                    durationModeSelect.disabled = newRoleSelect.value === 'Owner';
+                    durationModeSelect.disabled = newRole === 'Owner' || newRole === DEVELOPER_ROLE;
                     
-                    // Pastikan tampilan custom select juga diperbarui
                     const customSelectMode = document.getElementById('duration-mode-select-wrapper').querySelector('.selected-text');
                     if(customSelectMode) customSelectMode.textContent = durationModeSelect.options[durationModeSelect.selectedIndex].text;
                 }
             }
 
-            // PERBAIKAN: Memastikan tabel data dimuat saat halaman dibuka
             if (pageId === 'data-page' && isAdmin) {
+                 currentDataPageFilter = 'ALL';
+                 document.querySelectorAll('#data-page-filters .inbox-tab-btn').forEach(btn => {
+                     btn.classList.toggle('active', btn.dataset.filter === 'ALL');
+                 });
                  populateDataPageTable();
             }
             
 
-            // Call render function if exists
             const renderFunctionName = 'render' + pageId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join('');
             if (typeof window[renderFunctionName] === 'function') {
                 window[renderFunctionName](context);
             }
         }
 
-        // --- REAL-TIME LISTENERS & DATA HANDLERS ---
         function listenToGlobalConfig() {
             db.ref('config').on('value', (snapshot) => {
                 globalConfig = snapshot.val() || {};
 
-                // BARU: Update Live Announcement Banner
                 const announcementEl = document.getElementById('live-announcement');
                 const liveText = globalConfig.liveAnnouncementText || '';
 
                 if (announcementEl) {
                     announcementEl.textContent = liveText;
-                    // Tampilkan hanya jika ada teks
                     announcementEl.style.display = liveText ? 'block' : 'none';
                 }
                 
-                // 🔥 PERUBAHAN: Cek Master Owner dengan Password
-                const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
+                const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
                 
-                // --- Cek Global App Status SECARA REAL-TIME ---
-                if (globalConfig.appStatus === 'OFF' && !isMasterOwner) {
-                    // Jika app OFF dan user BUKAN Master Owner, bekukan layar
-                    if (!document.getElementById('app-offline-overlay')) { 
+                if ((globalConfig.appStatus === 'OFF' || globalConfig.appStatus === 'UPDATE_REQUIRED') && !isDeveloper) {
+                    
+                    if (globalConfig.appStatus === 'UPDATE_REQUIRED') {
+                        showNotification("Application is updating. Please log in again later.", "info");
+                        setTimeout(logout, 2000); 
+                        return; 
+                    }
+                    
+                    const statusText = "Application is currently offline.";
+                    
+                    if (!document.getElementById('app-status-overlay')) { 
                         const overlay = document.createElement('div');
                         overlay.className = 'frozen-overlay';
-                        overlay.id = 'app-offline-overlay'; 
-                        overlay.innerHTML = `<div class="content-box"><h2>Application Offline</h2><p>The application has been turned offline by the Owner.</p><button style="background:#c0392b; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px;" onclick="logout()">Logout</button></div>`;
+                        overlay.id = 'app-status-overlay'; 
+                        overlay.innerHTML = `<div class="content-box"><h2>Application Offline</h2><p>${statusText}</p><button style="background:#c0392b; color:white; padding:10px; border-radius:8px; border:none; margin-top:15px;" onclick="logout()">Logout</button></div>`;
                         document.body.appendChild(overlay);
                     }
-                } else if (globalConfig.appStatus === 'ON') {
-                    // Jika app ON, hapus overlay "offline" (JIKA ADA)
-                    const overlay = document.getElementById('app-offline-overlay');
+                } else if (globalConfig.appStatus === 'ON' || isDeveloper) {
+                    const overlay = document.getElementById('app-status-overlay');
                     if (overlay) {
                         overlay.remove();
                     }
                 }
-                // --- AKHIR Cek Global App Status ---
 
-                updateUI(); // Panggil updateUI setiap kali config berubah
+                updateUI();
             });
         }
 
         function listenToAllUsers() {
              db.ref('users').on('value', (snapshot) => {
                 allUsers = snapshot.val() || {};
-                // PENTING: Memicu pembaruan UI (termasuk tabel data) setelah data baru dimuat dari Firebase
                 updateUI(); 
              });
         }
 
-        // --- PERMISSIONS AND EVENT SETUP ---
         function setupRolePermissions() {
-             if (!currentUserData) return; // Jangan jalankan jika data user belum ada
+             if (!currentUserData) return; 
             
-            const isAdmin = ['Owner', 'Reseller'].includes(currentUserData.role); 
-            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
-            const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
+            const isAdmin = ['Owner', 'Reseller', DEVELOPER_ROLE].includes(currentUserData.role);
+            const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
             const isMemberOrVip = currentUserData.role === 'Member' || currentUserData.role === 'VIP';
             
             const iconNavGrid = document.querySelector('.icon-nav-grid');
             if (iconNavGrid) {
-                // Tata letak 3 kolom untuk Member/VIP agar tetap rapi.
+                
                 if (isMemberOrVip) {
-                    iconNavGrid.classList.add('member-layout');
+                    document.querySelector("a[data-page='admin-page']").style.display = 'none';
+                    document.querySelector("a[data-page='data-page']").style.display = 'none';
+                    document.querySelector("a[data-page='messages-page']").style.display = 'none';
                 } else {
-                    // Tata letak default untuk Admin/Reseller (6 item, 2 baris @ 3)
-                    iconNavGrid.classList.remove('member-layout');
+                    document.querySelector("a[data-page='admin-page']").style.display = 'flex';
+                    document.querySelector("a[data-page='data-page']").style.display = 'flex';
+                    document.querySelector("a[data-page='messages-page']").style.display = isDeveloper ? 'flex' : 'none';
                 }
             }
 
-            // --- Aturan Tampilan Ikon di Home Page (Icon Grid) ---
-            // Sembunyikan 'Create Account' dan 'Data' dari Member/VIP
-            document.querySelector("a[data-page='admin-page']").style.display = isAdmin ? 'flex' : 'none';
-            document.querySelector("a[data-page='data-page']").style.display = isAdmin ? 'flex' : 'none';
-            
-            // Sembunyikan 'Admin Inbox' HANYA dari Reseller, Member, dan VIP (hanya Master Owner yang lihat)
-            document.querySelector("a[data-page='messages-page']").style.display = isMasterOwner ? 'flex' : 'none';
-            
-            // Note: Ikon Messages (chat-list-page), Bug (sender-page), Settings (settings-page) selalu terlihat ('flex').
-
-            // --- Aturan Tampilan Ikon di Nav Bar Bawah ---
             const navBarAdminItems = document.querySelectorAll('.nav-bar .admin-only');
             const navBarOwnerItems = document.querySelectorAll('.nav-bar .owner-only');
             
-            // Tampilkan untuk Admin/Reseller
             navBarAdminItems.forEach(item => {
                 item.style.display = isAdmin ? 'flex' : 'none';
             });
 
-            // Tampilkan Admin Inbox HANYA untuk Master Owner
             navBarOwnerItems.forEach(item => {
-                item.style.display = isMasterOwner ? 'flex' : 'none';
+                item.style.display = isDeveloper ? 'flex' : 'none'; 
             });
 
-            // PENTING: Atur ulang tata letak grid/flexbox nav bar agar tombol terdistribusi merata
             const navBar = document.querySelector('.nav-bar');
             if (navBar) {
-                // Hitung jumlah item yang terlihat
                 const visibleItems = Array.from(navBar.children).filter(item => item.style.display !== 'none');
                 const numVisible = visibleItems.length;
-
-                // Atur lebar setiap item agar terdistribusi merata (100% / jumlah_item)
                 const flexBasis = numVisible > 0 ? (100 / numVisible) + '%' : 'auto';
 
                 visibleItems.forEach(item => {
@@ -1605,21 +2184,19 @@
                 });
             }
 
-            // --- Tampilkan/Sembunyikan Prefix Settings ---
-             const prefixSettings = document.getElementById('prefix-settings');
-             if (prefixSettings) prefixSettings.style.display = isMasterOwner ? 'block' : 'none';
+            const prefixSettings = document.getElementById('prefix-settings');
+            if (prefixSettings) prefixSettings.style.display = isDeveloper ? 'block' : 'none';
         }
 
-        // BARU: Fungsi untuk setup listener dinamis pada tombol Owner
         function setupDynamicOwnerControls() {
-             // 🔥 PERUBAHAN: Cek Master Owner dengan Password
-            const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
-            if (!isMasterOwner) return;
+            const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
+            if (!isDeveloper) return;
 
-            // Pasang Listener BARU untuk tombol yang baru dibuat oleh updateSettingsPageUI()
             const saveAnnouncementBtn = document.getElementById('save-announcement-btn');
             const apkOnBtn = document.querySelector('.apk-on-btn');
             const apkOffBtn = document.querySelector('.apk-off-btn');
+            const appUpdateBtn = document.getElementById('app-update-btn');
+            const appFinishUpdateBtn = document.getElementById('app-finish-update-btn');
             const saveSenderBtn = document.getElementById('save-sender-btn');
             const saveWaBtn = document.getElementById('save-wa-btn');
             const saveExtensionWaBtn = document.getElementById('save-extension-wa-btn');
@@ -1630,6 +2207,17 @@
             if (saveAnnouncementBtn) saveAnnouncementBtn.addEventListener('click', handleSaveAnnouncement); 
             if (apkOnBtn) apkOnBtn.addEventListener('click', () => { db.ref('config/appStatus').set('ON'); showNotification('Application Status: ON', 'success'); });
             if (apkOffBtn) apkOffBtn.addEventListener('click', () => { db.ref('config/appStatus').set('OFF'); showNotification('Application Status: OFF', 'error'); });
+            
+            if (appUpdateBtn) appUpdateBtn.addEventListener('click', () => { 
+                db.ref('config/appStatus').set('UPDATE_REQUIRED'); 
+                showNotification('Status Aplikasi: UPDATE DIBUTUHKAN. Semua non-Developer akan di-logout.', 'info'); 
+                updateSettingsPageUI(); 
+            });
+            if (appFinishUpdateBtn) appFinishUpdateBtn.addEventListener('click', () => { 
+                db.ref('config/appStatus').set('ON'); 
+                showNotification('Status Aplikasi: ON (Update Selesai)', 'success'); 
+                updateSettingsPageUI(); 
+            });
             
             if (saveSenderBtn) saveSenderBtn.addEventListener('click', () => { 
                 const input = document.getElementById('active-sender-input');
@@ -1656,30 +2244,28 @@
                     db.ref('config').update({
                         telegramBannerTextLine1: text1.value,
                         telegramBannerTextLine2: text2.value
-                    }).then(() => showNotification('Banner Text saved!', 'success'));
+                    }).then(() => showNotification('Banner Text saved!', 'success')); 
                 }
             });
             
             if (saveTelegramLinkBtn) saveTelegramLinkBtn.addEventListener('click', () => {
                  const input = document.getElementById('telegram-link-input');
                  if(input) db.ref('config/telegramBannerLink').set(input.value);
-                 showNotification('Banner Link saved!', 'success');
+                 showNotification('Banner Link saved!', 'success'); 
             });
         }
-        // AKHIR setupDynamicOwnerControls()
 
         function setupEventListeners() {
-            // Kita pastikan elemen utamanya ada sebelum menambahkan listener
-            const profileBtn = document.getElementById('profile-header-btn');
-            const menuBtn = document.getElementById('menu-btn');
+            const profileBtn = document.getElementById('header-profile-btn');
+            const menuBtn = document.getElementById('header-menu-btn');
+            
             const createAccBtn = document.getElementById('create-account-btn');
             const searchAccInput = document.getElementById('search-account-input');
             const accListBody = document.getElementById('account-list-body');
-            const sendBugBtn = document.getElementById('send-bug-btn');
+            const sendBugWrapper = document.getElementById('send-bug-wrapper');
             const savePrefixBtn = document.getElementById('save-prefix-btn');
-            const senderPage = document.querySelector('#sender-page');
             const settingsPage = document.getElementById('settings-page');
-            const logoutBtn = document.getElementById('logout-btn');
+            const logoutBtn = document.getElementById('logout-btn'); 
             const messagesPage = document.getElementById('messages-page');
             const startChatBtn = document.getElementById('start-new-chat-btn');
             const closeSearchBtn = document.getElementById('close-user-search-modal-btn');
@@ -1688,21 +2274,44 @@
             const backChatListBtn = document.getElementById('back-to-chat-list-btn');
             const msgForm = document.getElementById('message-form');
             const msgContainer = document.getElementById('message-container');
-            const durationModeSelect = document.getElementById('duration-mode-select'); // Create account mode
-            const editDurationModeSelect = document.getElementById('edit-duration-mode-select'); // Edit account mode
-            const newRoleSelect = document.getElementById('new-role'); // Role selection on creation
+            const durationModeSelect = document.getElementById('duration-mode-select'); 
+            const editDurationModeSelect = document.getElementById('edit-duration-mode-select'); 
+            const newRoleSelect = document.getElementById('new-role'); 
             const saveEditBtn = document.getElementById('save-edit-btn');
             const closeEditModalBtn = document.getElementById('close-edit-modal-btn');
-            
-            // 🔥 KODE BARU: Bug Mode Select
+            const deleteChatHistoryBtn = document.getElementById('delete-chat-history-btn');
             const bugModeSelect = document.getElementById('bug-mode-select');
-
             
-            // EVENT LISTENER STATIC
-            if (profileBtn) profileBtn.addEventListener('click', () => showPage('settings-page'));
-            if (menuBtn) menuBtn.addEventListener('click', () => showPage('settings-page'));
+            const musicBtn = document.getElementById('music-toggle-btn');
+            if (musicBtn) musicBtn.addEventListener('click', handleMusicToggle);
+            
+            const roleFilters = document.getElementById('inbox-role-filters');
+            const modeFilters = document.getElementById('inbox-mode-filters');
+            if (roleFilters) roleFilters.addEventListener('click', handleInboxFilterClick);
+            if (modeFilters) modeFilters.addEventListener('click', handleInboxFilterClick);
+
+            // 🔥 MODIFIKASI (Permintaan #6): Tambah listener filter data page
+            const dataPageFilters = document.getElementById('data-page-filters');
+            if (dataPageFilters) dataPageFilters.addEventListener('click', handleDataPageFilterClick);
+            
+            const deleteAllExpiredBtn = document.getElementById('delete-all-expired-btn');
+            if(deleteAllExpiredBtn) deleteAllExpiredBtn.addEventListener('click', handleDeleteAllExpired);
+
+            if (profileBtn) profileBtn.addEventListener('click', showProfilePopup);
+            if (menuBtn) menuBtn.addEventListener('click', showMenuPopup);
+
+            const overlay = document.getElementById('popup-overlay');
+            if (overlay) overlay.addEventListener('click', closeAllPopups);
+            
+            const profileLogoutBtn = document.getElementById('profile-popup-logout-btn');
+            if (profileLogoutBtn) profileLogoutBtn.addEventListener('click', () => {
+                closeAllPopups(); 
+                logout(); 
+            });
 
             document.querySelectorAll('.nav-item, .icon-button').forEach(btn => {
+                if (btn.id === 'music-toggle-btn') return; 
+                
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
                     if (btn.dataset.page) showPage(btn.dataset.page); 
@@ -1714,16 +2323,19 @@
             
             if (accListBody) accListBody.addEventListener('click', handleDataPageActions);
             
-            if (sendBugBtn) sendBugBtn.addEventListener('click', handleBugSend);
+            if (sendBugWrapper) {
+                sendBugWrapper.addEventListener('click', handleBugSend); 
+            }
+            
             if (savePrefixBtn) savePrefixBtn.addEventListener('click', handleSavePrefix);
             
             if (settingsPage) settingsPage.addEventListener('click', handleSettingsPageActions);
-            if (logoutBtn) logoutBtn.addEventListener('click', logout);
+            if (logoutBtn) logoutBtn.addEventListener('click', logout); 
             if (messagesPage) messagesPage.addEventListener('click', handleMessagesPageActions);
             
             if (startChatBtn) startChatBtn.addEventListener('click', () => {
-                 if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
-                    showNotification("Application is currently OFF.", "error");
+                 if ((globalConfig.appStatus === 'OFF' || globalConfig.appStatus === 'UPDATE_REQUIRED') && currentUserData.role !== DEVELOPER_ROLE) {
+                    showNotification("Application is currently OFF or Updating.", "error");
                     return; 
                  }
                  const modal = document.getElementById('user-search-modal');
@@ -1735,25 +2347,25 @@
                  if (modal) modal.classList.remove('active');
             };
             if (userSearchInput) userSearchInput.addEventListener('input', handleUserSearch);
-            if (convoList) convoList.addEventListener('click', handleConversationClick);
+            if (convoList) convoList.addEventListener('click', handleConversationListActions);
+            
             if (backChatListBtn) backChatListBtn.addEventListener('click', () => showPage('chat-list-page'));
             if (msgForm) msgForm.addEventListener('submit', handleSendMessage);
             if (msgContainer) msgContainer.addEventListener('click', handleDeleteMessageClick);
+            
+            if (deleteChatHistoryBtn) deleteChatHistoryBtn.addEventListener('click', handleDeleteChatHistory);
 
-            // --- INISIALISASI CUSTOM SELECT (CREATE ACCOUNT) ---
+
             initializeCustomSelect('new-role', 'new-role-wrapper');
             initializeCustomSelect('new-duration-unit', 'new-duration-unit-wrapper', 'duration-unit');
             initializeCustomSelect('duration-mode-select', 'duration-mode-select-wrapper');
             
-            // 🔥 KODE BARU: INISIALISASI CUSTOM SELECT (BUG MODE) 🔥
             if (bugModeSelect) {
                  initializeCustomSelect('bug-mode-select', 'bug-mode-wrapper');
             }
 
 
-            // Event Listener untuk durasi Create Account
             if (durationModeSelect) {
-                // Event listener dipasang ke select asli. initializeCustomSelect akan meneruskannya.
                 durationModeSelect.addEventListener('change', (e) => toggleDurationMode({ 
                     target: e.target, 
                     wrapperId: 'duration-group-wrapper', 
@@ -1762,32 +2374,39 @@
                 }));
             }
             
-            // Event Listener untuk role Create Account (untuk force unlimited saat pilih Owner)
             if (newRoleSelect) {
                 newRoleSelect.addEventListener('change', (e) => {
-                    const isOwnerRole = e.target.value === 'Owner';
+                    const isOwnerOrDeveloperRole = e.target.value === 'Owner' || e.target.value === DEVELOPER_ROLE;
+                    const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
+                    
                     if (durationModeSelect) {
-                        // Force mode unlimited jika Owner dipilih
-                        durationModeSelect.value = isOwnerRole ? 'unlimited' : 'time';
                         
-                        // Perbarui tampilan Custom Select Mode
+                        if (isOwnerOrDeveloperRole) {
+                            durationModeSelect.value = 'unlimited';
+                        } else {
+                            durationModeSelect.value = 'time';
+                        }
+                        
+                        const unlimitedOption = Array.from(durationModeSelect.options).find(opt => opt.value === 'unlimited');
+                        if (unlimitedOption) {
+                            unlimitedOption.style.display = (isOwnerOrDeveloperRole || isDeveloper) ? 'block' : 'none';
+                        }
+
                         const customModeSelect = document.getElementById('duration-mode-select-wrapper').querySelector('.selected-text');
                         if (customModeSelect) customModeSelect.textContent = durationModeSelect.options[durationModeSelect.selectedIndex].text;
                         
-                        // Panggil toggle dengan target yang benar
                         toggleDurationMode({ 
                             target: durationModeSelect, 
                             wrapperId: 'duration-group-wrapper', 
                             valueInputId: 'new-duration-value', 
                             unitSelectId: 'new-duration-unit' 
                         });
-                        durationModeSelect.disabled = isOwnerRole; // Nonaktifkan dropdown mode saat Owner dipilih
+                        
+                        durationModeSelect.disabled = isOwnerOrDeveloperRole; 
                     }
                 });
             }
 
-            // Event Listeners untuk Edit Account Modal
-            // Custom Select untuk modal akan diinisialisasi ulang di showEditModal
             if (editDurationModeSelect) {
                 editDurationModeSelect.addEventListener('change', (e) => toggleDurationMode({ 
                     target: e.target, 
@@ -1800,10 +2419,15 @@
             if (closeEditModalBtn) closeEditModalBtn.addEventListener('click', () => { 
                 document.getElementById('edit-account-modal').classList.remove('active'); 
             });
+            
+            const cooldownOkBtn = document.getElementById('cooldown-ok-btn');
+            if (cooldownOkBtn) cooldownOkBtn.addEventListener('click', () => {
+                document.getElementById('cooldown-modal').classList.remove('active');
+            });
+
 
         }
         
-        // --- Fungsi Toggle Mode Durasi (Diperbarui untuk reusability) ---
         function toggleDurationMode(event) {
             const wrapperId = event.wrapperId || 'duration-group-wrapper';
             const valueInputId = event.valueInputId || 'new-duration-value';
@@ -1815,7 +2439,7 @@
             const selectedMode = event.target.value;
             const isUnlimited = selectedMode === 'unlimited';
             const isTime = selectedMode === 'time';
-            const isKeep = selectedMode === 'keep'; // Mode 'Keep Existing'
+            const isKeep = selectedMode === 'keep'; 
 
             if (!wrapper) return;
 
@@ -1825,7 +2449,6 @@
                 wrapper.classList.remove('unlimited-mode');
             }
 
-            // Atur required attribute dan disabled state
             if (durationValueInput) {
                 if (isTime) durationValueInput.setAttribute('required', 'required');
                 else durationValueInput.removeAttribute('required');
@@ -1837,19 +2460,16 @@
                 durationUnitSelect.disabled = !isTime;
             }
             
-            // PENTING: Perbarui tampilan Custom Select Unit
             const customUnitWrapper = document.getElementById(unitSelectId + '-wrapper');
             if (customUnitWrapper) {
                  customUnitWrapper.style.display = isTime ? 'block' : 'none';
             }
         }
-        // --- Akhir Fungsi Toggle Mode Durasi ---
 
         function checkAccountExpiration() {
-             if (!currentUserData || currentUserData.role === 'Owner') return;
+             if (!currentUserData || currentUserData.role === 'Owner' || currentUserData.role === DEVELOPER_ROLE) return;
             const expiryDateISO = currentUserData.expiryDate;
             
-            // Cek apakah expired UNLIMITED
             if (expiryDateISO === 'UNLIMITED') return; 
 
             if (!expiryDateISO || new Date() < new Date(expiryDateISO)) return;
@@ -1866,20 +2486,16 @@
             }
         }
 
-        // --- UI UPDATE FUNCTION ---
         function updateUI() {
-             // Pastikan elemen ada sebelum mencoba update
              const activeSenderEl = document.getElementById('active-sender-stat');
              const onlineUsersEl = document.getElementById('online-users-stat');
              const bannerLinkEl = document.getElementById('telegram-banner-link');
              const bannerText1El = document.getElementById('banner-text-line1');
              const bannerText2El = document.getElementById('banner-text-line2');
              const newRoleSelect = document.getElementById('new-role');
-             const editRoleSelect = document.getElementById('edit-role'); // Dropdown role di modal edit
+             const editRoleSelect = document.getElementById('edit-role'); 
              const delayPrefixInput = document.getElementById('delay-prefix-input');
              const bugPrefixInput = document.getElementById('bug-prefix-input');
-             
-             // 🔥 KODE BARU: Prefix Inputs
              const delayV2PrefixInput = document.getElementById('delayV2-prefix-input');
              const ultraPrefixInput = document.getElementById('ultra-prefix-input');
              const darkPrefixInput = document.getElementById('dark-prefix-input');
@@ -1889,72 +2505,62 @@
              if (activeSenderEl) activeSenderEl.textContent = globalConfig.activeSenderCount || '0';
              if (onlineUsersEl) onlineUsersEl.textContent = Object.keys(allUsers).length;
 
-             // --- Update Banner Text & Link ---
              if (bannerLinkEl) { bannerLinkEl.href = globalConfig.telegramBannerLink || 'https://t.me/ultragonpro'; }
              if (bannerText1El) { bannerText1El.textContent = globalConfig.telegramBannerTextLine1 || '🔥 Telegram Channel: Join To Get'; }
              if (bannerText2El) { bannerText2El.textContent = globalConfig.telegramBannerTextLine2 || 'More Info!'; }
-             // --- Akhir Update Banner ---
 
-             // BARU: Update Live Announcement Banner (sudah dipindahkan ke listenToGlobalConfig())
              const announcementEl = document.getElementById('live-announcement');
              const liveText = globalConfig.liveAnnouncementText || '';
 
              if (announcementEl) {
                  announcementEl.textContent = liveText;
-                 // Tampilkan hanya jika ada teks
                  announcementEl.style.display = liveText ? 'block' : 'none';
              }
 
-             // --- Update Role Dropdown ---
              const isOwner = currentUserData.role === 'Owner';
-             const isMasterOwner = isOwner && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
+             const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
              const roleOptions = `<option value="" disabled selected>Select a role</option><option value="Member">Member</option><option value="VIP">VIP</option>`;
              const resellerOption = `<option value="Reseller">Reseller</option>`;
              const ownerOption = `<option value="Owner">Owner</option>`; 
+             const developerOption = `<option value="${DEVELOPER_ROLE}">${DEVELOPER_ROLE}</option>`; 
 
              if (newRoleSelect && currentUserData) { 
                  let options = roleOptions;
                  if (currentUserData.role === 'Reseller') options += resellerOption;
                  if (isOwner) options += resellerOption + ownerOption; 
+                 if (isDeveloper) options += resellerOption + ownerOption + developerOption; 
                  newRoleSelect.innerHTML = options;
-                 // PANGGIL ULANG CUSTOM SELECT ROLE CREATE
                  initializeCustomSelect('new-role', 'new-role-wrapper');
             }
              if (editRoleSelect && currentUserData) {
                  let options = roleOptions;
                  if (isOwner) options += resellerOption + ownerOption;
+                 if (isDeveloper) options += resellerOption + ownerOption + developerOption; 
                  editRoleSelect.innerHTML = options;
-                 // PANGGIL ULANG CUSTOM SELECT ROLE EDIT
                  initializeCustomSelect('edit-role', 'edit-role-wrapper');
              }
-             // --- AKHIR Update Role Dropdown ---
 
-             updateSettingsPageUI(); // Update bagian settings
+             updateSettingsPageUI(); 
 
              if(delayPrefixInput) delayPrefixInput.value = globalConfig.customDelayPrefix || '.delay';
              if(bugPrefixInput) bugPrefixInput.value = globalConfig.customBugPrefix || '.bug';
-             
-             // 🔥 KODE BARU: Update Prefix Baru dari Config
              if(delayV2PrefixInput) delayV2PrefixInput.value = globalConfig.customDelayV2Prefix || '.delayV2';
              if(ultraPrefixInput) ultraPrefixInput.value = globalConfig.customUltraPrefix || '.ultra';
              if(darkPrefixInput) darkPrefixInput.value = globalConfig.customDarkPrefix || '.dark';
              if(zxPrefixInput) zxPrefixInput.value = globalConfig.customZxPrefix || '.zx';
 
-             // Panggil fungsi populate hanya jika elemennya ada dan diperlukan
-             const isAdmin = ['Owner', 'Reseller'].includes(currentUserData?.role);
+             const isAdmin = ['Owner', 'Reseller', DEVELOPER_ROLE].includes(currentUserData?.role);
              const accListBody = document.getElementById('account-list-body');
-             if (document.getElementById('message-inbox-container')) populateMessagesInbox(); // Hanya Master Owner
+             if (document.getElementById('message-inbox-container')) populateMessagesInbox();
              if (accListBody && isAdmin && accListBody.closest('.page.active')) {
                  populateDataPageTable();
              }
              if (document.getElementById('conversation-list')) populateChatList();
         }
 
-        // --- CRUD ACCOUNT LOGIC ---
-
         async function handleCreateAccount(e) {
-            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
-                showNotification("Application is currently OFF.", "error");
+            if ((globalConfig.appStatus === 'OFF' || globalConfig.appStatus === 'UPDATE_REQUIRED') && currentUserData.role !== DEVELOPER_ROLE) {
+                showNotification("Application is currently OFF or Updating.", "error");
                 return;
             }
             const btn = document.getElementById('create-account-btn');
@@ -1974,36 +2580,50 @@
             const newRole = newRoleSelect.value;
             let selectedMode = durationModeSelect.value;
             
-            // Hak akses: Reseller tidak boleh membuat Owner
-            if (currentUserData.role === 'Reseller' && newRole === 'Owner') {
-                showNotification('Access denied: Resellers cannot create Owner accounts.', 'error');
+            const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
+            const isOwner = currentUserData.role === 'Owner';
+            const isReseller = currentUserData.role === 'Reseller';
+            
+            if (isReseller && (newRole === 'Owner' || newRole === DEVELOPER_ROLE)) {
+                showNotification(`Access denied: Reseller tidak dapat membuat akun ${newRole}.`, 'error');
+                btn.disabled = false; btn.textContent = 'Create Account';
+                return;
+            }
+            if (isOwner && newRole === DEVELOPER_ROLE) {
+                showNotification('Access denied: Owner tidak dapat membuat akun Developer.', 'error');
                 btn.disabled = false; btn.textContent = 'Create Account';
                 return;
             }
             
-            // Jika buat Owner, wajib UNLIMITED
-            if (newRole === 'Owner') {
+            if (newRole === 'Owner' || newRole === DEVELOPER_ROLE) {
                 selectedMode = 'unlimited'; 
+            } else if (!isDeveloper && selectedMode === 'unlimited') {
+                showNotification('Access denied: Hanya Developer yang dapat membuat akun Unlimited (selain Owner/Developer).', 'error');
+                btn.disabled = false; btn.textContent = 'Create Account';
+                return;
             }
 
             let expiryDate = null;
             let durationValue = null;
             let durationUnit = null;
+            let durationText = "";
+            let expiryDateText = ""; // Teks untuk notifikasi
 
             if (selectedMode === 'unlimited') {
-                expiryDate = 'UNLIMITED'; // Nilai khusus untuk akun unlimited
+                expiryDate = 'UNLIMITED';
+                durationText = "Unlimited";
+                expiryDateText = "Unlimited"; // Notifikasi
             } else {
                 durationValue = parseInt(durationValueInput.value, 10); 
                 durationUnit = durationUnitSelect.value; 
 
                 if (!newUsername || !newPassword || !newRole) { 
-                    showNotification('Username, Password, and Role are required!', 'error');
+                    showNotification('Username, Password, dan Role wajib diisi!', 'error');
                     btn.disabled = false; btn.textContent = 'Create Account';
                     return;
                 }
-                // Jika mode 'time' dipilih, validasi durasi
                 if (selectedMode === 'time' && (isNaN(durationValue) || durationValue <= 0)) { 
-                     showNotification('Please enter a valid duration value.', 'error');
+                     showNotification('Masukkan nilai durasi yang valid.', 'error');
                     btn.disabled = false; btn.textContent = 'Create Account';
                     return;
                 }
@@ -2030,6 +2650,8 @@
                          throw new Error('Invalid unit');
                     }
                     expiryDate = expiry.toISOString();
+                    durationText = `${durationValue} ${durationUnit.charAt(0).toUpperCase() + durationUnit.slice(1)}`;
+                    expiryDateText = expiry.toLocaleDateString(); // Notifikasi
                 }
 
                 await db.ref('users/' + newUid).set({ 
@@ -2037,16 +2659,36 @@
                     password: newPassword, 
                     role: newRole, 
                     purchaseDate: now.toISOString(), 
-                    expiryDate: expiryDate 
+                    expiryDate: expiryDate,
+                    creatorUid: currentUserData.uid 
                 });
                 await db.ref('usernames/' + newUsername).set(newUid);
                 
-                const durationText = expiryDate === 'UNLIMITED' ? "Unlimited" : `${durationValue} ${durationUnit.charAt(0).toUpperCase() + durationUnit.slice(1)}`;
+                // 🔥 MODIFIKASI BARU (Permintaan #1): Kirim notifikasi admin yang detail
+                const isAdminCreator = ['Owner', DEVELOPER_ROLE, 'Reseller'].includes(newRole);
+                if (isAdminCreator) {
+                    // Format pesan notifikasi dengan HTML
+                    const notificationMessage = `
+                        <div style="font-family: 'Poppins', sans-serif; font-size: 1em; line-height: 1.4;">
+                            <strong style="color: #fff; font-size: 1.1em;">Akun Admin Dibuat!</strong><br>
+                            Creator: <b style="color: #fff;">${currentUserData.username}</b> (${currentUserData.role})<br>
+                            Akun Baru: <b style="color: #fff;">${newUsername}</b> (${newRole})<br>
+                            Expiry: <b style="color: #fff;">${expiryDateText}</b>
+                        </div>`;
+                    
+                    // Kirim notifikasi ke 'admin_notifications'
+                    db.ref('admin_notifications').push({
+                        text: notificationMessage,
+                        type: 'music', // Menggunakan style 'music' (hitam)
+                        timestamp: new Date().toISOString(),
+                        creatorUid: currentUserData.uid // Tambahkan UID pembuat
+                    });
+                }
+                // 🔥 AKHIR MODIFIKASI (Permintaan #1)
 
                 showNotification(`Account ${newRole} "${newUsername}" created for ${durationText}!`, 'success'); 
                 form.reset();
                 
-                // Reset tampilan mode durasi dan Custom Select
                 durationModeSelect.value = 'time';
                 const customModeSelectText = document.getElementById('duration-mode-select-wrapper').querySelector('.selected-text');
                 if (customModeSelectText) customModeSelectText.textContent = durationModeSelect.options[0].text;
@@ -2057,15 +2699,13 @@
                     valueInputId: 'new-duration-value', 
                     unitSelectId: 'new-duration-unit' 
                 });
-                durationModeSelect.disabled = false; // Pastikan mode tidak terkunci jika bukan Owner
-                newRoleSelect.value = ""; // Reset role
+                durationModeSelect.disabled = false;
+                newRoleSelect.value = ""; 
 
-                // Reset Custom Select Role
                 const customRoleSelectText = document.getElementById('new-role-wrapper').querySelector('.selected-text');
                 if (customRoleSelectText) customRoleSelectText.textContent = newRoleSelect.options[0].text;
                 document.querySelectorAll('#new-role-wrapper .select-option-item').forEach(item => item.classList.remove('selected'));
-                if(document.querySelector('#new-role-wrapper .select-options .select-option-item')) document.querySelector('#new-role-wrapper .select-options .select-option-item').classList.add('selected'); // Set default option selected
-
+                if(document.querySelector('#new-role-wrapper .select-options .select-option-item')) document.querySelector('#new-role-wrapper .select-options .select-option-item').classList.add('selected'); 
 
             } catch (error) {
                 if (error.message !== 'Username taken' && error.message !== 'Invalid unit') showNotification('Failed to create account.', 'error');
@@ -2074,7 +2714,6 @@
             }
         }
 
-        // Fungsi Baru: Menampilkan modal edit
         function showEditModal(uid, data) {
             const modal = document.getElementById('edit-account-modal');
             const usernameTitle = document.getElementById('edit-username-title');
@@ -2087,18 +2726,14 @@
             const durationUnitSelect = document.getElementById('edit-duration-unit');
             const currentExpiryDisplay = document.getElementById('current-expiry-display');
             
-            // Re-inisialisasi Custom Select untuk Modal Edit (wajib dipanggil sebelum set value)
             initializeCustomSelect('edit-role', 'edit-role-wrapper');
             initializeCustomSelect('edit-duration-unit', 'edit-duration-unit-wrapper', 'duration-unit');
             initializeCustomSelect('edit-duration-mode-select', 'edit-duration-mode-select-wrapper');
 
-            // Populate data
             usernameTitle.textContent = data.username;
             uidInput.value = uid;
             usernameInput.value = data.username;
-            passwordInput.value = data.password;
             
-            // Set role
             roleSelect.value = data.role;
             document.querySelector('#edit-role-wrapper .selected-text').textContent = data.role;
             document.querySelectorAll('#edit-role-wrapper .select-option-item').forEach(item => {
@@ -2108,12 +2743,10 @@
                 }
             });
             
-            // Nonaktifkan/sembunyikan opsi jika akun adalah Owner Sekunder (tidak Master)
             const isTargetOwner = data.role === 'Owner';
-            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
-            const isMasterOwner = currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
+            const isTargetDeveloper = data.role === DEVELOPER_ROLE;
+            const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
 
-            // Tampilkan tanggal expired saat ini
             let currentExpiryText;
             let initialMode;
             if (data.expiryDate === 'UNLIMITED') {
@@ -2128,28 +2761,37 @@
             }
             currentExpiryDisplay.textContent = `Current Expiry: ${currentExpiryText}`;
             
-            // Set mode durasi
             durationModeSelect.value = initialMode;
             
-            // Atur mode durasi dan nonaktifkan jika Owner Sekunder
-            if (isTargetOwner && !isMasterOwner) {
-                durationModeSelect.value = 'unlimited';
-                durationModeSelect.disabled = true;
-                roleSelect.disabled = true;
-                usernameInput.disabled = true;
-                passwordInput.disabled = true;
-            } else {
-                durationModeSelect.disabled = false;
-                roleSelect.disabled = false;
-                usernameInput.disabled = false;
+            if (isDeveloper) {
+                passwordInput.value = data.password;
                 passwordInput.disabled = false;
+                usernameInput.disabled = false;
+                roleSelect.disabled = false;
+                durationModeSelect.disabled = false;
+            } else {
+                passwordInput.value = '••••••••'; 
+                passwordInput.disabled = true;  
+                
+                if (isTargetOwner || isTargetDeveloper) {
+                    usernameInput.disabled = true;
+                    roleSelect.disabled = true;
+                    durationModeSelect.disabled = true;
+                } else {
+                    usernameInput.disabled = false;
+                    roleSelect.disabled = false;
+                    durationModeSelect.disabled = false;
+                }
             }
 
-            // Reset input durasi (karena hanya digunakan saat mode 'time')
+            const unlimitedOption = Array.from(durationModeSelect.options).find(opt => opt.value === 'unlimited');
+            if (unlimitedOption) {
+                unlimitedOption.style.display = (isDeveloper || isTargetOwner || isTargetDeveloper) ? 'block' : 'none';
+            }
+
             durationValueInput.value = '';
             durationUnitSelect.value = 'days';
             
-            // Panggil toggle untuk mengatur tampilan UI sesuai mode dan Custom Select
             toggleDurationMode({ 
                 target: durationModeSelect, 
                 wrapperId: 'edit-duration-group-wrapper', 
@@ -2157,7 +2799,6 @@
                 unitSelectId: 'edit-duration-unit' 
             });
             
-            // Perbarui Custom Select Mode Durasi
             const customModeSelect = document.getElementById('edit-duration-mode-select-wrapper').querySelector('.selected-text');
             if (customModeSelect) customModeSelect.textContent = durationModeSelect.options[durationModeSelect.selectedIndex].text;
             document.querySelectorAll('#edit-duration-mode-select-wrapper .select-option-item').forEach(item => {
@@ -2171,7 +2812,6 @@
             modal.classList.add('active');
         }
 
-        // Fungsi Baru: Menyimpan perubahan akun
         async function handleSaveEditAccount() {
             const modal = document.getElementById('edit-account-modal');
             const btn = document.getElementById('save-edit-btn');
@@ -2179,46 +2819,65 @@
             btn.disabled = true; btn.textContent = 'Saving...';
 
             const uid = document.getElementById('edit-account-uid').value;
-            const oldData = allUsers[uid];
-            const oldUsername = oldData.username;
-            const newUsername = document.getElementById('edit-username').value;
-            const newPassword = document.getElementById('edit-password').value;
-            const newRole = document.getElementById('edit-role').value;
-            const durationModeSelect = document.getElementById('edit-duration-mode-select');
-            let selectedMode = durationModeSelect.value;
-            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
-            const isMasterOwner = currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
-            const isTargetOwner = oldData.role === 'Owner';
-
-            // Hak akses: Owner Sekunder tidak bisa melakukan apapun
-            if (isTargetOwner && !isMasterOwner) {
-                showNotification('Access denied: Only Master Owner can modify Owner account details.', 'error');
+            
+            // 🔥 MODIFIKASI (Permintaan #5): Cek jika oldData ada
+            if (!allUsers || !allUsers[uid]) {
+                showNotification('Error: User data not found. Please refresh.', 'error');
                 btn.disabled = false; btn.textContent = 'Save Changes';
                 return;
             }
             
-            // Validasi dasar
-            if (!newUsername || !newPassword || !newRole) {
-                showNotification('Username, Password, and Role are required!', 'error');
+            const oldData = allUsers[uid];
+            const oldUsername = oldData.username;
+            const newUsername = document.getElementById('edit-username').value;
+            const newRole = document.getElementById('edit-role').value;
+            const durationModeSelect = document.getElementById('edit-duration-mode-select');
+            let selectedMode = durationModeSelect.value;
+            
+            const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
+            const isTargetOwner = oldData.role === 'Owner';
+            const isTargetDeveloper = oldData.role === DEVELOPER_ROLE;
+
+            if ((isTargetOwner || isTargetDeveloper) && !isDeveloper) {
+                showNotification('Access denied: Hanya Developer yang dapat mengubah detail akun Owner/Developer.', 'error');
+                btn.disabled = false; btn.textContent = 'Save Changes';
+                return;
+            }
+            
+            if (!newUsername || !newRole) { // Password tidak lagi required di sini
+                showNotification('Username and Role are required!', 'error');
                 btn.disabled = false; btn.textContent = 'Save Changes';
                 return;
             }
 
-            // Jika role diubah menjadi Owner, wajibkan UNLIMITED
-            if (newRole === 'Owner') {
+            if (newRole === 'Owner' || newRole === DEVELOPER_ROLE) {
                 selectedMode = 'unlimited';
+            }
+            
+            if (!isDeveloper && selectedMode === 'unlimited') {
+                 showNotification('Access denied: Hanya Developer yang dapat mengatur/memperpanjang ke Unlimited.', 'error');
+                 btn.disabled = false; btn.textContent = 'Save Changes';
+                 return;
             }
             
             let updateData = {
                 username: newUsername,
-                password: newPassword,
                 role: newRole,
             };
             
-            let newExpiryDate = oldData.expiryDate; // Default: Keep existing
+            if (isDeveloper) {
+                const newPassword = document.getElementById('edit-password').value;
+                if (!newPassword) { // Tambahan cek jika developer mengedit
+                     showNotification('Password is required!', 'error');
+                     btn.disabled = false; btn.textContent = 'Save Changes';
+                     return;
+                }
+                updateData.password = newPassword;
+            }
+            
+            let newExpiryDate = oldData.expiryDate; 
             let durationText = "Expiry date unchanged";
 
-            // Logic Perubahan Waktu
             if (selectedMode === 'unlimited') {
                 newExpiryDate = 'UNLIMITED';
                 durationText = "Unlimited";
@@ -2234,34 +2893,33 @@
                     return;
                 }
 
-                // Hitung perpanjangan dari tanggal expired saat ini, atau dari sekarang jika sudah expired/UNLIMITED
                 let startDate = (oldData.expiryDate === 'UNLIMITED' || new Date(oldData.expiryDate) < new Date()) ? new Date() : new Date(oldData.expiryDate);
                 
-                let newExpiry = startDate;
+                let newExpiry = new Date(startDate);
                 if (durationUnit === 'days') newExpiry.setDate(startDate.getDate() + durationValue);
                 if (durationUnit === 'months') newExpiry.setMonth(startDate.getMonth() + durationValue);
                 if (durationUnit === 'years') newExpiry.setFullYear(startDate.getFullYear() + durationValue);
                 
                 newExpiryDate = newExpiry.toISOString();
                 durationText = `Extended by ${durationValue} ${durationUnit}`;
-            } 
+            } else if (selectedMode === 'keep') {
+                newExpiryDate = oldData.expiryDate;
+                durationText = "Expiry date unchanged";
+            }
             
             updateData.expiryDate = newExpiryDate;
 
 
             try {
-                // 1. Cek dan Update Username jika berubah
                 if (oldUsername !== newUsername) {
                     if ((await db.ref('usernames/' + newUsername).get()).exists()) {
                         showNotification(`Username "${newUsername}" is already taken!`, 'error');
                         throw new Error('Username taken');
                     }
-                    // Hapus username lama, simpan username baru
                     await db.ref('usernames/' + oldUsername).remove();
                     await db.ref('usernames/' + newUsername).set(uid);
                 }
 
-                // 2. Update data pengguna
                 await db.ref('users/' + uid).update(updateData);
                 
                 showNotification(`Account "${newUsername}" updated. (${durationText})`, 'success');
@@ -2272,47 +2930,80 @@
                 btn.disabled = false; btn.textContent = 'Save Changes';
             }
         }
-        
-        // --- DATA PAGE UI ---
 
+        // 🔥 MODIFIKASI (Permintaan #6): Logika filter data & tanda expired
         function populateDataPageTable() {
             const tableBody = document.getElementById('account-list-body');
             const searchInput = document.getElementById('search-account-input');
             const totalEl = document.getElementById('total-accounts-data');
-            if (!tableBody || !searchInput || !totalEl || !currentUserData) return;
+            const deleteAllBtn = document.getElementById('delete-all-expired-btn');
+            
+            if (!tableBody || !searchInput || !totalEl || !currentUserData || !deleteAllBtn) return;
+            
             const filter = searchInput.value.toLowerCase();
             tableBody.innerHTML = '';
-            // PENTING: Gunakan data terbaru dari listener Firebase (allUsers)
             if (!allUsers) { totalEl.textContent = '0'; return; }
             
-            const filtered = Object.entries(allUsers).filter(([uid, data]) => data && data.username && data.username.toLowerCase().includes(filter)); 
+            const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
+            const myUid = currentUserData.uid;
+            const now = new Date();
+
+            // Tampilkan/sembunyikan tombol Delete All
+            deleteAllBtn.style.display = currentDataPageFilter === 'EXPIRED' ? 'flex' : 'none';
+
+            const filtered = Object.entries(allUsers).filter(([uid, data]) => {
+                // 1. Filter pencarian
+                if (!data || !data.username || !data.username.toLowerCase().includes(filter)) {
+                    return false;
+                }
+                
+                // 2. Filter Owner/Reseller (hanya lihat buatan sendiri)
+                if (!isDeveloper && data.creatorUid !== myUid) {
+                    return false;
+                }
+                
+                // 3. Filter EXPIRED
+                const isOwnerOrDev = data.role === 'Owner' || data.role === DEVELOPER_ROLE;
+                const isExpired = data.expiryDate !== 'UNLIMITED' && !isOwnerOrDev && new Date(data.expiryDate) < now;
+                
+                if (currentDataPageFilter === 'EXPIRED') {
+                    return isExpired;
+                }
+                
+                // Jika filter 'ALL', tampilkan semua (termasuk yg expired)
+                return true; 
+            });
+
+            
             totalEl.textContent = filtered.length;
             
             filtered.forEach(([uid, data]) => {
                 const isCurrentUser = uid === currentUserData.uid;
                 const isOwner = currentUserData.role === 'Owner';
-                const isTargetOwner = data.role === 'Owner';
-                const isTargetReseller = data.role === 'Reseller';
                 
-                // Hak Hapus (Delete):
-                let canDelete = isOwner ? !isCurrentUser : (data.role !== 'Owner' && data.role !== 'Reseller'); 
+                const isOwnerOrDev = data.role === 'Owner' || data.role === DEVELOPER_ROLE;
+                const isExpired = data.expiryDate !== 'UNLIMITED' && !isOwnerOrDev && new Date(data.expiryDate) < now;
+
                 
-                // Hak Edit:
-                const canEdit = isOwner || (currentUserData.role === 'Reseller' && data.role !== 'Owner' && data.role !== 'Reseller');
+                let canDelete = isDeveloper ? !isCurrentUser : (data.role !== DEVELOPER_ROLE && data.role !== 'Owner'); 
+                const canEdit = isDeveloper || (isOwner && data.role !== DEVELOPER_ROLE) || (currentUserData.role === 'Reseller' && data.role !== DEVELOPER_ROLE && data.role !== 'Owner');
                 
-                // HTML untuk kolom Aksi
                 const actionHtml = `
                     <button class="action-btn edit-btn" data-uid="${uid}" data-action="edit" ${!canEdit ? 'disabled' : ''}>Edit</button>
                     <button class="action-btn delete-btn" data-uid="${uid}" data-uname="${data.username}" data-action="delete" ${!canDelete ? 'disabled' : ''}>Delete</button>
                 `;
                 
-                // HTML untuk kolom Extend
-                const extendHtml = (isTargetOwner || data.expiryDate === 'UNLIMITED') ? 
+                const extendHtml = (isOwnerOrDev || data.expiryDate === 'UNLIMITED') ? 
                     `<span style="color:#2ecc71;font-size:0.9em;font-weight:bold;">∞</span>` : 
                     `<button class="action-btn renew-account-btn" data-uid="${uid}" data-uname="${data.username}" data-action="extend">Extend</button>`;
 
+                const displayPassword = isDeveloper ? (data.password || 'N/A') : '••••••••';
+                
+                // Tambahkan tanda (Expired)
+                const expiredLabel = isExpired ? ' <span style="color:#e74c3c;font-size:0.9em;">(Expired)</span>' : '';
+
                 const row = document.createElement('tr');
-                row.innerHTML = `<td>${data.username}</td><td>${data.password || 'N/A'}</td><td>${data.role}</td>
+                row.innerHTML = `<td>${data.username}${expiredLabel}</td><td>${displayPassword}</td><td>${data.role}</td>
                 <td>${actionHtml}</td>
                 <td>${extendHtml}</td>`;
                 
@@ -2320,10 +3011,9 @@
             });
         }
         
-        // Memodifikasi handler aksi untuk menyertakan tombol edit
         function handleDataPageActions(e) {
-            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
-                showNotification("Application is currently OFF.", "error");
+            if ((globalConfig.appStatus === 'OFF' || globalConfig.appStatus === 'UPDATE_REQUIRED') && currentUserData.role !== DEVELOPER_ROLE) {
+                showNotification("Application is currently OFF or Updating.", "error");
                 return;
             }
             const target = e.target;
@@ -2331,21 +3021,26 @@
             const uid = target.dataset.uid;
             const uname = target.dataset.uname;
             const action = target.dataset.action;
+            
+             // 🔥 MODIFIKASI (Permintaan #5): Cek jika data ada
+            if (!allUsers || !allUsers[uid]) {
+                showNotification('Error: User data not found. Please refresh.', 'error');
+                return;
+            }
+            
             const data = allUsers[uid];
+            const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
             const isOwner = currentUserData.role === 'Owner';
 
             if (action === 'delete') {
-                // Tambahan: Logika Hak Hapus diperketat
-                if (data.role === 'Owner' && !isOwner) {
-                     showNotification('Access denied: You cannot delete an Owner account.', 'error');
+                if ((data.role === 'Owner' || data.role === DEVELOPER_ROLE) && !isDeveloper) {
+                     showNotification('Access denied: You cannot delete an Owner or Developer account.', 'error');
                      return;
                 }
-                 // Tambahan: Reseller tidak boleh menghapus sesama Reseller
                  if (currentUserData.role === 'Reseller' && data.role === 'Reseller' && uid !== currentUserData.uid) {
                      showNotification('Access denied: You cannot delete other Reseller accounts.', 'error');
                      return;
                  }
-                 // Cegah Owner menghapus diri sendiri
                  if (uid === currentUserData.uid) {
                      showNotification('You cannot delete your own active account.', 'error');
                      return;
@@ -2366,26 +3061,25 @@
             } else if (action === 'edit') {
                 if (data) {
                     const isTargetOwner = data.role === 'Owner';
-                    const isTargetReseller = data.role === 'Reseller';
+                    const isTargetDeveloper = data.role === DEVELOPER_ROLE;
                     const isCurrentUserReseller = currentUserData.role === 'Reseller';
                     
-                    // Owner dapat mengedit semua. Reseller hanya boleh edit Member/VIP
-                    const canEdit = isOwner || (isCurrentUserReseller && !isTargetOwner && !isTargetReseller);
+                    const canEdit = isDeveloper || (isOwner && !isTargetDeveloper) || (isCurrentUserReseller && !isTargetOwner && !isTargetDeveloper);
                     
                     if (canEdit) {
-                         showEditModal(uid, data);
-                    } else if (isCurrentUserReseller && (isTargetOwner || isTargetReseller)) {
-                        showNotification('Access denied: You cannot edit Owner or other Reseller accounts.', 'error');
+                         showEditModal(uid, data); 
+                    } else if (isCurrentUserReseller && (isTargetOwner || isTargetDeveloper)) {
+                        showNotification('Access denied: You cannot edit Owner/Developer accounts.', 'error');
+                    } else {
+                        showNotification('Access denied to edit this account.', 'error');
                     }
                 }
             }
         }
         
-        // --- HANDLER BARU: Save Live Announcement ---
         async function handleSaveAnnouncement() {
-            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
-            if (currentUserData.username !== MASTER_OWNER_USERNAME || currentUserData.password !== MASTER_OWNER_PASSWORD) {
-                showNotification("Access denied: Only the Master Owner can modify live announcement.", "error");
+            if (currentUserData.role !== DEVELOPER_ROLE) {
+                showNotification("Access denied: Only the Developer can modify live announcement.", "error");
                 return;
             }
 
@@ -2398,64 +3092,58 @@
             const newText = input.value.trim();
 
             try {
-                // Simpan teks baru ke node config
                 await db.ref('config/liveAnnouncementText').set(newText);
-                
                 showNotification(`Live Announcement saved! New text: "${newText || '(DELETED)'}"`, 'success');
-                // Data akan diperbarui secara real-time melalui listener
             } catch (error) {
                 showNotification('Failed to save announcement.', 'error');
             } finally {
-                // Tombol diaktifkan kembali oleh updateSettingsPageUI() melalui listener Firebase
-                // btn.disabled = false;
-                // btn.textContent = 'Save Announcement';
+                 btn.disabled = false;
+                 btn.textContent = 'Save Announcement';
             }
         }
-        // --- AKHIR HANDLER BARU ---
 
-        // Fungsi bawaan lainnya (handleBugSend, handleSavePrefix, dll.) diubah untuk mode select baru
         async function handleBugSend(e) {
-            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
-                showNotification("Application is currently OFF.", "error");
+            const btn = document.getElementById('send-bug-btn');
+            
+            if ((globalConfig.appStatus === 'OFF' || globalConfig.appStatus === 'UPDATE_REQUIRED') && currentUserData.role !== DEVELOPER_ROLE) {
+                showNotification("Application is currently OFF or Updating.", "error");
                 return;
             }
-            const btn = document.getElementById('send-bug-btn');
-            const bugModeSelect = document.getElementById('bug-mode-select'); 
             
+            const now = Date.now();
+            if (currentUserData.bugCooldownUntil && currentUserData.bugCooldownUntil > now) { 
+                const remainingMs = currentUserData.bugCooldownUntil - now;
+                const remainingMinutes = Math.floor(remainingMs / 60000);
+                const remainingSeconds = Math.floor((remainingMs % 60000) / 1000);
+                
+                showCooldownModal(remainingMinutes, remainingSeconds); 
+                checkBugCooldown(); 
+                return; 
+            }
+            
+            const bugModeSelect = document.getElementById('bug-mode-select'); 
             if (!currentUserData || !btn || !bugModeSelect) return;
             
             const selectedMode = bugModeSelect.value; 
             
-            // 🔥 KODE BARU: Penanganan mode disabled untuk Member
             const isMember = currentUserData.role === 'Member';
             const restrictedModes = ['ultra', 'dark', 'zx']; 
 
             if (isMember && restrictedModes.includes(selectedMode)) {
-                showNotification("Access denied: This mode is only available for VIP, Reseller, and Owner.", "error");
-                return; // Hentikan proses jika Member mencoba mode terbatas
+                showNotification("Access denied: This mode is only available for VIP, Reseller, Owner, and Developer.", "error");
+                return; 
             }
-
-            if (btn.disabled) { showNotification("You have sent, please wait for 15 minutes!!", "error"); return; }
-            const now = Date.now();
-            if (currentUserData.bugCooldownUntil && currentUserData.bugCooldownUntil > now) { showNotification("You have sent, please wait for 15 minutes!!", "error"); checkBugCooldown(); return; }
             
             btn.disabled = true;
             btn.innerHTML = `<span>SENDING...</span>`; 
             
-            // 🔥 KODE BARU: Mapping mode ke input ID prefix yang sesuai
             const prefixMap = {
-                'delay': 'delay-prefix-input',
-                'delayV2': 'delayV2-prefix-input',
-                'bug': 'bug-prefix-input',
-                'ultra': 'ultra-prefix-input',
-                'dark': 'dark-prefix-input',
-                'zx': 'zx-prefix-input',
+                'delay': 'delay-prefix-input', 'delayV2': 'delayV2-prefix-input', 'bug': 'bug-prefix-input',
+                'ultra': 'ultra-prefix-input', 'dark': 'dark-prefix-input', 'zx': 'zx-prefix-input',
             };
-            
             const prefixInputId = prefixMap[selectedMode];
             const prefixInput = document.getElementById(prefixInputId);
             
-            // 🔥 KODE BARU: Mendapatkan nilai prefix dari config, atau menggunakan default jika null/undefined
             let prefix;
             if (selectedMode === 'delay') prefix = prefixInput ? prefixInput.value : (globalConfig.customDelayPrefix || '.delay');
             else if (selectedMode === 'delayV2') prefix = prefixInput ? prefixInput.value : (globalConfig.customDelayV2Prefix || '.delayV2');
@@ -2471,46 +3159,60 @@
             if (!targetNumber) { 
                 showNotification('Target number is required!', 'error'); 
                 btn.disabled = false; 
-                btn.innerHTML = `<span>SEND BUG</span>`; 
+                btn.innerHTML = `<img src="kirim.png" alt="Send"><span>SEND BUG</span>`; 
                 return; 
             }
             
             if (!prefix) {
                 showNotification('Prefix is not defined for this mode!', 'error'); 
                 btn.disabled = false; 
-                btn.innerHTML = `<span>SEND BUG</span>`; 
+                btn.innerHTML = `<img src="kirim.png" alt="Send"><span>SEND BUG</span>`; 
                 return;
             }
             
-            const payload = `${prefix} ${targetNumber}`;
+            let formattedNumber = targetNumber.replace(/[^0-9]/g, '');
+            if (formattedNumber.startsWith('0')) {
+                formattedNumber = '62' + formattedNumber.substring(1);
+            } else if (!formattedNumber.startsWith('62')) {
+                 formattedNumber = '62' + formattedNumber;
+            }
+            
+            const payload = `${prefix} ${formattedNumber}`;
             try {
-                await db.ref('messageQueue').push({ senderUsername: currentUserData.username, senderUid: currentUserData.uid, payload: payload, timestamp: new Date().toISOString() });
-                showNotification('Bug request sent to Admin Inbox!', 'success');
+                await db.ref('messageQueue').push({ 
+                    senderUsername: currentUserData.username, 
+                    senderUid: currentUserData.uid, 
+                    payload: payload, 
+                    timestamp: new Date().toISOString(),
+                    senderRole: currentUserData.role,
+                    bugMode: selectedMode 
+                });
+                
+                showBugSuccessModal(formattedNumber); 
+                
                 const waForm = document.getElementById('wa-form'); if (waForm) waForm.reset();
-                const cooldownEndTime = Date.now() + 15 * 60 * 1000; 
+                const cooldownEndTime = Date.now() + COOLDOWN_MINUTES * 60 * 1000; 
                 await db.ref('users/' + currentUserData.uid + '/bugCooldownUntil').set(cooldownEndTime);
                 currentUserData.bugCooldownUntil = cooldownEndTime;
                 checkBugCooldown();
             } catch (error) { 
                 showNotification('Failed to send request.', "error"); 
                 btn.disabled = false; 
-                btn.innerHTML = `<span>SEND BUG</span>`; 
+                btn.innerHTML = `<img src="kirim.png" alt="Send"><span>SEND BUG</span>`; 
             }
         }
         
         function handleSavePrefix() {
-            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
-            if (currentUserData.username !== MASTER_OWNER_USERNAME || currentUserData.password !== MASTER_OWNER_PASSWORD) {
-                showNotification("Access denied: Only the Master Owner can modify global settings.", "error");
+            if (currentUserData.role !== DEVELOPER_ROLE) {
+                showNotification("Access denied: Only the Developer can modify global settings.", "error");
                 return;
             }
-            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
-                showNotification("Application is currently OFF.", "error");
+            if ((globalConfig.appStatus === 'OFF' || globalConfig.appStatus === 'UPDATE_REQUIRED') && currentUserData.role !== DEVELOPER_ROLE) {
+                showNotification("Application is currently OFF or Updating.", "error");
                 return;
             }
             const delayInput = document.getElementById('delay-prefix-input');
             const bugInput = document.getElementById('bug-prefix-input');
-            // 🔥 KODE BARU: Ambil nilai prefix baru
             const delayV2Input = document.getElementById('delayV2-prefix-input');
             const ultraInput = document.getElementById('ultra-prefix-input');
             const darkInput = document.getElementById('dark-prefix-input');
@@ -2520,7 +3222,6 @@
 
             if(delayInput) updates.customDelayPrefix = delayInput.value;
             if(bugInput) updates.customBugPrefix = bugInput.value;
-            // 🔥 KODE BARU: Simpan nilai prefix baru
             if(delayV2Input) updates.customDelayV2Prefix = delayV2Input.value;
             if(ultraInput) updates.customUltraPrefix = ultraInput.value;
             if(darkInput) updates.customDarkPrefix = darkInput.value;
@@ -2544,14 +3245,10 @@
             if (settingsUsername) settingsUsername.textContent = currentUserData.username;
             if (settingsRole) settingsRole.textContent = currentUserData.role;
             const isOwner = currentUserData.role === 'Owner';
-            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
-            const isMasterOwner = isOwner && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
-            const isCreatedAccount = currentUserData.purchaseDate; 
+            const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
             
             let displayExpiryDate;
-            if (currentUserData.expiryDate === 'UNLIMITED') {
-                displayExpiryDate = '∞ (Unlimited)';
-            } else if (isOwner) { // Owner (Master atau Sekunder) selalu dianggap Unlimited di UI Settings
+            if (currentUserData.expiryDate === 'UNLIMITED' || isOwner || isDeveloper) { 
                 displayExpiryDate = '∞ (Unlimited)';
             } else {
                 displayExpiryDate = currentUserData.expiryDate ? new Date(currentUserData.expiryDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric'}) : 'N/A';
@@ -2561,15 +3258,15 @@
             if (expiryDateEl) expiryDateEl.textContent = displayExpiryDate;
 
             if (appStatusDisplay) { 
-                appStatusDisplay.textContent = globalConfig.appStatus || 'ON'; 
-                appStatusDisplay.className = (globalConfig.appStatus || 'ON') === 'ON' ? 'status-active' : 'status-expired'; 
+                const status = globalConfig.appStatus || 'ON';
+                appStatusDisplay.textContent = status === 'UPDATE_REQUIRED' ? 'UPDATING' : status; 
+                appStatusDisplay.className = status === 'ON' ? 'status-active' : (status === 'OFF' ? 'status-expired' : 'status-update'); 
+                if (status === 'UPDATE_REQUIRED') appStatusDisplay.style.color = '#00bcd4';
             }
             
-            // Logika untuk tombol renew
             if (renewLink) {
                  const extensionWaNumber = globalConfig.extensionWaNumber || ''; 
-                 // Sembunyikan tombol renew jika UNLIMITED atau Owner
-                 if (currentUserData.expiryDate === 'UNLIMITED' || isOwner) {
+                 if (currentUserData.expiryDate === 'UNLIMITED' || isOwner || isDeveloper) {
                      renewLink.style.display = 'none';
                  } else {
                      renewLink.style.display = 'block';
@@ -2577,11 +3274,9 @@
                  }
             }
             
-            // Perbarui Owner Controls (dengan Live Announcement Control)
             const liveText = globalConfig.liveAnnouncementText || '';
             if (ownerControlsContainer) {
-                // Tampilkan Owner Controls hanya untuk Master Owner
-                ownerControlsContainer.innerHTML = isMasterOwner ? `
+                ownerControlsContainer.innerHTML = isDeveloper ? `
                     <div class="owner-controls">
                         <h3>Global Application Control</h3>
                         <div class="control-buttons">
@@ -2589,6 +3284,12 @@
                            <button class="apk-off-btn">APP OFF</button>
                         </div>
                         
+                        <div style="margin-top:20px; border-top:1px solid #2a2a3a; padding-top:20px;">
+                            <h4>Global Update Status</h4>
+                            <p style="color:#ffeb3b; font-weight:bold; margin-bottom:10px;">Warning: This prevents all non-Developer login.</p>
+                            <button class="submit-btn" style="background-color:#00bcd4" id="app-update-btn">🌐 Update App (Prevent Login)</button>
+                            <button class="submit-btn" style="background-color:#2ecc71; margin-top:5px;" id="app-finish-update-btn">✅ Finish Update (APP ON)</button>
+                        </div>
                         <div style="margin-top:20px; border-top:1px solid #2a2a3a; padding-top:20px;">
                             <h4>Live Announcement Banner</h4>
                             <div class="input-group">
@@ -2611,6 +3312,18 @@
                             <label>Extension Request WA Number</label> <input type="number" id="extension-wa-input" value="${globalConfig.extensionWaNumber || ''}" placeholder="e.g., 628...">
                             <button class="submit-btn" style="background-color:#3498db" id="save-extension-wa-btn">Save</button>
                         </div>
+                        
+                        <div style="margin-top:20px; border-top:1px solid #2a2a3a; padding-top:20px;">
+                            <h4>Prefix Settings (Bug Sender)</h4>
+                            <div class="input-group"><label>Prefix Invisible Delay (Mode: delay)</label><input id="delay-prefix-input" value="${globalConfig.customDelayPrefix || '.delay'}"></div>
+                            <div class="input-group"><label>Prefix Andro Crash (Mode: bug)</label><input id="bug-prefix-input" value="${globalConfig.customBugPrefix || '.bug'}"></div>
+                            <div class="input-group"><label>Prefix Invisible Delay V2 (Mode: delayV2)</label><input id="delayV2-prefix-input" value="${globalConfig.customDelayV2Prefix || '.delayV2'}"></div>
+                            <div class="input-group"><label>Prefix Ultra Killer (Mode: ultra)</label><input id="ultra-prefix-input" value="${globalConfig.customUltraPrefix || '.ultra'}"></div>
+                            <div class="input-group"><label>Prefix Dark Killer (Mode: dark)</label><input id="dark-prefix-input" value="${globalConfig.customDarkPrefix || '.dark'}"></div>
+                            <div class="input-group"><label>Prefix Ultimate ZX (Mode: zx)</label><input id="zx-prefix-input" value="${globalConfig.customZxPrefix || '.zx'}"></div>
+                            <button class="submit-btn" id="save-prefix-btn" style="background-color:#3498db">Save All Prefix Settings</button>
+                        </div>
+                        
                         <div class="banner-settings-section">
                             <h4>Banner Settings (Home Page)</h4>
                             <div class="input-group"> <label>Banner Text - Line 1</label> <input type="text" id="telegram-text1-input" value="${globalConfig.telegramBannerTextLine1 || '🔥 Telegram Channel: Join To Get'}"> </div>
@@ -2622,88 +3335,198 @@
                     </div>`
                 : ''; 
                 
-                // PENTING: Pasang Ulang Listener di sini
                 setupDynamicOwnerControls();
             }
         }
         function handleSettingsPageActions(e) {
-            // 🔥 PERUBAHAN: Cek Master Owner dengan Password
-            if (currentUserData.username !== MASTER_OWNER_USERNAME || currentUserData.password !== MASTER_OWNER_PASSWORD) {
-                showNotification("Access denied: Only the Master Owner can modify global settings.", "error");
+            if (currentUserData.role !== DEVELOPER_ROLE) {
                 return;
             }
-            
             const target = e.target;
-            const actions = {
-                // ... (Aksi Tombol lainnya sudah ada di setupDynamicOwnerControls)
-            };
+            const actions = {};
             const action = actions[target.id] || (target.classList.length > 0 && actions[target.classList[0]]);
             if (action) action();
         }
         
-        // 🔥 MODIFIKASI: Hanya Master Owner yang bisa melihat/memproses Inbox
+        function handleInboxFilterClick(e) {
+            const btn = e.target.closest('.inbox-tab-btn');
+            if (!btn) return;
+
+            const filterType = btn.dataset.filterType; 
+            const filterValue = btn.dataset.filterValue;
+
+            currentInboxFilters[filterType] = filterValue;
+
+            const parentGroup = btn.parentElement;
+            parentGroup.querySelectorAll('.inbox-tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            renderFilteredInbox();
+        }
+
+        // 🔥 MODIFIKASI (Permintaan #6): Fungsi baru untuk filter data page
+        function handleDataPageFilterClick(e) {
+             const btn = e.target.closest('.inbox-tab-btn');
+             if (!btn) return;
+             
+             currentDataPageFilter = btn.dataset.filter; // 'ALL' or 'EXPIRED'
+             
+             document.querySelectorAll('#data-page-filters .inbox-tab-btn').forEach(b => b.classList.remove('active'));
+             btn.classList.add('active');
+             
+             populateDataPageTable(); // Panggil ulang render tabel
+        }
+        
+        // 🔥 MODIFIKASI (Permintaan #6): Fungsi baru untuk hapus semua expired
+        function handleDeleteAllExpired() {
+            if (!allUsers) return;
+            
+            const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
+            const myUid = currentUserData.uid;
+            const now = new Date();
+            
+            const updates = {};
+            let expiredCount = 0;
+
+            Object.entries(allUsers).forEach(([uid, data]) => {
+                // Hanya hapus akun buatan sendiri (kecuali Developer)
+                if (!isDeveloper && data.creatorUid !== myUid) {
+                    return;
+                }
+
+                const isOwnerOrDev = data.role === 'Owner' || data.role === DEVELOPER_ROLE;
+                const isExpired = data.expiryDate !== 'UNLIMITED' && !isOwnerOrDev && new Date(data.expiryDate) < now;
+                
+                if (isExpired) {
+                    updates[`users/${uid}`] = null;
+                    updates[`usernames/${data.username}`] = null;
+                    expiredCount++;
+                }
+            });
+            
+            if (expiredCount === 0) {
+                 showNotification('No expired accounts found to delete.', 'info');
+                 return;
+            }
+
+            // Pop-up konfirmasi dalam Bahasa Inggris
+            showConfirm(
+                `Are you sure you want to delete ${expiredCount} expired account(s)? This action cannot be undone.`,
+                () => {
+                    db.ref().update(updates)
+                        .then(() => {
+                            showNotification(`Successfully deleted ${expiredCount} expired account(s).`, 'success');
+                        })
+                        .catch(err => {
+                            showNotification('Failed to delete accounts.', 'error');
+                        });
+                },
+                "Confirm Deletion", // Title
+                "Yes, Delete All", // Yes text
+                "Cancel" // No text
+            );
+        }
+
+
+        function renderFilteredInbox() {
+            const container = document.getElementById('message-inbox-container');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const filteredMessages = globalInboxMessages.filter(msg => {
+                const roleMatch = currentInboxFilters.role === 'ALL' || (msg.senderRole && msg.senderRole === currentInboxFilters.role);
+                const modeMatch = currentInboxFilters.mode === 'ALL' || (msg.bugMode && msg.bugMode === currentInboxFilters.mode);
+                return roleMatch && modeMatch;
+            });
+
+            if (filteredMessages.length === 0) {
+                container.innerHTML = '<p style="color: #a7a9be; text-align: center;">Inbox is empty for this filter.</p>';
+                return;
+            }
+
+            filteredMessages.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+            filteredMessages.forEach(msg => {
+                const msgKey = msg.key;
+                const senderUid = msg.senderUid || '';
+                const item = document.createElement('div');
+                item.className = 'message-item';
+                
+                let timestampText = '';
+                if (msg.timestamp) {
+                    try {
+                        const date = new Date(msg.timestamp);
+                        timestampText = ` (${date.toLocaleDateString()} ${date.toLocaleTimeString()})`;
+                    } catch(e) { /* Biarkan kosong jika error */ }
+                }
+
+                const roleText = msg.senderRole || 'Unknown Role';
+                const modeText = msg.bugMode || 'Unknown Mode';
+                
+                item.innerHTML = `<p><b>From:</b> ${msg.senderUsername} (<b>${roleText}</b>)${timestampText}</p>
+                                  <p style="color: #ffeb3b;"><b>Mode:</b> ${modeText}</p>
+                                  <p><b>Message:</b> ${msg.payload}</p> 
+                                  <div class="message-actions"> 
+                                    <button class="accept-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Reply (WA)</button> 
+                                    <button class="telegram-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Reply (TG)</button> 
+                                    <button class="reject-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Delete</button> 
+                                  </div>`;
+                container.appendChild(item);
+            });
+        }
+
         function populateMessagesInbox() {
             const container = document.getElementById('message-inbox-container');
             if (!container || !currentUserData) return;
             
-            // 🔥 Cek Master Owner
-            const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
+            const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
 
-            if (!isMasterOwner) {
-                container.innerHTML = '<p style="color:#e74c3c;">Access Denied: Only Master Owner can view the Inbox.</p>';
-                // Pastikan listener dimatikan jika bukan Master Owner
+            if (!isDeveloper) {
+                container.innerHTML = '<p style="color:#e74c3c;">Access Denied: Only Developer can view the Inbox.</p>';
                 db.ref('messageQueue').off('value'); 
                 return;
             }
 
             db.ref('messageQueue').on('value', snapshot => {
-                if (!container || !isMasterOwner) return; // Tambahan pengecekan di dalam listener
-                container.innerHTML = '';
-                if (!snapshot.exists()) { container.innerHTML = '<p>Inbox is empty.</p>'; return; }
+                if (!container || !isDeveloper) return; 
                 
-                snapshot.forEach(child => {
-                    const msg = child.val();
-                    const msgKey = child.key;
-                    const senderUid = msg.senderUid || '';
-                    const item = document.createElement('div');
-                    item.className = 'message-item';
-                    
-                    // Format Timestamp
-                    let timestampText = '';
-                    if (msg.timestamp) {
-                        try {
-                            const date = new Date(msg.timestamp);
-                            timestampText = ` (${date.toLocaleDateString()} ${date.toLocaleTimeString()})`;
-                        } catch(e) { /* Biarkan kosong jika error */ }
-                    }
-                    
-                    item.innerHTML = `<p><b>From:</b> ${msg.senderUsername}${timestampText}</p><p><b>Message:</b> ${msg.payload}</p> <div class="message-actions"> <button class="accept-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Reply (WA)</button> <button class="telegram-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Reply (TG)</button> <button class="reject-btn" data-key="${msgKey}" data-payload="${msg.payload}" data-sender-uid="${senderUid}">Delete</button> </div>`;
-                    container.appendChild(item);
-                });
+                globalInboxMessages = []; 
                 
-                const adminWaInput = document.getElementById('admin-wa-number');
-                const adminTgInput = document.getElementById('admin-tg-id');
-                if(adminWaInput) adminWaInput.value = currentUserData.adminReplyPrefs?.waNumber || '';
-                if(adminTgInput) adminTgInput.value = currentUserData.adminReplyPrefs?.tgId || '';
-             });
+                if (!snapshot.exists()) {
+                     globalInboxMessages = [];
+                } else {
+                    snapshot.forEach(child => {
+                        const msg = child.val();
+                        msg.key = child.key; 
+                        globalInboxMessages.push(msg);
+                    });
+                }
+                
+                renderFilteredInbox();
+            });
+            
+            const adminWaInput = document.getElementById('admin-wa-number');
+            const adminTgInput = document.getElementById('admin-tg-id');
+            if(adminWaInput) adminWaInput.value = currentUserData.adminReplyPrefs?.waNumber || '';
+            if(adminTgInput) adminTgInput.value = currentUserData.adminReplyPrefs?.tgId || '';
         }
+
         function pushNotificationToUser(targetUid, message, type) {
             if (!targetUid || !message || !type) return;
             db.ref('user_notifications/' + targetUid).push({ text: message, type: type, timestamp: new Date().toISOString() });
         }
         
-        // 🔥 MODIFIKASI: Hanya Master Owner yang bisa memproses Inbox Action
         async function handleMessagesPageActions(e) {
-            // 🔥 Cek Master Owner
-            const isMasterOwner = currentUserData.role === 'Owner' && currentUserData.username === MASTER_OWNER_USERNAME && currentUserData.password === MASTER_OWNER_PASSWORD;
+            const isDeveloper = currentUserData.role === DEVELOPER_ROLE;
             
-            if (!isMasterOwner) {
-                showNotification("Access denied: Only Master Owner can process Inbox messages.", "error");
+            if (!isDeveloper) {
+                showNotification("Access denied: Only Developer can process Inbox messages.", "error");
                 return;
             }
             
-            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
-                showNotification("Application is currently OFF.", "error");
+            if ((globalConfig.appStatus === 'OFF' || globalConfig.appStatus === 'UPDATE_REQUIRED') && currentUserData.role !== DEVELOPER_ROLE) {
+                showNotification("Application is currently OFF or Updating.", "error");
                 return;
             }
             const target = e.target;
@@ -2799,22 +3622,44 @@
                     item.className = 'conversation-list-item';
                     item.dataset.uid = convo.partnerUid;
                     item.dataset.uname = convo.partnerUsername;
-                    item.innerHTML = `<div class="conversation-info"><div class="username">${convo.partnerUsername}</div><div class="last-message">${lastMessage}</div></div>`;
+                    item.dataset.convoId = convo.id; 
+                    item.innerHTML = `<div class="conversation-info"><div class="username">${convo.partnerUsername}</div><div class="last-message">${lastMessage}</div></div>
+                                      <button class="delete-chat-btn" data-action="delete-chat" data-uid="${convo.partnerUid}" data-convo-id="${convo.id}">×</button>`;
                     conversationList.appendChild(item);
                 });
             });
         }
-        function handleConversationClick(e) {
-            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
-                showNotification("Application is currently OFF.", "error");
+        
+        function handleConversationListActions(e) {
+            const deleteBtn = e.target.closest('.delete-chat-btn');
+            const listItem = e.target.closest('.conversation-list-item');
+            
+            if ((globalConfig.appStatus === 'OFF' || globalConfig.appStatus === 'UPDATE_REQUIRED') && currentUserData.role !== DEVELOPER_ROLE) {
+                showNotification("Application is currently OFF or Updating.", "error");
                 return;
             }
-            const item = e.target.closest('.conversation-list-item');
-            if (item && item.dataset.uid) {
-                currentChatPartnerUid = item.dataset.uid;
-                showPage('chat-window-page', { partnerUid: item.dataset.uid, partnerUsername: item.dataset.uname });
+
+            if (deleteBtn) {
+                e.stopPropagation(); 
+                const convoId = deleteBtn.dataset.convoId;
+                const partnerUid = deleteBtn.dataset.uid;
+                const partnerName = allUsers[partnerUid]?.username || "Contact";
+
+                showConfirm(`Are you sure you want to delete chat history with ${partnerName}? This action cannot be undone.`, () => {
+                    db.ref('chats/' + convoId).remove()
+                        .then(() => {
+                            showNotification(`Chat with ${partnerName} deleted!`, 'success');
+                        })
+                        .catch(error => {
+                            showNotification("Failed to delete chat.", 'error');
+                        });
+                });
+            } else if (listItem && listItem.dataset.uid) {
+                currentChatPartnerUid = listItem.dataset.uid;
+                showPage('chat-window-page', { partnerUid: listItem.dataset.uid, partnerUsername: listItem.dataset.uname });
             }
         }
+
         function getConversationId(uid1, uid2) { return [uid1, uid2].sort().join('_'); }
         
         function renderChatWindowPage(context) {
@@ -2857,10 +3702,35 @@
                  if (bubbleToRemove) bubbleToRemove.remove();
              });
         }
+        
+        function handleDeleteChatHistory() {
+             if (!currentChatPartnerUid || !currentUserData) return;
+             
+             if ((globalConfig.appStatus === 'OFF' || globalConfig.appStatus === 'UPDATE_REQUIRED') && currentUserData.role !== DEVELOPER_ROLE) {
+                showNotification("Application is currently OFF or Updating.", "error");
+                return;
+            }
+
+             const partnerName = allUsers[currentChatPartnerUid]?.username || "Contact";
+             const conversationId = getConversationId(currentUserData.uid, currentChatPartnerUid);
+             
+             showConfirm(`Are you sure you want to delete ALL chat history with ${partnerName}? This will also remove the conversation from your list.`, () => {
+                 db.ref('chats/' + conversationId).remove()
+                     .then(() => {
+                         showNotification(`All chat history with ${partnerName} deleted!`, 'success');
+                         showPage('chat-list-page');
+                         currentChatPartnerUid = null;
+                     })
+                     .catch(error => {
+                         showNotification("Failed to delete chat history.", 'error');
+                     });
+             });
+        }
+
         function handleSendMessage(e) {
             e.preventDefault();
-            if (globalConfig.appStatus === 'OFF' && currentUserData.role !== 'Owner') {
-                showNotification("Application is currently OFF.", "error");
+            if ((globalConfig.appStatus === 'OFF' || globalConfig.appStatus === 'UPDATE_REQUIRED') && currentUserData.role !== DEVELOPER_ROLE) {
+                showNotification("Application is currently OFF or Updating.", "error");
                 return;
             }
             const input = document.getElementById('message-input');
