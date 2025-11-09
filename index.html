@@ -319,6 +319,9 @@
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        
+        // --- 🔥 MODIFIKASI: Tambahkan Role Developer di atas ---
+        const DEVELOPER_ROLE = "Developer"; 
 
         // --- COOKIE FUNCTIONS ---
         function setCookie(name, value, days) {
@@ -400,10 +403,15 @@
             const loginButton = loginForm.querySelector('.submit-button');
             const loginContainer = document.getElementById('loginContainer');
             const loginErrorEl = document.getElementById('loginError');
+            
+            const usernameInput = document.getElementById('loginUser'); // Definisikan di sini
+            const passwordInput = document.getElementById('loginPass'); // Definisikan di sini
+
+            // 🔥 MODIFIKASI: Variabel untuk 3-langkah login
+            let developerLoginStep = 1;
 
             // 🔥 MODIFIKASI BARU: Logika untuk Ikon Mata
             const togglePassword = document.getElementById('togglePassword');
-            const passwordInput = document.getElementById('loginPass');
 
             if (togglePassword && passwordInput) {
                 togglePassword.addEventListener('click', () => {
@@ -422,6 +430,29 @@
                     loginContainer.classList.remove('shake-error');
                 }
             });
+            
+            // --- 🔥 MODIFIKASI: Fungsi untuk reset form jika gagal verifikasi
+            function resetDeveloperFlow(errorMessage) {
+                loginErrorEl.textContent = errorMessage;
+                loginErrorEl.style.display = 'block';
+                loginContainer.classList.add('shake-error');
+                
+                // Reset ke langkah 1
+                developerLoginStep = 1;
+                passwordInput.placeholder = 'Password';
+                passwordInput.value = '';
+                usernameInput.disabled = false;
+                
+                // Cleanup tombol
+                loginButton.disabled = false;
+                loginButton.classList.add('error');
+                loginButton.textContent = 'Gagal!';
+                setTimeout(() => {
+                    loginButton.classList.remove('error');
+                    loginButton.textContent = 'LOGIN';
+                }, 1500);
+            }
+            // --- 🔥 AKHIR MODIFIKASI
 
             loginForm.addEventListener('submit', (event) => {
                 event.preventDefault();
@@ -430,8 +461,57 @@
                 loginButton.classList.remove('success', 'error');
                 
                 loginErrorEl.style.display = 'none';
-                const username = document.getElementById('loginUser').value;
-                const password = document.getElementById('loginPass').value;
+                const username = usernameInput.value;
+                const password = passwordInput.value;
+
+                // --- 🔥 MODIFIKASI BARU: Logika 3-Langkah (Sequential Fields) 🔥 ---
+            
+                // --- Cek Langkah 3 (MARAH TULIS) ---
+                if (developerLoginStep === 3) {
+                    if (username === "Ultragon" && password === "MARAH TULIS") {
+                        // Berhasil! Lanjutkan ke proses login developer di bawah
+                        loginButton.disabled = true;
+                        loginButton.textContent = 'Memeriksa...';
+                        // Biarkan kode di bawah berjalan
+                    } else {
+                        // Gagal di langkah 3
+                        resetDeveloperFlow('Password Verifikasi 3 Salah!');
+                        return; // Hentikan di sini
+                    }
+                }
+                
+                // --- Cek Langkah 2 (ZAVINIX) ---
+                else if (developerLoginStep === 2) {
+                    if (username === "Ultragon" && password === "ZAVINIX") {
+                        // Berhasil, lanjut ke langkah 3
+                        developerLoginStep = 3;
+                        passwordInput.value = '';
+                        passwordInput.placeholder = 'Password Verifikasi 3';
+                        return; // Hentikan di sini, tunggu input berikutnya
+                    } else {
+                        // Gagal di langkah 2
+                        resetDeveloperFlow('Password Verifikasi 2 Salah!');
+                        return; // Hentikan di sini
+                    }
+                }
+
+                // --- Cek Langkah 1 (MASTER KING) ---
+                // Cek ini HANYA jika username-nya "Ultragon" dan ini langkah 1
+                else if (developerLoginStep === 1 && username === "Ultragon") {
+                    if (password === "MASTER KING") {
+                        // Password 1 benar! Cegat login normal.
+                        developerLoginStep = 2;
+                        passwordInput.value = '';
+                        passwordInput.placeholder = 'Password Verifikasi 2';
+                        usernameInput.disabled = true; // Kunci username
+                        return; // Hentikan di sini, tunggu input berikutnya
+                    }
+                    // Jika password-nya salah (mis. "MASTER"), biarkan kode di bawah
+                    // (Firebase) yang menanganinya dan memberi error.
+                }
+                
+                // --- 🔥 AKHIR MODIFIKASI 3-Langkah 🔥 ---
+
 
                 if (!username || !password) {
                     loginErrorEl.textContent = 'Username dan Password harus diisi!';
@@ -465,14 +545,30 @@
                 .then((userSnapshot) => {
                     if (!userSnapshot.exists()) throw new Error('Data user tidak ditemukan.');
                     userData = userSnapshot.val();
-                    if (userData.password !== password) throw new Error('Username atau Password salah!');
+
+                    // --- 🔥 MODIFIKASI: Ubah cek password ---
+                    // Jika ini adalah developer di langkah 3, kita sudah cek password "MARAH TULIS".
+                    // Kita harus cek password 1 ("MASTER KING") di database
+                    if (developerLoginStep === 3 && userData.role === DEVELOPER_ROLE) {
+                        if (userData.password !== "MASTER KING") {
+                            // Ini berarti password di DB BUKAN "MASTER KING"
+                            throw new Error("Data Akun Developer tidak sinkron.");
+                        }
+                        // Jika password di DB = "MASTER KING" dan kita lolos 3 langkah,
+                        // maka kita aman untuk lanjut.
+                    } else {
+                        // Jika ini user normal ATAU developer langkah 1 (yang salah pass)
+                        if (userData.password !== password) throw new Error('Username atau Password salah!');
+                    }
+                    // --- 🔥 AKHIR MODIFIKASI ---
+                    
                     return db.ref('config/appStatus').get();
                 })
                 .then((statusSnapshot) => {
                     const appStatus = statusSnapshot.val() || 'ON';
                     
                     // Cek Status Aplikasi/Update (Kecuali untuk role Developer)
-                    if (userData.role !== 'Developer') {
+                    if (userData.role !== DEVELOPER_ROLE) {
                         if (appStatus === 'OFF') {
                             showAppStatusModal('🚫', 'LOGIN FAILED', 'Login failed because the application is currently offline', '#ff5555');
                             throw new Error('Aplikasi sedang non-aktif.');
@@ -483,10 +579,10 @@
                         }
                     }
 
-                    // --- 🔥 MODIFIKASI BARU: Logika Pengecekan Expired & Terkunci (URUTAN BARU) 🔥 ---
+                    // --- 🔥 MODIFIKASI: Logika Pengecekan Expired & Terkunci (URUTAN BARU) 🔥 ---
                     
                     let isExpired = false;
-                    if (userData.role !== 'Developer' && userData.role !== 'Owner' && userData.expiryDate !== 'UNLIMITED') {
+                    if (userData.role !== DEVELOPER_ROLE && userData.role !== 'Owner' && userData.expiryDate !== 'UNLIMITED') {
                         if (!userData.expiryDate) {
                              throw new Error('Data akun tidak lengkap. Hubungi admin.');
                         }
@@ -500,9 +596,7 @@
 
                     if (isExpired) {
                         if (isLocked) {
-                            // --- INI SOLUSINYA ---
                             // Akunnya expired DAN terkunci. Buka kuncinya sekarang.
-                            // Kita panggil .set(null) daripada .remove() untuk keamanan
                             db.ref('users/' + userUid + '/currentSessionId').set(null); 
                         }
                         // Tampilkan error expired (akun sudah tidak terkunci lagi)
@@ -510,19 +604,22 @@
                     }
 
                     // Jika sampai sini, berarti akun TIDAK expired.
-                    // Sekarang baru kita cek apakah terkunci.
-                    if (isLocked) {
+                    // Sekarang baru kita cek apakah terkunci, TAPI KECUALIKAN DEVELOPER
+                    
+                    if (isLocked && userData.role !== DEVELOPER_ROLE) {
+                        // Jika BUKAN Developer, dan akun terkunci, blokir.
                         throw new Error('Akun sedang digunakan.');
                     }
+                    // Jika user adalah Developer, pengecekan ini akan dilewati
                     // --- 🔥 AKHIR MODIFIKASI 🔥 ---
+                    
+                    // Jika kita lolos 3 langkah, reset form-nya
+                    if (developerLoginStep === 3 && userData.role === DEVELOPER_ROLE) {
+                        developerLoginStep = 1;
+                        usernameInput.disabled = false;
+                        passwordInput.placeholder = 'Password';
+                    }
 
-
-                    // Jika sampai sini, berarti:
-                    // 1. Password benar
-                    // 2. Aplikasi ON
-                    // 3. Akun TIDAK Expired
-                    // 4. Akun TIDAK Terkunci
-                    // -> Lanjutkan login
                     const newSessionId = Date.now().toString() + Math.random().toString(36).substring(2);
                     return db.ref('users/' + userUid).update({ currentSessionId: newSessionId }).then(() => newSessionId); 
                 })
@@ -538,6 +635,12 @@
                     }, 1500);
                 })
                 .catch((error) => {
+                    
+                    // 🔥 MODIFIKASI: Reset state jika ada error 🔥
+                    developerLoginStep = 1;
+                    usernameInput.disabled = false;
+                    passwordInput.placeholder = 'Password';
+                    
                     loginButton.disabled = false;
                     loginButton.classList.add('error');
                     loginButton.textContent = 'Gagal!';

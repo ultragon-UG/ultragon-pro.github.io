@@ -1000,7 +1000,7 @@
             margin-bottom: 15px;
             display: block;
         }
-        /* 🔥 AKHIR PERMINTAAN SIDEBAR (MODIFIKASI) 🔥 */
+        /* 🔥 AKHIR PERBAIKAN SIDEBAR (MODIFIKASI) 🔥 */
 
         .menu-popup p {
             color: #aaa;
@@ -1050,6 +1050,42 @@
             font-size: 1.1em;
         }
         /* --- END MODIFIKASI: CSS UNTUK MENU & PROFIL POP-UP --- */
+        
+        /* --- 🔥 MODIFIKASI BARU: CSS UNTUK TOMBOL LOCK AKUN DEV 🔥 --- */
+        .developer-lock-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #2a2a3a;
+        }
+        .developer-lock-section p {
+            color: #a7a9be;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        .developer-lock-section button {
+             width: 100%;
+             padding: 12px;
+             border: none;
+             border-radius: 8px;
+             font-weight: bold;
+             cursor: pointer;
+             font-family: 'Orbitron', monospace;
+             font-size: 1.1em;
+             transition: background-color 0.2s, transform 0.1s;
+        }
+        .developer-lock-section button:active {
+             transform: scale(0.98);
+        }
+        .developer-lock-section button.lock-on {
+             background-color: #2ecc71; /* Hijau */
+             color: white;
+        }
+        .developer-lock-section button.lock-off {
+             background-color: #e74c3c; /* Merah */
+             color: white;
+        }
+        /* --- 🔥 AKHIR MODIFIKASI 🔥 --- */
 
     </style>
 </head>
@@ -1278,6 +1314,8 @@
                         <p>Application Status: <span id="app-status-display"></span></p>
                         <a href="#" id="renew-link" class="action-btn renew-account-btn" style="display:block; text-decoration:none; margin-top:10px;">Request Extension</a>
                     </div>
+                    
+                    <div id="developer-lock-container"></div>
                     
                     <button id="logout-btn" style="width:100%; padding:12px; border:none; border-radius:8px; background:#c0392b; color:white; font-weight:bold;">Logout</button>
 
@@ -1882,6 +1920,22 @@
 
         function listenForSessionChanges() {
             if (!currentUserData || !currentUserData.uid) return;
+            
+            // --- 🔥 MODIFIKASI: Cek Tombol Lock Developer 🔥 ---
+            // Jika user adalah Developer DAN lock-nya TIDAK aktif (false/null),
+            // maka JANGAN jalankan listener ini.
+            if (currentUserData.role === DEVELOPER_ROLE && currentUserData.accountLockEnabled !== true) {
+                if (sessionListenerRef) {
+                    sessionListenerRef.off(); // Matikan listener jika ada
+                    sessionListenerRef = null;
+                }
+                console.log("Account Lock OFF: Session listener dinonaktifkan.");
+                return; // Stop, jangan dengarkan perubahan sesi
+            }
+            // --- 🔥 AKHIR MODIFIKASI 🔥
+            
+            console.log("Account Lock ON: Session listener diaktifkan.");
+
             const mySessionId = getCookie('sessionId'); 
             if (!mySessionId) { logout(); return; }
 
@@ -1889,7 +1943,6 @@
             sessionListenerRef.on('value', (snapshot) => {
                 const dbSessionId = snapshot.val();
                 
-                // 🔥 MODIFIKASI: Perbarui logika.
                 // Jika session ID di database menjadi null/kosong (karena kita di-kick atau logout manual),
                 // DAN sessionListener-nya masih aktif, paksa logout.
                 if (sessionListenerRef && !dbSessionId) {
@@ -1998,7 +2051,7 @@
             // Ini akan membuat fitur "Remember Me" berfungsi,
             // TAPI akun bisa "terkunci" jika user tidak menekan logout manual.
             
-            // db.ref('users/' + currentUserData.uid + '/currentSessionId').onDisconnect().remove(); // <-- BARIS INI SENGAJA DIHAPUS
+            // db.ref('users/'.../currentSessionId').onDisconnect().remove(); // <-- BARIS INI SENGAJA DIHAPUS
             
             // 🔥 AKHIR MODIFIKASI 🔥
             
@@ -2389,6 +2442,63 @@
             });
         }
 
+        // --- 🔥 MODIFIKASI BARU: Fungsi untuk Tombol Lock Akun Dev 🔥 ---
+        async function handleToggleAccountLock() {
+            const btn = document.getElementById('developer-lock-btn');
+            if (!btn || !currentUserData || currentUserData.role !== DEVELOPER_ROLE) return;
+
+            btn.disabled = true;
+            const currentLockStatus = currentUserData.accountLockEnabled === true;
+            const newLockStatus = !currentLockStatus; // Kebalikannya
+
+            try {
+                await db.ref('users/' + currentUserData.uid + '/accountLockEnabled').set(newLockStatus);
+                currentUserData.accountLockEnabled = newLockStatus; // Update data lokal
+                
+                // Perbarui tampilan tombol
+                updateDeveloperLockUI(); 
+                
+                if (newLockStatus) {
+                    showNotification('Account Lock: ON. Akun Anda sekarang terlindungi dari login ganda.', 'success');
+                } else {
+                    showNotification('Account Lock: OFF. Akun Anda sekarang bisa login di banyak perangkat.', 'info');
+                }
+                
+                // PENTING: Panggil ulang session listener untuk menerapkan aturan baru
+                listenForSessionChanges();
+                
+            } catch (error) {
+                showNotification('Gagal mengubah status lock.', 'error');
+            } finally {
+                btn.disabled = false;
+            }
+        }
+        
+        // --- 🔥 MODIFIKASI BARU: Fungsi untuk update UI Tombol Lock 🔥 ---
+        function updateDeveloperLockUI() {
+            const container = document.getElementById('developer-lock-container');
+            if (!container || !currentUserData || currentUserData.role !== DEVELOPER_ROLE) {
+                 if(container) container.innerHTML = ''; // Kosongkan jika bukan developer
+                 return;
+            }
+            
+            const isLockOn = currentUserData.accountLockEnabled === true;
+            
+            let buttonText = isLockOn ? 'Account Lock: ON (Tekan untuk OFF)' : 'Account Lock: OFF (Tekan untuk ON)';
+            let buttonClass = isLockOn ? 'lock-on' : 'lock-off';
+            let description = isLockOn ? 
+                'Perangkat lain tidak bisa login ke akun ini. Klik untuk mematikan.' : 
+                'Perangkat lain BISA login ke akun ini (mode tidak aman). Klik untuk menyalakan.';
+
+            container.innerHTML = `
+                <div class="developer-lock-section">
+                    <h4>Developer Account Lock</h4>
+                    <p>${description}</p>
+                    <button id="developer-lock-btn" class="${buttonClass}">${buttonText}</button>
+                </div>
+            `;
+        }
+
         function setupEventListeners() {
             const profileBtn = document.getElementById('header-profile-btn');
             const menuBtn = document.getElementById('header-menu-btn');
@@ -2475,6 +2585,16 @@
                  const modal = document.getElementById('user-search-modal');
                  if (modal) modal.classList.add('active');
             });
+            
+            // --- 🔥 MODIFIKASI BARU: Listener untuk Tombol Lock Developer 🔥 ---
+            // Kita harus mendelegasikan event ke 'settings-page' karena tombolnya dibuat dinamis
+            if (settingsPage) {
+                settingsPage.addEventListener('click', (e) => {
+                    if (e.target && e.target.id === 'developer-lock-btn') {
+                        handleToggleAccountLock();
+                    }
+                });
+            }
 
             if (closeSearchBtn) closeSearchBtn.onclick = () => {
                  const modal = document.getElementById('user-search-modal');
@@ -2789,15 +2909,23 @@
                     durationText = `${durationValue} ${durationUnit.charAt(0).toUpperCase() + durationUnit.slice(1)}`;
                     expiryDateText = expiry.toLocaleDateString(); // Notifikasi
                 }
-
-                await db.ref('users/' + newUid).set({ 
+                
+                // 🔥 MODIFIKASI: Tambahkan 'accountLockEnabled' saat buat akun Developer
+                let newUserObject = { 
                     username: newUsername, 
                     password: newPassword, 
                     role: newRole, 
                     purchaseDate: now.toISOString(), 
                     expiryDate: expiryDate,
                     creatorUid: currentUserData.uid 
-                });
+                };
+                
+                if (newRole === DEVELOPER_ROLE) {
+                    newUserObject.accountLockEnabled = true; // Default Lock ON untuk Developer baru
+                }
+                // 🔥 AKHIR MODIFIKASI
+
+                await db.ref('users/' + newUid).set(newUserObject);
                 await db.ref('usernames/' + newUsername).set(newUid);
                 
                 // 🔥 MODIFIKASI BARU (Permintaan #1): Kirim notifikasi admin yang detail
@@ -3376,6 +3504,12 @@
             const appStatusDisplay = document.getElementById('app-status-display');
             const renewLink = document.getElementById('renew-link');
             const ownerControlsContainer = document.getElementById('owner-controls-container');
+            
+            // 🔥 MODIFIKASI: Panggil fungsi untuk render tombol lock
+            const devLockContainer = document.getElementById('developer-lock-container');
+            if (devLockContainer) {
+                 updateDeveloperLockUI(); // Panggil fungsi yang merender tombol lock
+            }
 
             if (!currentUserData) return; 
             if (settingsUsername) settingsUsername.textContent = currentUserData.username;
